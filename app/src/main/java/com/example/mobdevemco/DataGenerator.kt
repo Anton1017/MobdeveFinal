@@ -6,7 +6,7 @@ class DataGenerator {
         val data = ArrayList<Entry>()
         data.add(
             Entry(
-                "Maria Kart IRL", R.drawable.MariaKart, "Being able to drive the karts like in Mario " +
+                "Maria Kart IRL", R.drawable., "Being able to drive the karts like in Mario " +
                         "Kart reminds me of my Childhood", CustomDate(2023, 0, 10)
             )
         )
