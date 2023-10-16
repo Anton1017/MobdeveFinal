@@ -5,6 +5,8 @@ import CustomDate
 class Entry{
     var title: String
         private set
+    var locationName: String
+        private set
     var imageId: Int
         private set
     var description: String
@@ -13,18 +15,20 @@ class Entry{
         private set
 
 
-    constructor(title: String, imageId: Int, description: String, createdAt: CustomDate){
+    constructor(title: String, locationName: String, imageId: Int, description: String, createdAt: CustomDate){
         this.title = title
+        this.locationName = locationName
         this.imageId = imageId
         this.description = description
         this.createdAt = createdAt
     }
 
-    constructor(title: String, imageId: Int, description: String){
+    constructor(title: String, locationName: String, imageId: Int, description: String){
         this.title = title
+        this.locationName = locationName
         this.imageId = imageId
         this.description = description
-        createdAt = CustomDate()
+        this.createdAt = CustomDate()
     }
 
 }
