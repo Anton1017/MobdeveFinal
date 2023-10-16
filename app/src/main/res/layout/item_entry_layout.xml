@@ -37,7 +37,8 @@
             android:text="TextView"
             android:textAllCaps="false"
             android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-            android:textColor="?attr/colorOnSecondary" />
+            android:textColor="?attr/colorOnSecondary"
+            android:textStyle="italic" />
 
     </LinearLayout>
 
