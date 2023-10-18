@@ -17,11 +17,18 @@ class ActivityMain : AppCompatActivity(){
 
     private lateinit var recyclerView: RecyclerView
     private lateinit var myAdapter: EntryAdapter
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val viewBinding : ActivityMainBinding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(viewBinding.root)
 
+        //Logic for adding a new entry
+        viewBinding.addBtn.setOnClickListener(View.OnClickListener {
+            val intent = Intent(this@ActivityMain, NewEntryActivity::class.java)
+            this.startActivity(intent)
+        })
 
         this.recyclerView = viewBinding.entryRecyclerView
         this.myAdapter = EntryAdapter(entryData)
