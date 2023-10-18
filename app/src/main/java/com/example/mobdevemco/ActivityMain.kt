@@ -10,11 +10,23 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.mobdevemco.databinding.ActivityMainBinding
+
 class ActivityMain : AppCompatActivity(){
+
+    private var entryData = DataGenerator.loadEntryData()
+
+    private lateinit var recyclerView: RecyclerView
+    private lateinit var myAdapter: EntryAdapter
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val viewBinding : ActivityMainBinding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(viewBinding.root)
+
+
+        this.recyclerView = viewBinding.entryRecyclerView
+        this.myAdapter = EntryAdapter(entryData)
+        this.recyclerView.adapter = myAdapter
+        this.recyclerView.layoutManager = LinearLayoutManager(this)
     }
 
 }
