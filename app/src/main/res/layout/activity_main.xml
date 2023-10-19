@@ -26,20 +26,6 @@
             app:srcCompat="@drawable/app_name_logo"
             app:tint="?attr/colorOnPrimary" />
 
-        <SearchView
-            android:id="@+id/searchView"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:backgroundTintMode="multiply"
-            android:gravity="center"
-            android:layoutDirection="rtl"
-            android:searchIcon="@drawable/baseline_manage_search_24"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/entryAddBtn"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.5" />
-
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/entryAddBtn"
             android:layout_width="wrap_content"
@@ -52,6 +38,25 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:srcCompat="@android:drawable/ic_menu_add" />
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:orientation="horizontal"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/entryAddBtn"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <SearchView
+                android:id="@+id/searchView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:backgroundTintMode="multiply"
+                android:layoutDirection="rtl"
+                android:searchIcon="@drawable/baseline_manage_search_24"
+                android:showAsAction="collapseActionView|ifRoom" />
+        </LinearLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
