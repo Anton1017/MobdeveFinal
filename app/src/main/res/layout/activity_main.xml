@@ -48,14 +48,22 @@
             app:layout_constraintStart_toEndOf="@+id/entryAddBtn"
             app:layout_constraintTop_toTopOf="parent">
 
-            <SearchView
-                android:id="@+id/searchView"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:backgroundTintMode="multiply"
-                android:layoutDirection="rtl"
-                android:searchIcon="@drawable/baseline_manage_search_24"
-                android:showAsAction="collapseActionView|ifRoom" />
+
+<!--            <SearchView-->
+<!--                android:id="@+id/searchView"-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="match_parent"-->
+<!--                android:backgroundTintMode="multiply"-->
+<!--                android:layoutDirection="rtl"-->
+<!--                android:searchIcon="@drawable/baseline_manage_search_24"-->
+<!--                android:showAsAction="collapseActionView|ifRoom" />-->
+            <ImageView
+                android:id="@+id/imageView2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_weight="1"
+                app:srcCompat="@drawable/baseline_manage_search_24" />
         </LinearLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
