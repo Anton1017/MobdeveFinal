@@ -14,11 +14,12 @@
 
         <ImageView
             android:id="@+id/imageView"
-            android:layout_width="104dp"
+            android:layout_width="0dp"
             android:layout_height="0dp"
-            android:layout_marginLeft="16dp"
+            android:scaleX="0.5"
+            android:scaleY="0.5"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/floatingActionButton"
+            app:layout_constraintEnd_toStartOf="@+id/entryAddBtn"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
@@ -27,7 +28,7 @@
 
         <SearchView
             android:id="@+id/searchView"
-            android:layout_width="160dp"
+            android:layout_width="0dp"
             android:layout_height="match_parent"
             android:backgroundTintMode="multiply"
             android:gravity="center"
@@ -35,15 +36,17 @@
             android:searchIcon="@drawable/baseline_manage_search_24"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/floatingActionButton"
+            app:layout_constraintStart_toEndOf="@+id/entryAddBtn"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0.5" />
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/floatingActionButton"
+            android:id="@+id/entryAddBtn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:clickable="true"
+            android:contentDescription="add entry"
+            android:visibility="visible"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -58,7 +61,6 @@
         android:layout_height="match_parent"
         android:background="?attr/colorOnPrimary"
         android:paddingLeft="8dp"
-        android:paddingTop="8dp"
         android:paddingRight="8dp" />
 
 </LinearLayout>

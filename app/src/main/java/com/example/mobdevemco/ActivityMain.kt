@@ -25,7 +25,7 @@ class ActivityMain : AppCompatActivity(){
         setContentView(viewBinding.root)
 
         //Logic for adding a new entry
-        viewBinding.addBtn.setOnClickListener(View.OnClickListener {
+        viewBinding.entryAddBtn.setOnClickListener(View.OnClickListener {
             val intent = Intent(this@ActivityMain, NewEntryActivity::class.java)
             this.startActivity(intent)
         })
