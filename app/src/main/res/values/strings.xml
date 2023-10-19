@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">Tournal</string>
+    <string name="app_placeholder_place">Pasay City, Metro Manila</string>
 </resources>
