@@ -15,6 +15,13 @@
     android:paddingRight="16dp"
     android:paddingBottom="16dp">
 
+    <ImageView
+        android:id="@+id/deletebtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:foregroundGravity="left"
+        app:srcCompat="@android:drawable/ic_delete" />
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="20dp"
