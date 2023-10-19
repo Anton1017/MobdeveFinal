@@ -1,5 +1,6 @@
 package com.example.mobdevemco
 
+import android.content.Intent
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
@@ -14,7 +15,10 @@ class EntryAdapter(private val data: ArrayList<Entry>) : RecyclerView.Adapter<En
             false)
         val entryViewHolder = EntryViewHolder(itemViewBinding)
 
-
+        entryViewHolder.itemView.setOnClickListener{
+            val intent : Intent = Intent(entryViewHolder.itemView.context, EntryDetailsActivity::class.java)
+//            this.startActivity(intent)
+        }
 
         return entryViewHolder
     }
