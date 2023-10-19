@@ -9,7 +9,7 @@ class DataGenerator {
                 Entry(
                     "Maria Kart IRL",
                     "Tokyo, Japan",
-                    R.drawable.mario_kart,
+                    R.mipmap.mario_kart,
                     "Being able to drive the karts like in Mario :)" +
                             "Kart reminds me of my Childhood",
                     CustomDate(2023, 9, 12)
@@ -19,7 +19,7 @@ class DataGenerator {
                 Entry(
                     "CAVS vs GSW Game 7",
                     "Oracle Arena, California",
-                    R.drawable.nba_game,
+                    R.mipmap.nba_game,
                     "Travelled all the way from the Phillipines to watch Lebron comeback " +
                             "from a 3-1 deficeit",
                     CustomDate(2023, 5, 19)
@@ -29,7 +29,7 @@ class DataGenerator {
                 Entry(
                     "Paris Eiffel Tower Tour",
                     "Paris, France",
-                    R.drawable.eiffel_tower,
+                    R.mipmap.eiffel_tower,
                     "Exploring the iconic Eiffel Tower in the City of Love.",
                     CustomDate(2022, 11, 12)
                 )
@@ -38,7 +38,7 @@ class DataGenerator {
                 Entry(
                     "Beach Paradise in Bali",
                     "Bali, Indonesia",
-                    R.drawable.beach_indonesia,
+                    R.mipmap.beach_indonesia,
                     "Relaxing on Bali's stunning beaches and enjoy tropical paradise.",
                     CustomDate(2022, 3, 23)
                 )
@@ -47,7 +47,7 @@ class DataGenerator {
                 Entry(
                     "Historic Rome Walk",
                     "Rome, Italy",
-                    R.drawable.ruins_italy,
+                    R.mipmap.ruins_italy,
                     "Stroll through ancient Roman ruins and landmarks.",
                     CustomDate(2012, 3, 23)
                 )
