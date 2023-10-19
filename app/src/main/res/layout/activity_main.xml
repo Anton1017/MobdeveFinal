@@ -33,6 +33,8 @@
             android:layout_height="48dp"
             android:clickable="true"
             android:contentDescription="add entry"
+            android:tint="?attr/colorPrimary"
+            android:tintMode="multiply"
             android:visibility="visible"
             app:fabCustomSize="48dp"
             app:layout_constraintBottom_toBottomOf="parent"
