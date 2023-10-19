@@ -1,5 +1,7 @@
 package com.example.mobdevemco
 
+import android.view.View
+import android.content.DialogInterface.OnClickListener
 import androidx.recyclerview.widget.RecyclerView
 import com.example.mobdevemco.databinding.EntryItemBinding
 
@@ -11,4 +13,9 @@ class EntryViewHolder(private val viewBinding: EntryItemBinding): RecyclerView.V
         this.viewBinding.entryDescription.text = entry.description
         this.viewBinding.entryCreatedAt.text = entry.createdAt.toStringFull()
     }
+
+    fun setDeleteOnClickListener(onClickListener: View.OnClickListener){
+        this.viewBinding.deletebtn.setOnClickListener(onClickListener)
+    }
+
 }
