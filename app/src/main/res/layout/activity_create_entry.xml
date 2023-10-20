@@ -10,15 +10,18 @@
     android:weightSum="2">
 
     <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/editLocationBtn"
         android:layout_width="match_parent"
         android:layout_height="112dp"
         android:background="@drawable/entry_background">
 
         <ImageView
-            android:id="@+id/imageView4"
+            android:id="@+id/mapView"
             android:layout_width="wrap_content"
             android:layout_height="0dp"
             android:adjustViewBounds="true"
+            android:clickable="true"
+            android:contentDescription="small map view"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/imageView3"
             app:layout_constraintStart_toStartOf="parent"
@@ -32,7 +35,7 @@
             android:layout_marginStart="16dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/textView5"
-            app:layout_constraintStart_toEndOf="@+id/imageView4"
+            app:layout_constraintStart_toEndOf="@+id/mapView"
             app:layout_constraintTop_toTopOf="parent"
             app:srcCompat="@drawable/baseline_gps_fixed_24" />
 
@@ -96,7 +99,7 @@
         android:layout_marginTop="8dp">
 
         <Button
-            android:id="@+id/create_btn"
+            android:id="@+id/createBtn"
             android:layout_width="wrap_content"
             android:layout_height="0dp"
             android:text="@string/tournal_create_action"
@@ -105,17 +108,17 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <ImageView
-            android:id="@+id/imageView5"
+            android:id="@+id/addImageBtn"
             android:layout_width="40dp"
             android:layout_height="0dp"
             android:layout_marginRight="16dp"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/create_btn"
+            app:layout_constraintEnd_toStartOf="@+id/createBtn"
             app:layout_constraintTop_toTopOf="parent"
             app:srcCompat="@drawable/baseline_image_search_24" />
 
         <ImageView
-            android:id="@+id/imageView6"
+            android:id="@+id/cancelBtn"
             android:layout_width="40dp"
             android:layout_height="56dp"
             app:layout_constraintBottom_toBottomOf="parent"
