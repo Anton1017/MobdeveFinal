@@ -72,6 +72,28 @@ class DataGenerator {
                     CustomDate(2012, 3, 23)
                 )
             )
+            val images6 = ArrayList<EntryImages>()
+            images6.add(EntryImages(R.mipmap.bee))
+            images6.add(EntryImages(R.mipmap.bee))
+            images6.add(EntryImages(R.mipmap.bee))
+            images6.add(EntryImages(R.mipmap.bee))
+            images6.add(EntryImages(R.mipmap.bee))
+            images6.add(EntryImages(R.mipmap.bee))
+            images6.add(EntryImages(R.mipmap.bee))
+            images6.add(EntryImages(R.mipmap.bee))
+            images6.add(EntryImages(R.mipmap.bee))
+            images6.add(EntryImages(R.mipmap.bee))
+            data.add(
+                Entry(
+                    "Bee Movie Script",
+                    "Pyongyang, North Korea",
+                    images6,
+                    "According to all known laws of aviation, there is no way a bee should be able to fly.\n" +
+                            "Its wings are too small to get its fat little body off the ground.\n" +
+                            "The bee, of course, flies anyway because bees don't care what humans think is impossible.",
+                    CustomDate(2012, 11, 21)
+                )
+            )
             return data
         }
     }
