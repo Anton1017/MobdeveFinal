@@ -69,7 +69,9 @@
                 android:layout_height="match_parent"
                 android:layout_gravity="center"
                 android:layout_marginRight="8dp"
-                app:srcCompat="@drawable/baseline_manage_search_24" />
+                app:tint="?attr/colorOnPrimary"
+                android:tintMode="multiply"
+                app:srcCompat="@drawable/ic_search_api_material" />
         </LinearLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
