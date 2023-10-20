@@ -12,7 +12,7 @@ class EntryViewHolder(private val viewBinding: EntryItemBinding): RecyclerView.V
         // TODO: images for recyclerView
         this.viewBinding.entryDescription.text = entry.description
         this.viewBinding.entryCreatedAt.text = entry.createdAt.toStringFull()
-        this.viewBinding.entroImage.setImageResource(entry.imageId)
+        //this.viewBinding.entroImage.setImageResource(entry.imageId)
     }
 
     fun setDeleteOnClickListener(onClickListener: View.OnClickListener){
