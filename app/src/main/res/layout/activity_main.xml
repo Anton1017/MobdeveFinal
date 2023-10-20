@@ -85,7 +85,7 @@
             android:background="?attr/colorOnPrimary"
             android:clipToPadding="true"
             android:paddingLeft="8dp"
-            android:paddingTop="38dp"
+            android:paddingTop="8dp"
             android:paddingRight="8dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
