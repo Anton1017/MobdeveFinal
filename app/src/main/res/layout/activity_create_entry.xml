@@ -39,7 +39,7 @@
             app:layout_constraintTop_toTopOf="parent"
             app:srcCompat="@drawable/baseline_gps_fixed_24" />
 
-        <EditText
+        <TextView
             android:id="@+id/textView5"
             style="@style/Widget.Material3.AutoCompleteTextView.FilledBox"
             android:layout_width="0dp"
