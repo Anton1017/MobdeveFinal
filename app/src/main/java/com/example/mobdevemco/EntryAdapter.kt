@@ -22,7 +22,7 @@ class EntryAdapter(private val data: ArrayList<Entry>) : RecyclerView.Adapter<En
 
         entryViewHolder.itemView.setOnClickListener{
             val intent : Intent = Intent(entryViewHolder.itemView.context, EntryDetailsActivity::class.java)
-            //this.startActivity(intent)
+            parent.context.startActivity(intent)
         }
 
         entryViewHolder.setDeleteOnClickListener(View.OnClickListener{
