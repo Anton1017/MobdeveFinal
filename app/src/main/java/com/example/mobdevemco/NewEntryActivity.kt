@@ -11,9 +11,11 @@ class NewEntryActivity : AppCompatActivity(){
         val viewBinding : ActivityCreateEntryBinding = ActivityCreateEntryBinding.inflate(layoutInflater)
         setContentView(viewBinding.root)
         viewBinding.createBtn.setOnClickListener(View.OnClickListener {
-            /* TODO:
-             *  1. Finish the activity
-             * */
+
+            finish()
+        })
+        viewBinding.cancelBtn.setOnClickListener(View.OnClickListener {
+
             finish()
         })
     }
