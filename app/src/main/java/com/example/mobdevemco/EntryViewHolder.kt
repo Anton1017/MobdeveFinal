@@ -32,8 +32,8 @@ class EntryViewHolder(private val viewBinding: EntryItemBinding): RecyclerView.V
 
     }
 
-    fun setDeleteOnClickListener(onClickListener: View.OnClickListener){
-        this.viewBinding.deletebtn.setOnClickListener(onClickListener)
-    }
+//    fun setDeleteOnClickListener(onClickListener: View.OnClickListener){
+//        this.viewBinding.deletebtn.setOnClickListener(onClickListener)
+//    }
 
 }
