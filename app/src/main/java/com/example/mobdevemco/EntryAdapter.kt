@@ -25,18 +25,18 @@ class EntryAdapter(private val data: ArrayList<Entry>) : RecyclerView.Adapter<En
             parent.context.startActivity(intent)
         }
 
-        entryViewHolder.setDeleteOnClickListener(View.OnClickListener{
-            builder.setTitle("Alert!")
-                .setMessage("Are you sure you want to delete " + itemViewBinding.entryTitle.text)
-                .setCancelable(true)
-                .setPositiveButton("Yes"){dialogInterface,it ->
-                    dialogInterface.cancel()
-                }
-                .setNegativeButton("No"){dialogInterface,it ->
-                    dialogInterface.cancel()
-                }
-                .show()
-        })
+//        entryViewHolder.setDeleteOnClickListener(View.OnClickListener{
+//            builder.setTitle("Alert!")
+//                .setMessage("Are you sure you want to delete " + itemViewBinding.entryTitle.text)
+//                .setCancelable(true)
+//                .setPositiveButton("Yes"){dialogInterface,it ->
+//                    dialogInterface.cancel()
+//                }
+//                .setNegativeButton("No"){dialogInterface,it ->
+//                    dialogInterface.cancel()
+//                }
+//                .show()
+//        })
 
 
         return entryViewHolder
