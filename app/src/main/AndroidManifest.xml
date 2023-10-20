@@ -16,6 +16,9 @@
                 android:name=".EntryDetailsActivity"
                 android:exported="false" />
             <activity
+                android:name=".EntryMapActivity"
+                android:exported="false" />
+            <activity
                 android:name=".NewEntryActivity"
                 android:exported="false" />
             <activity

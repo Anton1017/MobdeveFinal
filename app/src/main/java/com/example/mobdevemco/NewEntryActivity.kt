@@ -1,5 +1,6 @@
 package com.example.mobdevemco
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
@@ -17,6 +18,10 @@ class NewEntryActivity : AppCompatActivity(){
         viewBinding.cancelBtn.setOnClickListener(View.OnClickListener {
 
             finish()
+        })
+        viewBinding.mapView.setOnClickListener(View.OnClickListener {
+            val intent = Intent(this@NewEntryActivity, EntryMapActivity::class.java)
+            this.startActivity(intent)
         })
     }
 
