@@ -25,6 +25,7 @@ class EntryViewHolder(private val viewBinding: EntryItemBinding): RecyclerView.V
 
         //this.viewBinding.entroImage.setImageResource(entry.imageId)
         val snapHelper: SnapHelper = PagerSnapHelper()
+        snapHelper.attachToRecyclerView(recyclerView)
     }
 
     fun setDeleteOnClickListener(onClickListener: View.OnClickListener){
