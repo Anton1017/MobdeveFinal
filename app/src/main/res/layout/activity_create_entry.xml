@@ -7,11 +7,11 @@
     android:background="?attr/colorOnPrimary"
     android:orientation="vertical"
     android:padding="16dp"
-    android:weightSum="1">
+    android:weightSum="2">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="125dp"
+        android:layout_height="112dp"
         android:background="@drawable/entry_background">
 
         <ImageView
@@ -71,10 +71,9 @@
     <EditText
         android:id="@+id/editTextTextMultiLine2"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_weight="0.9"
+        android:layout_height="0dp"
+        android:layout_weight="1.5"
         android:background="@null"
-        android:ems="10"
         android:fontFamily="sans-serif"
         android:gravity="start"
         android:hint="@string/tournal_description_hint"
@@ -87,21 +86,20 @@
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/imageListRecyclerView"
         android:layout_width="match_parent"
-        android:layout_height="96dp"
+        android:layout_height="0dp"
         android:layout_marginTop="8dp"
-        android:layout_weight="0.05" />
+        android:layout_weight="0.5" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="56dp"
-        android:layout_marginTop="8dp"
-        android:layout_weight="0.05">
+        android:layout_marginTop="8dp">
 
         <Button
             android:id="@+id/create_btn"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Create"
+            android:layout_height="0dp"
+            android:text="@string/tournal_create_action"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -119,7 +117,7 @@
         <ImageView
             android:id="@+id/imageView6"
             android:layout_width="40dp"
-            android:layout_height="0dp"
+            android:layout_height="56dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
