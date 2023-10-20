@@ -101,19 +101,19 @@
         android:textAppearance="@style/TextAppearance.AppCompat.Small"
         android:textColor="?attr/colorOnSecondary" />
 
-    <ImageView
-        android:id="@+id/entro_image"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:adjustViewBounds="true"
-        android:maxHeight="200dp"
-        android:minHeight="200dp"
-        tools:srcCompat="@tools:sample/avatars" />
-
-    <!--    <androidx.recyclerview.widget.RecyclerView-->
-<!--        android:id="@+id/entryImageRecyclerView"-->
+<!--    <ImageView-->
+<!--        android:id="@+id/entro_image"-->
 <!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="match_parent"-->
-<!--        android:layout_marginTop="16dp" />-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_marginTop="8dp"-->
+<!--        android:adjustViewBounds="true"-->
+<!--        android:maxHeight="200dp"-->
+<!--        android:minHeight="200dp"-->
+<!--        tools:srcCompat="@tools:sample/avatars" />-->
+
+        <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/entryImageRecyclerView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="16dp" />
 </LinearLayout>

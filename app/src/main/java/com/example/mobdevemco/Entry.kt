@@ -2,7 +2,7 @@ package com.example.mobdevemco
 import CustomDate
 
 
-class Entry (var title: String, var locationName: String, var images: ArrayList<Int>, var description: String, var createdAt: CustomDate){
+class Entry (var title: String, var locationName: String, var images: ArrayList<EntryImages>, var description: String, var createdAt: CustomDate)
 //    var title: String
 //        private set
 //    var locationName: String
@@ -31,4 +31,3 @@ class Entry (var title: String, var locationName: String, var images: ArrayList<
 //        this.createdAt = CustomDate()
 //    }
 
-}

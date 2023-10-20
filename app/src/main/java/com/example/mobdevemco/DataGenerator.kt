@@ -5,9 +5,9 @@ class DataGenerator {
     companion object {
         fun loadEntryData(): ArrayList<Entry> {
             val data = ArrayList<Entry>()
-            val images1 = ArrayList<Int>()
-            images1.add(R.mipmap.mario_kart)
-            images1.add(R.mipmap.mario_kart)
+            val images1 = ArrayList<EntryImages>()
+            images1.add(EntryImages(R.mipmap.mario_kart))
+            images1.add(EntryImages(R.mipmap.eiffel_tower))
             data.add(
                 Entry(
                     "Maria Kart IRL",
@@ -18,9 +18,14 @@ class DataGenerator {
                     CustomDate(2023, 9, 12)
                 )
             )
-            val images2 = ArrayList<Int>()
-            images2.add(R.mipmap.nba_game)
-            images2.add(R.mipmap.nba_game)
+            val images2 = ArrayList<EntryImages>()
+            images2.add(EntryImages(R.mipmap.nba_game))
+//            images2.add(EntryImages(R.mipmap.nba_game))
+//            images2.add(EntryImages(R.mipmap.nba_game))
+//            images2.add(EntryImages(R.mipmap.nba_game))
+//            images2.add(EntryImages(R.mipmap.nba_game))
+//            images2.add(EntryImages(R.mipmap.nba_game))
+
             data.add(
                 Entry(
                     "CAVS vs GSW Game 7",
@@ -31,9 +36,9 @@ class DataGenerator {
                     CustomDate(2023, 5, 19)
                 )
             )
-            val images3 = ArrayList<Int>()
-            images3.add(R.mipmap.eiffel_tower)
-            images3.add(R.mipmap.eiffel_tower)
+            val images3 = ArrayList<EntryImages>()
+            images3.add(EntryImages(R.mipmap.eiffel_tower))
+            images3.add(EntryImages(R.mipmap.eiffel_tower))
             data.add(
                 Entry(
                     "Paris Eiffel Tower Tour",
@@ -43,9 +48,9 @@ class DataGenerator {
                     CustomDate(2022, 11, 12)
                 )
             )
-            val images4 = ArrayList<Int>()
-            images4.add(R.mipmap.beach_indonesia)
-            images4.add(R.mipmap.beach_indonesia)
+            val images4 = ArrayList<EntryImages>()
+            images4.add(EntryImages(R.mipmap.beach_indonesia))
+            images4.add(EntryImages(R.mipmap.beach_indonesia))
             data.add(
                 Entry(
                     "Beach Paradise in Bali",
@@ -55,9 +60,9 @@ class DataGenerator {
                     CustomDate(2022, 3, 23)
                 )
             )
-            val images5 = ArrayList<Int>()
-            images5.add(R.mipmap.beach_indonesia)
-            images5.add(R.mipmap.beach_indonesia)
+            val images5 = ArrayList<EntryImages>()
+            images5.add(EntryImages(R.mipmap.ruins_italy))
+            images5.add(EntryImages(R.mipmap.ruins_italy))
             data.add(
                 Entry(
                     "Historic Rome Walk",
