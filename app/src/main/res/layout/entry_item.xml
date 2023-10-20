@@ -94,6 +94,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
+        android:layout_marginBottom="16dp"
         android:ellipsize="end"
         android:maxLines="2"
         android:text="TextView"
@@ -114,7 +115,7 @@
         android:id="@+id/entryImageRecyclerView"
         android:layout_width="match_parent"
         android:layout_height="300dp"
-        android:layout_marginTop="16dp" />
+        android:background="?attr/colorPrimaryVariant" />
 
     <LinearLayout
         android:layout_width="match_parent"
