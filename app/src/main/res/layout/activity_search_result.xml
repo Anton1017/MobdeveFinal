@@ -40,7 +40,7 @@
             android:textSize="14sp" />
 
         <Button
-            android:id="@+id/createBtn2"
+            android:id="@+id/searchBtn"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="0.25"
