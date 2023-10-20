@@ -129,7 +129,7 @@
                     android:ellipsize="end"
                     android:gravity="center|left"
                     android:maxLines="1"
-                    android:text="@string/app_placeholder_place" />
+                    android:text="@string/tournal_placeholder_place" />
             </LinearLayout>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
