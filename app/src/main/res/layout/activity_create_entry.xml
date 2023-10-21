@@ -13,14 +13,16 @@
         android:id="@+id/editLocationBtn"
         android:layout_width="match_parent"
         android:layout_height="112dp"
-        android:background="@drawable/entry_background">
+        android:background="@drawable/entry_background"
+        android:clickable="true"
+        android:focusable="true">
 
         <ImageView
             android:id="@+id/mapView"
             android:layout_width="wrap_content"
             android:layout_height="0dp"
             android:adjustViewBounds="true"
-            android:clickable="true"
+            android:clickable="false"
             android:contentDescription="small map view"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/imageView3"
@@ -33,6 +35,7 @@
             android:layout_width="30dp"
             android:layout_height="0dp"
             android:layout_marginStart="16dp"
+            android:clickable="false"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/textView5"
             app:layout_constraintStart_toEndOf="@+id/mapView"
@@ -50,6 +53,7 @@
             android:textColor="?attr/colorPrimary"
             android:textColorHint="?attr/colorTertiary"
             android:textSize="20sp"
+            android:clickable="false"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/imageView3"

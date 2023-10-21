@@ -19,7 +19,7 @@ class NewEntryActivity : AppCompatActivity(){
 
             finish()
         })
-        viewBinding.mapView.setOnClickListener(View.OnClickListener {
+        viewBinding.editLocationBtn.setOnClickListener(View.OnClickListener {
             val intent = Intent(this@NewEntryActivity, EntryMapActivity::class.java)
             this.startActivity(intent)
         })
