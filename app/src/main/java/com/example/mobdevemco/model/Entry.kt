@@ -1,5 +1,4 @@
-package com.example.mobdevemco
-import CustomDate
+package com.example.mobdevemco.model
 
 
 class Entry (var title: String, var locationName: String, var images: ArrayList<EntryImages>, var description: String, var createdAt: CustomDate)
@@ -11,11 +10,11 @@ class Entry (var title: String, var locationName: String, var images: ArrayList<
 //        private set
 //    var description: String
 //        private set
-//    var createdAt: CustomDate
+//    var createdAt: com.example.mobdevemco.model.CustomDate
 //        private set
 
 
-//    constructor(title: String, locationName: String, imageId: Int, description: String, createdAt: CustomDate){
+//    constructor(title: String, locationName: String, imageId: Int, description: String, createdAt: com.example.mobdevemco.model.CustomDate){
 //        this.title = title
 //        this.locationName = locationName
 //        this.imageId = imageId
@@ -28,6 +27,6 @@ class Entry (var title: String, var locationName: String, var images: ArrayList<
 //        this.locationName = locationName
 //        this.imageId = imageId
 //        this.description = description
-//        this.createdAt = CustomDate()
+//        this.createdAt = com.example.mobdevemco.model.CustomDate()
 //    }
 

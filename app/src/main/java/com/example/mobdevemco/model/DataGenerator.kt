@@ -1,6 +1,8 @@
-package com.example.mobdevemco
+package com.example.mobdevemco.model
+import com.example.mobdevemco.R
 import java.util.ArrayList
-import CustomDate
+import com.example.mobdevemco.model.CustomDate
+
 class DataGenerator {
     companion object {
         fun loadEntryData(): ArrayList<Entry> {
@@ -79,7 +81,7 @@ class DataGenerator {
 //                    images2,
 //                    "Travelled all the way from the Phillipines to watch Lebron comeback " +
 //                            "from a 3-1 deficeit",
-//                    CustomDate(2023, 5, 19)
+//                    com.example.mobdevemco.model.CustomDate(2023, 5, 19)
 //                )
 //            )
 //            val images3 = ArrayList<EntryImages>()
@@ -91,7 +93,7 @@ class DataGenerator {
 //                    "Paris, France",
 //                    images3,
 //                    "Exploring the iconic Eiffel Tower in the City of Love.",
-//                    CustomDate(2022, 11, 12)
+//                    com.example.mobdevemco.model.CustomDate(2022, 11, 12)
 //                )
 //            )
 //            val images4 = ArrayList<EntryImages>()
@@ -103,7 +105,7 @@ class DataGenerator {
 //                    "Bali, Indonesia",
 //                    images4,
 //                    "Relaxing on Bali's stunning beaches and enjoy tropical paradise.",
-//                    CustomDate(2022, 3, 23)
+//                    com.example.mobdevemco.model.CustomDate(2022, 3, 23)
 //                )
 //            )
 //            val images5 = ArrayList<EntryImages>()
@@ -115,7 +117,7 @@ class DataGenerator {
 //                    "Rome, Italy",
 //                    images5,
 //                    "Stroll through ancient Roman ruins and landmarks.",
-//                    CustomDate(2012, 3, 23)
+//                    com.example.mobdevemco.model.CustomDate(2012, 3, 23)
 //                )
 //            )
 //            val images6 = ArrayList<EntryImages>()
@@ -137,7 +139,7 @@ class DataGenerator {
 //                    "According to all known laws of aviation, there is no way a bee should be able to fly.\n" +
 //                            "Its wings are too small to get its fat little body off the ground.\n" +
 //                            "The bee, of course, flies anyway because bees don't care what humans think is impossible.",
-//                    CustomDate(2012, 11, 21)
+//                    com.example.mobdevemco.model.CustomDate(2012, 11, 21)
 //                )
 //            )
             return data

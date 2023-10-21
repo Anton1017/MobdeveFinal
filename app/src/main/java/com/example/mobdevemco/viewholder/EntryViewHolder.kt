@@ -1,11 +1,14 @@
-package com.example.mobdevemco
+package com.example.mobdevemco.viewholder
 
-import android.view.View
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.mobdevemco.databinding.EntryItemBinding
 import androidx.recyclerview.widget.SnapHelper
 import androidx.recyclerview.widget.PagerSnapHelper
+import com.example.mobdevemco.adapter.EntryImageAdapter
+import com.example.mobdevemco.activity.SnapOnScrollListener
+import com.example.mobdevemco.model.Entry
+
 class EntryViewHolder(private val viewBinding: EntryItemBinding): RecyclerView.ViewHolder(viewBinding.root) {
 
     private lateinit var recyclerView: RecyclerView

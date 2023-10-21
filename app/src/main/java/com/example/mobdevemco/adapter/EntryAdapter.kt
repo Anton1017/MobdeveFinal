@@ -1,13 +1,15 @@
-package com.example.mobdevemco
+package com.example.mobdevemco.adapter
 
-import android.content.Context
 import android.content.Intent
-import android.view.View
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.mobdevemco.databinding.EntryItemBinding
 import androidx.appcompat.app.AlertDialog
+import com.example.mobdevemco.activity.EntryDetailsActivity
+import com.example.mobdevemco.model.Entry
+import com.example.mobdevemco.viewholder.EntryViewHolder
+
 class EntryAdapter(private val data: ArrayList<Entry>) : RecyclerView.Adapter<EntryViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): EntryViewHolder {

@@ -1,4 +1,4 @@
-package com.example.mobdevemco
+package com.example.mobdevemco.activity
 
 import android.content.Intent
 import android.os.Bundle

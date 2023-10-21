@@ -1,8 +1,7 @@
-package com.example.mobdevemco
-import android.view.View
-import android.content.DialogInterface.OnClickListener
+package com.example.mobdevemco.viewholder
 import androidx.recyclerview.widget.RecyclerView
 import com.example.mobdevemco.databinding.EntryImageItemBinding
+import com.example.mobdevemco.model.EntryImages
 
 
 class EntryImageViewHolder(private val viewBinding: EntryImageItemBinding): RecyclerView.ViewHolder(viewBinding.root) {

@@ -1,5 +1,5 @@
 // source: https://medium.com/over-engineering/detecting-snap-changes-with-androids-recyclerview-snaphelper-9e9f5e95c424
-package com.example.mobdevemco
+package com.example.mobdevemco.activity
 
 
 import androidx.recyclerview.widget.RecyclerView

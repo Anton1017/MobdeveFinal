@@ -1,14 +1,14 @@
-package com.example.mobdevemco
+package com.example.mobdevemco.activity
 
 
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
-import androidx.activity.result.ActivityResult
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.mobdevemco.model.DataGenerator
+import com.example.mobdevemco.adapter.EntryAdapter
 import com.example.mobdevemco.databinding.ActivityMainBinding
 
 class ActivityMain : AppCompatActivity(){

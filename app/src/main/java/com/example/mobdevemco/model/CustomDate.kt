@@ -1,3 +1,5 @@
+package com.example.mobdevemco.model
+
 import java.util.Calendar
 
 
@@ -6,7 +8,7 @@ class CustomDate {
     private var month: Int
     private var year: Int
 
-    // Creates a CustomDate for today
+    // Creates a com.example.mobdevemco.model.CustomDate for today
     constructor() {
         val c = Calendar.getInstance()
         year = c[Calendar.YEAR]
@@ -23,15 +25,15 @@ class CustomDate {
     }
 
     // Example output
-    // if CustomDate has 2023, 0, 1: Jan 1, 2023
-    // if CustomDate has 2023, 11, 1: Dec 1, 2023
+    // if com.example.mobdevemco.model.CustomDate has 2023, 0, 1: Jan 1, 2023
+    // if com.example.mobdevemco.model.CustomDate has 2023, 11, 1: Dec 1, 2023
     fun toStringFull(): String {
         return monthString[month] + " " + day_in_month + ", " + year
     }
 
     // Example output
-    // if CustomDate has 2023, 0, 1: Jan 1
-    // if CustomDate has 2023, 11, 1: Dec 1
+    // if com.example.mobdevemco.model.CustomDate has 2023, 0, 1: Jan 1
+    // if com.example.mobdevemco.model.CustomDate has 2023, 11, 1: Dec 1
     fun toStringNoYear(): String {
         return monthString[month] + " " + day_in_month
     }
