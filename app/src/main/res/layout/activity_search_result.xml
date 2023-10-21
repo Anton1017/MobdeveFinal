@@ -17,7 +17,7 @@
             android:id="@+id/backBtn"
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_marginRight="8dp"
+            android:layout_marginRight="16dp"
             android:layout_weight="0.1"
             app:srcCompat="@drawable/baseline_keyboard_backspace_24" />
 
@@ -26,7 +26,7 @@
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_marginRight="8dp"
-            android:layout_weight="0.65"
+            android:layout_weight="0.60"
             android:background="@null"
             android:ellipsize="end"
             android:ems="5"
@@ -37,13 +37,13 @@
             android:paddingTop="8dp"
             android:paddingBottom="8dp"
             android:textColorHint="?attr/colorTertiary"
-            android:textSize="14sp" />
+            android:textSize="12sp" />
 
         <Button
             android:id="@+id/searchBtn"
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_weight="0.25"
+            android:layout_weight="0.3"
             android:text="@string/tournal_search_action" />
 
     </LinearLayout>

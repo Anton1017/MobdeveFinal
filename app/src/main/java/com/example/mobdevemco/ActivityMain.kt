@@ -31,7 +31,7 @@ class ActivityMain : AppCompatActivity(){
         })
 
         viewBinding.searchLogo.setOnClickListener(View.OnClickListener {
-                       
+            val intent = Intent(this@ActivityMain, EntrySearchActivity::class.java)
             this.startActivity(intent)
         })
         this.recyclerView = viewBinding.entryRecyclerView
