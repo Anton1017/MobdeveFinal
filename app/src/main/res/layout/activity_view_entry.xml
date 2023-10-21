@@ -83,7 +83,7 @@
                     android:layout_marginTop="1dp"
                     android:ellipsize="end"
                     android:maxLines="1"
-                    android:text="TextView"
+                    android:text="Oct 12, 2023"
                     android:textAllCaps="false"
                     android:textAppearance="@style/TextAppearance.AppCompat.Small"
                     android:textColor="?attr/colorOnSecondary" />
@@ -110,7 +110,7 @@
                     android:layout_marginTop="1dp"
                     android:ellipsize="end"
                     android:maxLines="1"
-                    android:text="TextView"
+                    android:text="Tokyo, Japan"
                     android:textAllCaps="false"
                     android:textAppearance="@style/TextAppearance.AppCompat.Small"
                     android:textColor="?attr/colorOnSecondary"
@@ -127,7 +127,7 @@
                 android:ellipsize="end"
                 android:fontFamily="sans-serif"
                 android:maxLines="2"
-                android:text="TextView"
+                android:text="Mario Kart IRL "
                 android:textAllCaps="false"
                 android:textAppearance="@style/TextAppearance.AppCompat.Large"
                 android:textColor="?attr/colorOnSecondary"
@@ -146,8 +146,7 @@
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/entryImageRecyclerView"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginStart="8dp"
+                android:layout_height="300dp"
                 android:backgroundTint="?attr/colorOnPrimary" />
 
             <TextView
@@ -156,9 +155,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
                 android:layout_marginBottom="32dp"
-                android:ellipsize="end"
-                android:maxLines="2"
-                android:text="TextView"
+                android:text="Being able to drive the karts like in Mario Kart reminds me of my Childhood Kart reminds me of my Childhood, excited to be like Mario while my friend is Luigi"
                 android:textAppearance="@style/TextAppearance.AppCompat.Small"
                 android:textColor="?attr/colorOnSecondary" />
         </LinearLayout>

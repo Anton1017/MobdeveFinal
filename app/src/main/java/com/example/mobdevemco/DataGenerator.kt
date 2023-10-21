@@ -16,7 +16,10 @@ class DataGenerator {
                     "Maria Kart IRL",
                     "Tokyo, Japan",
                     images1,
-                    "Being able to drive the karts like in Mario :)" +
+                    "Being able to drive the karts like in Mario " +
+                            "Kart reminds me of my Childhood" + " Being able to drive the karts like in Mario " +
+                            "Kart reminds me of my Childhood" + " Being able to drive the karts like in Mario " +
+                            "Kart reminds me of my Childhood" + " Being able to drive the karts like in Mario " +
                             "Kart reminds me of my Childhood",
                     CustomDate(2023, 9, 12)
                 )
@@ -27,7 +30,7 @@ class DataGenerator {
                     "Tokyo, Japan",
                     images1,
                     "Being able to drive the karts like in Mario :)" +
-                            "Kart reminds me of my Childhood",
+                            "Kart reminds me of my Childhood, excited to be like Mario while my friend is Luigi",
                     CustomDate(2023, 9, 12)
                 )
             )
@@ -139,5 +142,15 @@ class DataGenerator {
 //            )
             return data
         }
+        fun loadEntryImageData(): ArrayList<EntryImages>{
+            val imagedata = ArrayList<EntryImages>()
+            imagedata.add(EntryImages(R.mipmap.mario_kart))
+            imagedata.add(EntryImages(R.mipmap.mario_kart))
+            imagedata.add(EntryImages(R.mipmap.mario_kart))
+            imagedata.add(EntryImages(R.mipmap.mario_kart))
+            imagedata.add(EntryImages(R.mipmap.mario_kart))
+            return imagedata
+        }
+
     }
 }
