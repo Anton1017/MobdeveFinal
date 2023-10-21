@@ -73,7 +73,7 @@
         android:padding="8dp"
         android:textColorHint="?attr/colorTertiary"
         android:textSize="24sp"
-        android:text="@string/tournal_edit_location"/>
+        android:text="@string/tournal_edit_title"/>
 
     <EditText
         android:id="@+id/editTextTextMultiLine2"
@@ -91,6 +91,8 @@
         android:textColorHint="?attr/colorTertiary"
         android:text="@string/tournal_edit_description"/>
 
+
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/imageListRecyclerView"
         android:layout_width="match_parent"
@@ -98,6 +100,13 @@
         android:layout_marginTop="8dp"
         android:layout_weight="0.5"
         android:padding="8dp"/>
+
+    <TextView
+        android:id="@+id/textView4"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="1 or 5" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
