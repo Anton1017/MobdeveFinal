@@ -30,7 +30,7 @@
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/entryAddBtn"
             android:layout_width="48dp"
-            android:layout_height="48dp"
+            android:layout_height="0dp"
             android:clickable="true"
             android:contentDescription="add entry"
             android:tint="?attr/colorPrimary"
