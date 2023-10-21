@@ -9,4 +9,10 @@
     <string name="tournal_title_hint">Title</string>
     <string name="tournal_description_hint">Description</string>
     <string name="tournal_search_hint">Search for a keyword, time, place, etc.</string>
+    <string name="tournal_edit_location">Tokyo, Japan</string>
+    <string name="tournal_edit_title">Mario Kart IRL</string>
+    <string name="tournal_edit_description">Being able to drive the karts like
+        in Mario Kart reminds me of my Childhood Kart reminds me of my Childhood, excited to
+        be like Mario while my friend is Luigi</string>
+    <string name="tournal_edit_save">Save</string>
 </resources>

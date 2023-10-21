@@ -13,7 +13,7 @@ class DataGenerator {
             images1.add(EntryImages(R.mipmap.mario_kart))
             data.add(
                 Entry(
-                    "Maria Kart IRL",
+                    "Mario Kart IRL",
                     "Tokyo, Japan",
                     images1,
                     "Being able to drive the karts like in Mario " +
@@ -26,7 +26,7 @@ class DataGenerator {
             )
             data.add(
                 Entry(
-                    "Maria Kart IRL",
+                    "Mario Kart IRL",
                     "Tokyo, Japan",
                     images1,
                     "Being able to drive the karts like in Mario :)" +
@@ -36,7 +36,7 @@ class DataGenerator {
             )
             data.add(
                 Entry(
-                    "Maria Kart IRL",
+                    "Mario Kart IRL",
                     "Tokyo, Japan",
                     images1,
                     "Being able to drive the karts like in Mario :)" +
@@ -46,7 +46,7 @@ class DataGenerator {
             )
             data.add(
                 Entry(
-                    "Maria Kart IRL",
+                    "Mario Kart IRL",
                     "Tokyo, Japan",
                     images1,
                     "Being able to drive the karts like in Mario :)" +
@@ -56,7 +56,7 @@ class DataGenerator {
             )
             data.add(
                 Entry(
-                    "Maria Kart IRL",
+                    "Mario Kart IRL",
                     "Tokyo, Japan",
                     images1,
                     "Being able to drive the karts like in Mario :)" +

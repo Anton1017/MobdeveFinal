@@ -1,5 +1,6 @@
 package com.example.mobdevemco
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AlertDialog
@@ -38,6 +39,10 @@ class EntryDetailsActivity: AppCompatActivity() {
             finish()
         })
 
+        viewBinding.editBtn.setOnClickListener(View.OnClickListener {
+            val intent = Intent(this@EntryDetailsActivity, EntryEditActivity::class.java)
+            this.startActivity(intent)
+        })
         this.recyclerView = viewBinding.entryImageRecyclerView
         this.myAdapter = EntryImageAdapter(entryDataImages)
         this.recyclerView.adapter = myAdapter
