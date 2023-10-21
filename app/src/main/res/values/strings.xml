@@ -7,6 +7,6 @@
     <string name="tournal_confirm_action">CONFIRM</string>
 
     <string name="tournal_title_hint">Title</string>
-    <string name="tournal_description_hint">description</string>
+    <string name="tournal_description_hint">Description</string>
     <string name="tournal_search_hint">Search for a keyword, time, place, etc.</string>
 </resources>

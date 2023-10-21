@@ -30,6 +30,10 @@ class ActivityMain : AppCompatActivity(){
             this.startActivity(intent)
         })
 
+        viewBinding.searchLogo.setOnClickListener(View.OnClickListener {
+                       
+            this.startActivity(intent)
+        })
         this.recyclerView = viewBinding.entryRecyclerView
         this.myAdapter = EntryAdapter(entryData)
         this.recyclerView.adapter = myAdapter
