@@ -25,6 +25,9 @@ class EntryDetailsActivity: AppCompatActivity() {
                 }
                 .show()
         })
+        viewBinding.backBtn.setOnClickListener(View.OnClickListener{
+            finish()
+        })
 
 
     }
