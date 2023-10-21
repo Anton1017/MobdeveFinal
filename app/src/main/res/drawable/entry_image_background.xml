@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<shape xmlns:android="http://schemas.android.com/apk/res/android">
+    <solid /> <!-- Background color of the view -->
+    <corners android:radius="8dp" /> <!-- Radius of the corners in dp -->
+    <stroke android:width="2dp" android:color="?attr/colorSecondaryVariant" /> <!-- Border color -->
+</shape>

@@ -114,7 +114,10 @@
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/entryImageRecyclerView"
         android:layout_width="match_parent"
-        android:layout_height="300dp" />
+        android:layout_height="300dp"
+        android:background="@drawable/entry_image_background"
+        android:paddingLeft="2dp"
+        android:paddingRight="2dp" />
 
     <LinearLayout
         android:layout_width="match_parent"
