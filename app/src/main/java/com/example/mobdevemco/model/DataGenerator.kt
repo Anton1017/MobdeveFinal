@@ -1,7 +1,6 @@
 package com.example.mobdevemco.model
 import com.example.mobdevemco.R
 import java.util.ArrayList
-import com.example.mobdevemco.model.CustomDate
 
 class DataGenerator {
     companion object {
@@ -23,7 +22,7 @@ class DataGenerator {
                             "Kart reminds me of my Childhood" + " Being able to drive the karts like in Mario " +
                             "Kart reminds me of my Childhood" + " Being able to drive the karts like in Mario " +
                             "Kart reminds me of my Childhood",
-                    CustomDate(2023, 9, 12)
+                    CustomDateTime(2023, 9, 12, 12, 20)
                 )
             )
             data.add(
@@ -33,7 +32,7 @@ class DataGenerator {
                     images1,
                     "Being able to drive the karts like in Mario :)" +
                             "Kart reminds me of my Childhood, excited to be like Mario while my friend is Luigi",
-                    CustomDate(2023, 9, 12)
+                    CustomDateTime(2023, 9, 12,12, 20)
                 )
             )
             data.add(
@@ -43,7 +42,7 @@ class DataGenerator {
                     images1,
                     "Being able to drive the karts like in Mario :)" +
                             "Kart reminds me of my Childhood",
-                    CustomDate(2023, 9, 12)
+                    CustomDateTime(2023, 9, 12,12, 20)
                 )
             )
             data.add(
@@ -53,7 +52,7 @@ class DataGenerator {
                     images1,
                     "Being able to drive the karts like in Mario :)" +
                             "Kart reminds me of my Childhood",
-                    CustomDate(2023, 9, 12)
+                    CustomDateTime(2023, 9, 12,12, 20)
                 )
             )
             data.add(
@@ -63,7 +62,7 @@ class DataGenerator {
                     images1,
                     "Being able to drive the karts like in Mario :)" +
                             "Kart reminds me of my Childhood",
-                    CustomDate(2023, 9, 12)
+                    CustomDateTime(2023, 9, 12,12, 20)
                 )
             )
 //            val images2 = ArrayList<EntryImages>()

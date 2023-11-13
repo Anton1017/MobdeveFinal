@@ -3,15 +3,15 @@ package com.example.mobdevemco.model
 
 class Entry (var title: String, var locationName: String, var images: ArrayList<EntryImages>, var description: String){
     var id = -1
-    var createdAt : CustomDate = CustomDate()
-    constructor(title: String, locationName: String, images: ArrayList<EntryImages>, description: String, createdAt: CustomDate) : this(title, locationName, images, description) {
+    var createdAt : CustomDateTime = CustomDateTime()
+    constructor(title: String, locationName: String, images: ArrayList<EntryImages>, description: String, createdAt: CustomDateTime) : this(title, locationName, images, description) {
         this.title = title
         this.locationName = locationName
         this.images = images
         this.description = description
         this.createdAt = createdAt
     }
-    constructor(title: String, locationName: String, images: ArrayList<EntryImages>, description: String, createdAt: CustomDate, id: Int) : this(title, locationName, images, description) {
+    constructor(title: String, locationName: String, images: ArrayList<EntryImages>, description: String, createdAt: CustomDateTime, id: Int) : this(title, locationName, images, description) {
         this.title = title
         this.locationName = locationName
         this.images = images
