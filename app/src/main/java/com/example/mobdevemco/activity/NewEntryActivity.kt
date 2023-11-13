@@ -9,6 +9,15 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import com.example.mobdevemco.databinding.ActivityCreateEntryBinding
 class NewEntryActivity : AppCompatActivity(){
+    companion object {
+        const val POSITION_KEY = "POSITION_KEY"
+
+        const val TITLE_KEY = "TITLE_KEY"
+        const val LOCATION_NAME_KEY = "LOCATION_NAME_KEY"
+        const val IMAGE_KEY = "IMAGE_KEY"
+        const val DESCRIPTION_KEY = "DESCRIPTION_KEY"
+        const val CREATED_AT_KEY = "CREATED_AT_KEY"
+    }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
