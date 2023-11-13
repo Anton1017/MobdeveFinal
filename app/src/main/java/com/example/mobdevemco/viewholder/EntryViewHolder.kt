@@ -18,7 +18,7 @@ class EntryViewHolder(private val viewBinding: EntryItemBinding): RecyclerView.V
         this.viewBinding.entryLocationName.text = entry.locationName
         // TODO: images for recyclerView
         this.viewBinding.entryDescription.text = entry.description
-        this.viewBinding.entryCreatedAt.text = entry.createdAt.toStringFull()
+        this.viewBinding.entryCreatedAt.text = entry.createdAt.toString()
         recyclerView = viewBinding.entryImageRecyclerView
         entryImageAdapter = EntryImageAdapter(entry.images)
         recyclerView.adapter = entryImageAdapter

@@ -2,7 +2,6 @@ package com.example.mobdevemco.model
 
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
-import java.util.Locale
 
 
 class CustomDateTime {
@@ -20,14 +19,32 @@ class CustomDateTime {
 //        time = dateTime.format(DateTimeFormatter.ofPattern("HH:mm"))
     }
 
-    fun toStringFull(): String {
+    fun getLocalDateTime(): String {
+        return this.dateTime.toString()
+    }
+    fun getYear(): Int {
+        return this.dateTime.format(DateTimeFormatter.ofPattern("yyyy")).toInt()
+    }
+
+    fun getMonth(): Int {
+        return this.dateTime.format(DateTimeFormatter.ofPattern("MM")).toInt()
+    }
+
+    fun getDay(): Int {
+        return this.dateTime.format(DateTimeFormatter.ofPattern("dd")).toInt()
+    }
+
+    override fun toString(): String {
         val month = this.dateTime.format(DateTimeFormatter.ofPattern("MM")).toInt()
         return monthString[month-1] + this.dateTime.format(DateTimeFormatter.ofPattern(" dd, yyyy | HH:mm"))
     }
 
-    fun toStringNoYear(): String {
-        val month = this.dateTime.format(DateTimeFormatter.ofPattern("MM")).toInt()
-        return monthString[month-1] + this.dateTime.format(DateTimeFormatter.ofPattern(" dd | HH:mm"))
+    fun toStringDate(): String {
+        return this.dateTime.format(DateTimeFormatter.ofPattern("MM-dd-yyyy"))
+    }
+
+    fun toStringTime(): String {
+        return this.dateTime.format(DateTimeFormatter.ofPattern("HH:mm"))
     }
 
     companion object {
