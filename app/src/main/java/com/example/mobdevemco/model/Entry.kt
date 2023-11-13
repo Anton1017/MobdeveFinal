@@ -2,7 +2,7 @@ package com.example.mobdevemco.model
 
 
 class Entry (var title: String, var locationName: String, var images: ArrayList<EntryImages>, var description: String){
-    var id = 0
+    var id = -1
     var createdAt : CustomDate = CustomDate()
     constructor(title: String, locationName: String, images: ArrayList<EntryImages>, description: String, createdAt: CustomDate) : this(title, locationName, images, description) {
         this.title = title
