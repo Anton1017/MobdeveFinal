@@ -4,12 +4,16 @@ package com.example.mobdevemco.activity
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
+import androidx.activity.result.ActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.mobdevemco.model.DataGenerator
 import com.example.mobdevemco.adapter.EntryAdapter
 import com.example.mobdevemco.databinding.ActivityMainBinding
+import com.example.mobdevemco.model.Entry
+import com.example.mobdevemco.model.EntryImages
 
 class ActivityMain : AppCompatActivity(){
 
@@ -17,6 +21,31 @@ class ActivityMain : AppCompatActivity(){
 
     private lateinit var recyclerView: RecyclerView
     private lateinit var myAdapter: EntryAdapter
+
+
+    private val newEntryResultLauncher = registerForActivityResult(
+        ActivityResultContracts.StartActivityForResult()) { result: ActivityResult ->
+        // Check to see if the result returned is appropriate (i.e. OK)
+        if (result.resultCode == RESULT_OK) {
+            val title : String = result.data?.getStringExtra(NewEntryActivity.TITLE_KEY)!!
+            val locationName : String = result.data?.getStringExtra(NewEntryActivity.LOCATION_NAME_KEY)!!
+            val images : ArrayList<EntryImages> = result.data?.getSerializableExtra(NewEntryActivity.IMAGE_KEY)!! as ArrayList<EntryImages>
+            val description : String = result.data?.getStringExtra(NewEntryActivity.DESCRIPTION_KEY)!!
+
+            val entry = Entry(title, locationName, images, description)
+
+//            if(position != -1){
+//                ActivityMain.data.set(position, email)
+//                this.myAdapter.notifyItemChanged(position)
+//            }
+//            else{
+//
+//                ActivityMain.data.add(email)
+//                this.myAdapter.notifyDataSetChanged()
+//            }
+
+        }
+    }
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
