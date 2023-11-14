@@ -37,7 +37,7 @@ class EntryDbHelper(context: Context?) :
                 null,
                 null,
                 null,
-                DbReferences.ENTRIES_COLUMN_NAME_CREATED_AT + " DESC, " ,
+                DbReferences.ENTRIES_COLUMN_NAME_CREATED_AT + " DESC " ,
                 null
             )
             val entries: ArrayList<Entry> = ArrayList<Entry>()
@@ -180,8 +180,10 @@ class EntryDbHelper(context: Context?) :
         const val ENTRY_IMAGES_CREATE_TABLE_STATEMENT =
             "CREATE TABLE IF NOT EXISTS " + TABLE_NAME_ENTRY_IMAGES + " (" +
                     _ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
-                    "FOREIGN KEY (" + ENTRY_IMAGES_COLUMN_NAME_ENTRY_ID + ") REFERENCES " + TABLE_NAME_ENTRIES + " (" + _ID + ")" +
-                    ENTRY_IMAGES_COLUMN_NAME_URI + " TEXT)"
+                    ENTRY_IMAGES_COLUMN_NAME_ENTRY_ID + " INTEGER, " +
+                    ENTRY_IMAGES_COLUMN_NAME_URI + " TEXT," +
+                    "FOREIGN KEY (" + ENTRY_IMAGES_COLUMN_NAME_ENTRY_ID + ") REFERENCES " + TABLE_NAME_ENTRIES + " (" + _ID + "))"
+
         const val ENTRY_IMAGES_DROP_TABLE_STATEMENT = "DROP TABLE IF EXISTS " + TABLE_NAME_ENTRY_IMAGES
     }
 
