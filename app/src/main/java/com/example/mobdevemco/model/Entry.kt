@@ -30,32 +30,29 @@ class Entry (var title: String, var locationName: String, var images: ArrayList<
         this.createdAt = createdAt
         this.id = id
     }
+
+    fun getTitle(): String {
+        return this.title
+    }
+
+    fun getLocationName(): String {
+        return this.locationName
+    }
+
+    fun getImages(): ArrayList<EntryImages> {
+        return this.images
+    }
+
+    fun getDescription(): String {
+        return this.description
+    }
+
+    fun getCreatedAt(): CustomDateTime {
+        return this.createdAt
+    }
+
+    fun getId(): Long {
+        return this.id
+    }
 }
-//    var title: String
-//        private set
-//    var locationName: String
-//        private set
-//    var imageId: Int
-//        private set
-//    var description: String
-//        private set
-//    var createdAt: com.example.mobdevemco.model.CustomDate
-//        private set
-
-
-//    constructor(title: String, locationName: String, imageId: Int, description: String, createdAt: com.example.mobdevemco.model.CustomDate){
-//        this.title = title
-//        this.locationName = locationName
-//        this.imageId = imageId
-//        this.description = description
-//        this.createdAt = createdAt
-//    }
-//
-//    constructor(title: String, locationName: String, imageId: Int, description: String){
-//        this.title = title
-//        this.locationName = locationName
-//        this.imageId = imageId
-//        this.description = description
-//        this.createdAt = com.example.mobdevemco.model.CustomDate()
-//    }
 

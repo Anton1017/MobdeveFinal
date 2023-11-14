@@ -13,4 +13,16 @@ class EntryImages (var imageUri: Uri){
         this.imageUri = imageUri
         this.id = id
     }
+
+    fun getEntryId(): Long {
+        return this.entryId
+    }
+
+    fun getImageUri(): Uri {
+        return this.imageUri
+    }
+
+    fun getId(): Long {
+        return this.id
+    }
 }

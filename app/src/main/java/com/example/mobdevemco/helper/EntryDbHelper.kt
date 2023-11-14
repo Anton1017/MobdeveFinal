@@ -1,5 +1,6 @@
 package com.example.mobdevemco.helper
 
+import android.content.ContentValues
 import android.content.Context
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
@@ -29,7 +30,7 @@ class EntryDbHelper(context: Context?) :
         // Method that returns an ArrayList of all stored contacts. This method was named with the term
         get() {
             val database = this.readableDatabase
-            val c = database.query(
+            val e = database.query(
                 DbReferences.TABLE_NAME_ENTRIES,
                 null,
                 null,
@@ -40,12 +41,12 @@ class EntryDbHelper(context: Context?) :
                 null
             )
             val entries: ArrayList<Entry> = ArrayList<Entry>()
-            while (c.moveToNext()) {
+            while (e.moveToNext()) {
                 val imgQuery = database.query(
                     DbReferences.TABLE_NAME_ENTRY_IMAGES,
                     null,
                     DbReferences.ENTRY_IMAGES_COLUMN_NAME_ENTRY_ID + "=?",
-                    arrayOf(c.getString(c.getColumnIndexOrThrow(DbReferences.ENTRIES_COLUMN_NAME_TITLE))),
+                    arrayOf(e.getString(e.getColumnIndexOrThrow(DbReferences.ENTRIES_COLUMN_NAME_TITLE))),
                     null,
                     null,
                     DbReferences._ID,
@@ -65,41 +66,41 @@ class EntryDbHelper(context: Context?) :
 
                 entries.add(
                     Entry(
-                        c.getString(c.getColumnIndexOrThrow(DbReferences.ENTRIES_COLUMN_NAME_TITLE)),
-                        c.getString(c.getColumnIndexOrThrow(DbReferences.ENTRIES_COLUMN_NAME_LOCATION_NAME)),
+                        e.getString(e.getColumnIndexOrThrow(DbReferences.ENTRIES_COLUMN_NAME_TITLE)),
+                        e.getString(e.getColumnIndexOrThrow(DbReferences.ENTRIES_COLUMN_NAME_LOCATION_NAME)),
                         imgArray,
-                        c.getString(c.getColumnIndexOrThrow(DbReferences.ENTRIES_COLUMN_NAME_DESCRIPTION)),
-                        CustomDateTime(c.getString(c.getColumnIndexOrThrow(DbReferences.ENTRIES_COLUMN_NAME_CREATED_AT))),
-                        c.getLong(c.getColumnIndexOrThrow(DbReferences._ID))
+                        e.getString(e.getColumnIndexOrThrow(DbReferences.ENTRIES_COLUMN_NAME_DESCRIPTION)),
+                        CustomDateTime(e.getString(e.getColumnIndexOrThrow(DbReferences.ENTRIES_COLUMN_NAME_CREATED_AT))),
+                        e.getLong(e.getColumnIndexOrThrow(DbReferences._ID))
                     )
                 )
             }
-            c.close()
+            e.close()
             database.close()
             return entries
         }
 
-//    // The insert operation, which takes a contact object as a parameter. It also returns the ID of
-//    // the row so that the Contact can have that properly referenced within itself.
-//    @Synchronized
-//    fun insertContact(c: Contact): Long {
-//        val database = this.writableDatabase
-//
-//        // Create a new map of values, where column names are the keys
-//        val values = ContentValues()
-//        values.put(DbReferences.COLUMN_NAME_LAST_NAME, c.getLastName())
-//        values.put(DbReferences.COLUMN_NAME_FIRST_NAME, c.getFirstName())
-//        values.put(DbReferences.COLUMN_NAME_NUMBER, c.getNumber())
-//        values.put(DbReferences.COLUMN_NAME_IMAGE_URI, c.getImageUri().toString())
-//
-//        // The actual insertion operation. As inserting returns the primary key value of the new
-//        // row, we can use this and return it to whomever is calling so they can be aware of what
-//        // ID the new contact was referenced with.
-//        val _id = database.insert(DbReferences.TABLE_NAME, null, values)
-//        database.close()
-//        return _id
-//    }
-//
+    // The insert operation, which takes a contact object as a parameter. It also returns the ID of
+    // the row so that the Contact can have that properly referenced within itself.
+    @Synchronized
+    fun insertEntry(e: Entry): Long {
+        val database = this.writableDatabase
+
+        // Create a new map of values, where column names are the keys
+        val values = ContentValues()
+        values.put(DbReferences.COLUMN_NAME_LAST_NAME, c.getLastName())
+        values.put(DbReferences.COLUMN_NAME_FIRST_NAME, c.getFirstName())
+        values.put(DbReferences.COLUMN_NAME_NUMBER, c.getNumber())
+        values.put(DbReferences.COLUMN_NAME_IMAGE_URI, c.getImageUri().toString())
+
+        // The actual insertion operation. As inserting returns the primary key value of the new
+        // row, we can use this and return it to whomever is calling so they can be aware of what
+        // ID the new contact was referenced with.
+        val _id = database.insert(DbReferences.TABLE_NAME, null, values)
+        database.close()
+        return _id
+    }
+
 //    // Performs an UPDATE operation by comparing the old contact with the new contact. This method
 //    // tries to reduce the length of the update statement by only including attributes that have
 //    // been changed. If no changed are present, the update statement is simply not called.
