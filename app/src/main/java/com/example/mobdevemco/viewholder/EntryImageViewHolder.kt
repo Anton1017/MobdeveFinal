@@ -6,7 +6,7 @@ import com.example.mobdevemco.model.EntryImages
 
 class EntryImageViewHolder(private val viewBinding: EntryImageItemBinding): RecyclerView.ViewHolder(viewBinding.root) {
     fun bindData(entryImages: EntryImages){
-        this.viewBinding.imageEntry.setImageURI(entryImages.imageUri)
+        this.viewBinding.imageEntry.setImageURI(entryImages.getImageUri())
     }
 
 }

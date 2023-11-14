@@ -14,13 +14,13 @@ class EntryViewHolder(private val viewBinding: EntryItemBinding): RecyclerView.V
     private lateinit var recyclerView: RecyclerView
     private lateinit var entryImageAdapter: EntryImageAdapter
     fun bindData(entry: Entry) {
-        this.viewBinding.entryTitle.text = entry.title
-        this.viewBinding.entryLocationName.text = entry.locationName
+        this.viewBinding.entryTitle.text = entry.getTitle()
+        this.viewBinding.entryLocationName.text = entry.getLocationName()
         // TODO: images for recyclerView
-        this.viewBinding.entryDescription.text = entry.description
-        this.viewBinding.entryCreatedAt.text = entry.createdAt.toStringFormatted()
+        this.viewBinding.entryDescription.text = entry.getDescription()
+        this.viewBinding.entryCreatedAt.text = entry.getCreatedAt().toStringFormatted()
         recyclerView = viewBinding.entryImageRecyclerView
-        entryImageAdapter = EntryImageAdapter(entry.images)
+        entryImageAdapter = EntryImageAdapter(entry.getImages())
         recyclerView.adapter = entryImageAdapter
         val linearLayoutManager = LinearLayoutManager(itemView.context)
         linearLayoutManager.orientation = LinearLayoutManager.HORIZONTAL
@@ -36,7 +36,7 @@ class EntryViewHolder(private val viewBinding: EntryItemBinding): RecyclerView.V
             this.viewBinding.currentImg.text = curr_pos.toString().replace(" ", "")
         })
 
-        this.viewBinding.totalImg.text = entry.images.size.toString()
+        this.viewBinding.totalImg.text = entry.getImages().size.toString()
 
     }
 

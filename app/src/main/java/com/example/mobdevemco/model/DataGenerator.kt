@@ -8,11 +8,11 @@ class DataGenerator {
         fun loadEntryData(): ArrayList<Entry> {
             val data = ArrayList<Entry>()
             val images1 = ArrayList<EntryImages>()
-            images1.add(EntryImages(Uri.parse("android.resource://com.example.mobdevemco/" + R.mipmap.mario_kart)))
-            images1.add(EntryImages(Uri.parse("android.resource://com.example.mobdevemco/" + R.mipmap.mario_kart)))
-            images1.add(EntryImages(Uri.parse("android.resource://com.example.mobdevemco/" + R.mipmap.mario_kart)))
-            images1.add(EntryImages(Uri.parse("android.resource://com.example.mobdevemco/" + R.mipmap.mario_kart)))
-            images1.add(EntryImages(Uri.parse("android.resource://com.example.mobdevemco/" + R.mipmap.mario_kart)))
+            images1.add(EntryImages(1, Uri.parse("android.resource://com.example.mobdevemco/" + R.mipmap.mario_kart)))
+            images1.add(EntryImages(1, Uri.parse("android.resource://com.example.mobdevemco/" + R.mipmap.mario_kart)))
+            images1.add(EntryImages(1, Uri.parse("android.resource://com.example.mobdevemco/" + R.mipmap.mario_kart)))
+            images1.add(EntryImages(1, Uri.parse("android.resource://com.example.mobdevemco/" + R.mipmap.mario_kart)))
+            images1.add(EntryImages(1, Uri.parse("android.resource://com.example.mobdevemco/" + R.mipmap.mario_kart)))
             data.add(
                 Entry(
                     "Mario Kart IRL",
@@ -146,11 +146,11 @@ class DataGenerator {
         }
         fun loadEntryImageData(): ArrayList<EntryImages>{
             val imagedata = ArrayList<EntryImages>()
-            imagedata.add(EntryImages(Uri.parse("android.resource://com.example.mobdevemco/" + R.mipmap.mario_kart)))
-            imagedata.add(EntryImages(Uri.parse("android.resource://com.example.mobdevemco/" + R.mipmap.mario_kart)))
-            imagedata.add(EntryImages(Uri.parse("android.resource://com.example.mobdevemco/" + R.mipmap.mario_kart)))
-            imagedata.add(EntryImages(Uri.parse("android.resource://com.example.mobdevemco/" + R.mipmap.mario_kart)))
-            imagedata.add(EntryImages(Uri.parse("android.resource://com.example.mobdevemco/" + R.mipmap.mario_kart)))
+            imagedata.add(EntryImages(1, Uri.parse("android.resource://com.example.mobdevemco/" + R.mipmap.mario_kart)))
+            imagedata.add(EntryImages(1, Uri.parse("android.resource://com.example.mobdevemco/" + R.mipmap.mario_kart)))
+            imagedata.add(EntryImages(1, Uri.parse("android.resource://com.example.mobdevemco/" + R.mipmap.mario_kart)))
+            imagedata.add(EntryImages(1, Uri.parse("android.resource://com.example.mobdevemco/" + R.mipmap.mario_kart)))
+            imagedata.add(EntryImages(1, Uri.parse("android.resource://com.example.mobdevemco/" + R.mipmap.mario_kart)))
             return imagedata
         }
 
