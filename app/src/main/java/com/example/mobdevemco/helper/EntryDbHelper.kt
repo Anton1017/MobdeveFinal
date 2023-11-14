@@ -56,7 +56,7 @@ class EntryDbHelper(context: Context?) :
                     imgArray.add(
                         EntryImages(
                             imgQuery.getLong(imgQuery.getColumnIndexOrThrow(DbReferences.ENTRY_IMAGES_COLUMN_NAME_ENTRY_ID)),
-                            imgQuery.getString(imgQuery.getColumnIndexOrThrow(DbReferences.ENTRY_IMAGES_COLUMN_NAME_URI)),
+                            Uri.parse(imgQuery.getString(imgQuery.getColumnIndexOrThrow(DbReferences.ENTRY_IMAGES_COLUMN_NAME_URI))),
                             imgQuery.getLong(imgQuery.getColumnIndexOrThrow(DbReferences.ENTRY_IMAGES_COLUMN_NAME_ENTRY_ID))
                         )
                     )
