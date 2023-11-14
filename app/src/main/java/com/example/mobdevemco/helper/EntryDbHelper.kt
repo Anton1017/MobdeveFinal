@@ -1,15 +1,13 @@
 package com.example.mobdevemco.helper
 
-import android.content.ContentValues
 import android.content.Context
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
 import android.net.Uri
+import com.example.mobdevemco.model.CustomDateTime
 import com.example.mobdevemco.model.Entry
-import java.lang.String
-import kotlin.Any
+import com.example.mobdevemco.model.EntryImages
 import kotlin.Int
-import kotlin.Long
 import kotlin.arrayOf
 
 
@@ -27,38 +25,60 @@ class EntryDbHelper(context: Context?) :
         onCreate(sqLiteDatabase)
     }
 
-//    val allEntriesDefault: ArrayList<Any>
-//        // Method that returns an ArrayList of all stored contacts. This method was named with the term
-//        get() {
-//            val database = this.readableDatabase
-//            val c = database.query(
-//                DbReferences.TABLE_NAME,
-//                null,
-//                null,
-//                null,
-//                null,
-//                null,
-//                DbReferences.COLUMN_NAME_CREATED_AT + " DESC, " ,
-//                null
-//            )
-//            val entries: ArrayList<Entry> = ArrayList<Entry>()
-//            while (c.moveToNext()) {
-//                entries.add(
-//                    Entry(
-//                        c.getString(c.getColumnIndexOrThrow(DbReferences.COLUMN_NAME_TITLE)),
-//                        c.getString(c.getColumnIndexOrThrow(DbReferences.COLUMN_NAME_LOCATION_NAME)),
-//                        ,
-//                        c.getString(c.getColumnIndexOrThrow(DbReferences.COLUMN_NAME_DESCRIPTION)),
-//                        Uri.parse(c.getString(c.getColumnIndexOrThrow(DbReferences.COLUMN_NAME_CREATED_AT))),
-//                        c.getLong(c.getColumnIndexOrThrow(DbReferences._ID))
-//                    )
-//                )
-//            }
-//            c.close()
-//            database.close()
-//            return entries
-//        }
-//
+    val allEntriesDefault: ArrayList<Entry>
+        // Method that returns an ArrayList of all stored contacts. This method was named with the term
+        get() {
+            val database = this.readableDatabase
+            val c = database.query(
+                DbReferences.TABLE_NAME_ENTRIES,
+                null,
+                null,
+                null,
+                null,
+                null,
+                DbReferences.ENTRIES_COLUMN_NAME_CREATED_AT + " DESC, " ,
+                null
+            )
+            val entries: ArrayList<Entry> = ArrayList<Entry>()
+            while (c.moveToNext()) {
+                val imgQuery = database.query(
+                    DbReferences.TABLE_NAME_ENTRY_IMAGES,
+                    null,
+                    DbReferences.ENTRY_IMAGES_COLUMN_NAME_ENTRY_ID + "=?",
+                    arrayOf(c.getString(c.getColumnIndexOrThrow(DbReferences.ENTRIES_COLUMN_NAME_TITLE))),
+                    null,
+                    null,
+                    DbReferences._ID,
+                    null,
+                )
+                val imgArray : ArrayList<EntryImages> = ArrayList<EntryImages>()
+                while(imgQuery.moveToNext()){
+                    imgArray.add(
+                        EntryImages(
+                            imgQuery.getLong(imgQuery.getColumnIndexOrThrow(DbReferences.ENTRY_IMAGES_COLUMN_NAME_ENTRY_ID)),
+                            imgQuery.getString(imgQuery.getColumnIndexOrThrow(DbReferences.ENTRY_IMAGES_COLUMN_NAME_URI)),
+                            imgQuery.getLong(imgQuery.getColumnIndexOrThrow(DbReferences.ENTRY_IMAGES_COLUMN_NAME_ENTRY_ID))
+                        )
+                    )
+                }
+                imgQuery.close()
+
+                entries.add(
+                    Entry(
+                        c.getString(c.getColumnIndexOrThrow(DbReferences.ENTRIES_COLUMN_NAME_TITLE)),
+                        c.getString(c.getColumnIndexOrThrow(DbReferences.ENTRIES_COLUMN_NAME_LOCATION_NAME)),
+                        imgArray,
+                        c.getString(c.getColumnIndexOrThrow(DbReferences.ENTRIES_COLUMN_NAME_DESCRIPTION)),
+                        CustomDateTime(c.getString(c.getColumnIndexOrThrow(DbReferences.ENTRIES_COLUMN_NAME_CREATED_AT))),
+                        c.getLong(c.getColumnIndexOrThrow(DbReferences._ID))
+                    )
+                )
+            }
+            c.close()
+            database.close()
+            return entries
+        }
+
 //    // The insert operation, which takes a contact object as a parameter. It also returns the ID of
 //    // the row so that the Contact can have that properly referenced within itself.
 //    @Synchronized
@@ -145,12 +165,12 @@ class EntryDbHelper(context: Context?) :
         const val ENTRIES_DROP_TABLE_STATEMENT = "DROP TABLE IF EXISTS " + TABLE_NAME_ENTRIES
 
         const val TABLE_NAME_ENTRY_IMAGES = "entry_images"
-        const val ENTRY_IMAGES_COLUMN_NAME_TABLE_ID = "uri"
+        const val ENTRY_IMAGES_COLUMN_NAME_ENTRY_ID = "entry_id"
         const val ENTRY_IMAGES_COLUMN_NAME_URI = "uri"
         const val ENTRY_IMAGES_CREATE_TABLE_STATEMENT =
             "CREATE TABLE IF NOT EXISTS " + TABLE_NAME_ENTRY_IMAGES + " (" +
                     _ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
-                    "FOREIGN KEY (" + ENTRY_IMAGES_COLUMN_NAME_TABLE_ID + ") REFERENCES " + TABLE_NAME_ENTRIES + " (" + _ID + ")" +
+                    "FOREIGN KEY (" + ENTRY_IMAGES_COLUMN_NAME_ENTRY_ID + ") REFERENCES " + TABLE_NAME_ENTRIES + " (" + _ID + ")" +
                     ENTRY_IMAGES_COLUMN_NAME_URI + " TEXT)"
         const val ENTRY_IMAGES_DROP_TABLE_STATEMENT = "DROP TABLE IF EXISTS " + TABLE_NAME_ENTRY_IMAGES
     }
