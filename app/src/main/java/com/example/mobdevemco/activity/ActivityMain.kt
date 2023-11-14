@@ -9,11 +9,13 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.mobdevemco.model.DataGenerator
 import com.example.mobdevemco.adapter.EntryAdapter
 import com.example.mobdevemco.databinding.ActivityMainBinding
+import com.example.mobdevemco.helper.EntryDbHelper
+import com.example.mobdevemco.model.DataGenerator
 import com.example.mobdevemco.model.Entry
 import com.example.mobdevemco.model.EntryImages
+import java.util.concurrent.Executors
 
 class ActivityMain : AppCompatActivity(){
 
@@ -47,6 +49,8 @@ class ActivityMain : AppCompatActivity(){
         }
     }
 
+    private var entryDbHelper: EntryDbHelper? = null
+    private val executorService = Executors.newSingleThreadExecutor()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -64,8 +68,20 @@ class ActivityMain : AppCompatActivity(){
             this.startActivity(intent)
         })
         this.recyclerView = viewBinding.entryRecyclerView
-        this.myAdapter = EntryAdapter(entryData)
-        this.recyclerView.adapter = myAdapter
+//        this.myAdapter = EntryAdapter(entryData)
+//        this.recyclerView.adapter = myAdapter
+
+        executorService.execute {
+            // Get all contacts from the database
+            entryDbHelper = EntryDbHelper.getInstance(this@ActivityMain)
+            val entries = entryDbHelper?.allEntriesDefault
+
+            runOnUiThread { // Pass in the contacts to the needed components and set the adapter
+                myAdapter = entries?.let { EntryAdapter(it, newEntryResultLauncher) }!!
+                this.recyclerView.adapter = myAdapter
+            }
+        }
+
         this.recyclerView.layoutManager = LinearLayoutManager(this)
     }
 

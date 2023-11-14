@@ -37,13 +37,13 @@
             android:layout_marginStart="16dp"
             android:clickable="false"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/textView5"
+            app:layout_constraintEnd_toStartOf="@+id/locationText"
             app:layout_constraintStart_toEndOf="@+id/mapView"
             app:layout_constraintTop_toTopOf="parent"
             app:srcCompat="@drawable/baseline_gps_fixed_24" />
 
         <TextView
-            android:id="@+id/textView5"
+            android:id="@+id/locationText"
             style="@style/Widget.Material3.AutoCompleteTextView.FilledBox"
             android:layout_width="0dp"
             android:layout_height="0dp"
@@ -61,7 +61,7 @@
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <EditText
-        android:id="@+id/editTextText"
+        android:id="@+id/titleText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
@@ -76,7 +76,7 @@
         android:text="@string/tournal_edit_title"/>
 
     <EditText
-        android:id="@+id/editTextTextMultiLine2"
+        android:id="@+id/descriptionText"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_marginTop="8dp"

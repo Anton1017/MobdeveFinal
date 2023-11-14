@@ -3,6 +3,7 @@ package com.example.mobdevemco.adapter
 import android.content.Intent
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.activity.result.ActivityResultLauncher
 import androidx.recyclerview.widget.RecyclerView
 import com.example.mobdevemco.databinding.EntryItemBinding
 import androidx.appcompat.app.AlertDialog
@@ -10,7 +11,7 @@ import com.example.mobdevemco.activity.EntryDetailsActivity
 import com.example.mobdevemco.model.Entry
 import com.example.mobdevemco.viewholder.EntryViewHolder
 
-class EntryAdapter(private val data: ArrayList<Entry>) : RecyclerView.Adapter<EntryViewHolder>() {
+class EntryAdapter(private val data: ArrayList<Entry>, myActivityResultLauncher: ActivityResultLauncher<Intent>) : RecyclerView.Adapter<EntryViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): EntryViewHolder {
         // Initialize the ViewBinding of an item's layout

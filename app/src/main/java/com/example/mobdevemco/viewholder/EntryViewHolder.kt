@@ -26,7 +26,7 @@ class EntryViewHolder(private val viewBinding: EntryItemBinding): RecyclerView.V
         linearLayoutManager.orientation = LinearLayoutManager.HORIZONTAL
         recyclerView.layoutManager = linearLayoutManager
 
-        //this.viewBinding.entroImage.setImageResource(entry.imageId)
+        //this.viewBinding.entryImage.setImageResource(entry.imageId)
         val snapHelper: SnapHelper = PagerSnapHelper()
         recyclerView.setOnFlingListener(null);
         snapHelper.attachToRecyclerView(recyclerView)

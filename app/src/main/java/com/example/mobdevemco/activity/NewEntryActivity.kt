@@ -19,7 +19,9 @@ import android.content.pm.PackageManager
 import android.location.Address
 import android.location.Geocoder
 import android.location.Location
+import android.net.Uri
 import android.util.Log
+import androidx.activity.result.ActivityResult
 import java.util.Locale
 
 class NewEntryActivity : AppCompatActivity(), LocationListener{
@@ -27,6 +29,8 @@ class NewEntryActivity : AppCompatActivity(), LocationListener{
     private var currentlocation : String = "sampple"
     private val locationPermissionCode = 2
     private lateinit var locationManager: LocationManager
+
+    private val imageUriArray: ArrayList<Uri> = ArrayList<Uri>()
     companion object {
         const val POSITION_KEY = "POSITION_KEY"
         const val TITLE_KEY = "TITLE_KEY"
@@ -35,15 +39,33 @@ class NewEntryActivity : AppCompatActivity(), LocationListener{
         const val DESCRIPTION_KEY = "DESCRIPTION_KEY"
         const val CREATED_AT_KEY = "CREATED_AT_KEY"
     }
+    private val myActivityResultLauncher = registerForActivityResult<Intent, ActivityResult>(
+        ActivityResultContracts.StartActivityForResult()
+    ) { result ->
+        if (result.resultCode == RESULT_OK) {
+            try {
+                if (result.data != null) {
+                    val count: Int? = result.data!!.clipData
+                        ?.itemCount
+
+                    for (i in 0 until count!!) {
+                        result.data!!.clipData?.getItemAt(i)?.uri?.let { imageUriArray.add(it) }
+                    }
+                }
+            } catch (exception: Exception) {
+                Log.d("TAG", "" + exception.localizedMessage)
+            }
+        }
+    }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         this.viewBinding = ActivityCreateEntryBinding.inflate(layoutInflater)
         setContentView(viewBinding.root)
         getLocation()
-        viewBinding.textView5.text =  this.currentlocation
+        viewBinding.locationText.text =  this.currentlocation
         viewBinding.createBtn.setOnClickListener(View.OnClickListener {
-            viewBinding.textView5.text = this.currentlocation
+            viewBinding.locationText.text = this.currentlocation
             finish()
         })
         viewBinding.cancelBtn.setOnClickListener(View.OnClickListener {
