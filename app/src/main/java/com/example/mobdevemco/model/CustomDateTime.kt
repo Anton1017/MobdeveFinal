@@ -1,7 +1,9 @@
 package com.example.mobdevemco.model
 
+import java.text.SimpleDateFormat
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
+import java.util.Locale
 
 
 class CustomDateTime {
@@ -9,14 +11,15 @@ class CustomDateTime {
 
     constructor() {
         this.dateTime = LocalDateTime.now()
-//        date = dateTime.format(DateTimeFormatter.ofPattern("MM-dd-yyyy"))
-//        time = dateTime.format(DateTimeFormatter.ofPattern("HH:mm"))
     }
+
+    constructor(str: String) {
+        this.dateTime = LocalDateTime.parse(str, DateTimeFormatter.ofPattern(sqliteFormat))
+    }
+
 
     constructor(year: Int, month: Int, dayOfMonth: Int, hour: Int, minute: Int) {
         this.dateTime = LocalDateTime.of(year, month, dayOfMonth, hour, minute)
-//        date = dateTime.format(DateTimeFormatter.ofPattern("MM-dd-yyyy"))
-//        time = dateTime.format(DateTimeFormatter.ofPattern("HH:mm"))
     }
 
     fun getLocalDateTime(): String {
@@ -35,6 +38,10 @@ class CustomDateTime {
     }
 
     override fun toString(): String {
+        return this.dateTime.format(DateTimeFormatter.ofPattern(sqliteFormat))
+    }
+
+    fun toStringFormatted(): String {
         val month = this.dateTime.format(DateTimeFormatter.ofPattern("MM")).toInt()
         return monthString[month-1] + this.dateTime.format(DateTimeFormatter.ofPattern(" dd, yyyy | HH:mm"))
     }
@@ -62,5 +69,6 @@ class CustomDateTime {
             "Nov",
             "Dec"
         )
+        private val sqliteFormat = "yyyy-MM-dd HH:mm"
     }
 }
