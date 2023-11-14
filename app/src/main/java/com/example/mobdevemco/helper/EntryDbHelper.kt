@@ -88,15 +88,24 @@ class EntryDbHelper(context: Context?) :
 
         // Create a new map of values, where column names are the keys
         val values = ContentValues()
-        values.put(DbReferences.COLUMN_NAME_LAST_NAME, c.getLastName())
-        values.put(DbReferences.COLUMN_NAME_FIRST_NAME, c.getFirstName())
-        values.put(DbReferences.COLUMN_NAME_NUMBER, c.getNumber())
-        values.put(DbReferences.COLUMN_NAME_IMAGE_URI, c.getImageUri().toString())
+        values.put(DbReferences.ENTRIES_COLUMN_NAME_TITLE, e.getTitle())
+        values.put(DbReferences.ENTRIES_COLUMN_NAME_LOCATION_NAME, e.getLocationName())
+        values.put(DbReferences.ENTRIES_COLUMN_NAME_DESCRIPTION, e.getDescription())
+        values.put(DbReferences.ENTRIES_COLUMN_NAME_CREATED_AT, e.getCreatedAt().toString())
 
         // The actual insertion operation. As inserting returns the primary key value of the new
         // row, we can use this and return it to whomever is calling so they can be aware of what
         // ID the new contact was referenced with.
-        val _id = database.insert(DbReferences.TABLE_NAME, null, values)
+        val _id = database.insert(DbReferences.TABLE_NAME_ENTRIES, null, values)
+
+        for(image in e.getImages()){
+            val imgValues = ContentValues()
+            imgValues.put(DbReferences.ENTRY_IMAGES_COLUMN_NAME_ENTRY_ID, e.getId())
+            imgValues.put(DbReferences.ENTRY_IMAGES_COLUMN_NAME_URI, image.getEntryId())
+
+            val imgId = database.insert(DbReferences.TABLE_NAME_ENTRY_IMAGES, null, imgValues)
+        }
+
         database.close()
         return _id
     }
