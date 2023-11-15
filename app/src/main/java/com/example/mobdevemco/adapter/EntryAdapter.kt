@@ -11,14 +11,15 @@ import com.example.mobdevemco.activity.EntryDetailsActivity
 import com.example.mobdevemco.model.Entry
 import com.example.mobdevemco.viewholder.EntryViewHolder
 
-class EntryAdapter(private val data: ArrayList<Entry>, myActivityResultLauncher: ActivityResultLauncher<Intent>) : RecyclerView.Adapter<EntryViewHolder>() {
+class EntryAdapter(private val data: ArrayList<Entry>, private val myActivityResultLauncher: ActivityResultLauncher<Intent>) : RecyclerView.Adapter<EntryViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): EntryViewHolder {
         // Initialize the ViewBinding of an item's layout
         val itemViewBinding: EntryItemBinding = EntryItemBinding.inflate(
             LayoutInflater.from(parent.context),
             parent,
-            false)
+            false
+        )
         val entryViewHolder = EntryViewHolder(itemViewBinding)
 
         val builder = AlertDialog.Builder(entryViewHolder.itemView.context)

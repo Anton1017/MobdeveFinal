@@ -1,56 +1,56 @@
 package com.example.mobdevemco.activity
 
+import android.Manifest
 import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
-import android.location.LocationListener
-import android.location.LocationManager
-import android.os.Bundle
-import android.view.View
-import android.widget.Toast
-import androidx.activity.result.ActivityResultCallback
-import android.provider.Settings
-import androidx.activity.result.contract.ActivityResultContracts
-import androidx.appcompat.app.AppCompatActivity
-import androidx.core.app.ActivityCompat
-import com.example.mobdevemco.databinding.ActivityCreateEntryBinding
-import android.Manifest
 import android.content.pm.PackageManager
 import android.location.Address
 import android.location.Geocoder
 import android.location.Location
-import android.net.Uri
+import android.location.LocationListener
+import android.location.LocationManager
+import android.os.Bundle
+import android.provider.Settings
 import android.util.Log
+import android.view.View
+import android.widget.Toast
 import androidx.activity.result.ActivityResult
+import androidx.activity.result.ActivityResultCallback
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityCompat
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import com.example.mobdevemco.adapter.EntryImageAdapter
+import com.example.mobdevemco.databinding.ActivityCreateEntryBinding
+import com.example.mobdevemco.model.EntryImages
 import java.util.Locale
+
 
 class NewEntryActivity : AppCompatActivity(), LocationListener{
     private lateinit var viewBinding: ActivityCreateEntryBinding
-    private var currentlocation : String = "sampple"
+    private var currentlocation : String = "sample"
     private val locationPermissionCode = 2
     private lateinit var locationManager: LocationManager
 
-    private val imageUriArray: ArrayList<Uri> = ArrayList<Uri>()
-    companion object {
-        const val POSITION_KEY = "POSITION_KEY"
-        const val TITLE_KEY = "TITLE_KEY"
-        const val LOCATION_NAME_KEY = "LOCATION_NAME_KEY"
-        const val IMAGE_KEY = "IMAGE_KEY"
-        const val DESCRIPTION_KEY = "DESCRIPTION_KEY"
-        const val CREATED_AT_KEY = "CREATED_AT_KEY"
-    }
+    private lateinit var recyclerView: RecyclerView
+    private lateinit var newImagesAdapter: EntryImageAdapter
+    private val newImageArray: ArrayList<EntryImages> = ArrayList<EntryImages>()
+
     private val myActivityResultLauncher = registerForActivityResult<Intent, ActivityResult>(
         ActivityResultContracts.StartActivityForResult()
     ) { result ->
         if (result.resultCode == RESULT_OK) {
             try {
                 if (result.data != null) {
-                    val count: Int? = result.data!!.clipData
-                        ?.itemCount
-
+                    val count: Int? = result.data!!.clipData?.itemCount
                     for (i in 0 until count!!) {
-                        result.data!!.clipData?.getItemAt(i)?.uri?.let { imageUriArray.add(it) }
+                        result.data!!.clipData?.getItemAt(i)?.uri?.let {
+                            newImageArray.add( EntryImages(it) )
+                        }
                     }
+                    newImagesAdapter.updateData(newImageArray)
                 }
             } catch (exception: Exception) {
                 Log.d("TAG", "" + exception.localizedMessage)
@@ -63,6 +63,11 @@ class NewEntryActivity : AppCompatActivity(), LocationListener{
         this.viewBinding = ActivityCreateEntryBinding.inflate(layoutInflater)
         setContentView(viewBinding.root)
         getLocation()
+
+        this.recyclerView = viewBinding.imageListRecyclerView
+        this.newImagesAdapter = EntryImageAdapter(newImageArray)
+        this.recyclerView.adapter = this.newImagesAdapter
+
         viewBinding.locationText.text =  this.currentlocation
         viewBinding.createBtn.setOnClickListener(View.OnClickListener {
             viewBinding.locationText.text = this.currentlocation
@@ -78,14 +83,21 @@ class NewEntryActivity : AppCompatActivity(), LocationListener{
             ActivityResultCallback {
 
             })
+
         viewBinding.addImageBtn.setOnClickListener(View.OnClickListener {
-            galleryImage.launch("image/*")
+            val i = Intent()
+            i.type = "image/*"
+            i.action = Intent.ACTION_OPEN_DOCUMENT
+            i.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true)
+            myActivityResultLauncher.launch(Intent.createChooser(i, "Select Pictures"))
         })
 
         viewBinding.editLocationBtn.setOnClickListener(View.OnClickListener {
             val intent = Intent(this@NewEntryActivity, EntryMapActivity::class.java)
             this.startActivity(intent)
         })
+
+        this.recyclerView.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
     }
 
 
@@ -152,5 +164,20 @@ class NewEntryActivity : AppCompatActivity(), LocationListener{
                 Toast.makeText(this, "Permission Denied", Toast.LENGTH_SHORT).show()
             }
         }
+    }
+
+    override fun onProviderEnabled(provider: String) {}
+
+    override fun onProviderDisabled(provider: String) {}
+
+    override fun onStatusChanged(provider: String?, status: Int, extras: Bundle?) {}
+
+    companion object {
+        const val POSITION_KEY = "POSITION_KEY"
+        const val TITLE_KEY = "TITLE_KEY"
+        const val LOCATION_NAME_KEY = "LOCATION_NAME_KEY"
+        const val IMAGE_KEY = "IMAGE_KEY"
+        const val DESCRIPTION_KEY = "DESCRIPTION_KEY"
+        const val CREATED_AT_KEY = "CREATED_AT_KEY"
     }
 }

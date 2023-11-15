@@ -2,12 +2,13 @@ package com.example.mobdevemco.model
 
 import android.net.Uri
 
-class EntryImages (private var entryId: Long, private var imageUri: Uri){
+class EntryImages (private var imageUri: Uri){
+    private var entryId: Long = -1
     private var id: Long = -1
     constructor(entryId: Long,
                 imageUri: Uri,
                 id: Long)
-            : this(entryId, imageUri) {
+            : this(imageUri) {
         this.entryId = entryId
         this.imageUri = imageUri
         this.id = id
