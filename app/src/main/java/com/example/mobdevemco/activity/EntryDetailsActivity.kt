@@ -47,6 +47,7 @@ class EntryDetailsActivity: AppCompatActivity() {
         })
         this.recyclerView = viewBinding.entryImageRecyclerView
         this.myAdapter = EntryImageAdapter(entryDataImages)
+        this.myAdapter.setViewType(EntryImageAdapter.ENTRY_IMAGE_LAYOUT)
         this.recyclerView.adapter = myAdapter
         val linearLayoutManager = LinearLayoutManager(this)
         linearLayoutManager.orientation = LinearLayoutManager.HORIZONTAL
