@@ -125,13 +125,12 @@
                     app:srcCompat="@drawable/baseline_gps_fixed_24" />
 
                 <TextView
-                    android:id="@+id/textView"
+                    android:id="@+id/currentLocationMain"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:ellipsize="end"
                     android:gravity="center|left"
-                    android:maxLines="1"
-                    android:text="@string/tournal_placeholder_place" />
+                    android:maxLines="1" />
             </LinearLayout>
 
         </androidx.constraintlayout.widget.ConstraintLayout>

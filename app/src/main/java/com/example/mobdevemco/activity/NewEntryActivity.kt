@@ -30,7 +30,6 @@ import java.util.Locale
 
 class NewEntryActivity : AppCompatActivity(), LocationListener{
     private lateinit var viewBinding: ActivityCreateEntryBinding
-    private var currentlocation : String = "sample"
     private val locationPermissionCode = 2
     private lateinit var locationManager: LocationManager
 
@@ -158,7 +157,6 @@ class NewEntryActivity : AppCompatActivity(), LocationListener{
         Log.d("TAG", location.latitude.toString())
         Log.d("TAG", location.longitude.toString())
         Log.d("TAG", "Address\n${list?.get(0)?.getAddressLine(0)}")
-        Log.d("TAG", currentlocation)
 
     }
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
