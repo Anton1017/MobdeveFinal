@@ -35,7 +35,7 @@ class EntryImageAdapter(private var data: ArrayList<EntryImages>) : RecyclerView
             customImageViewHolder = EntryImageViewHolder(itemViewBinding)
             customImageViewHolder
         }else{
-            throw Throwable("ERROR: Invalid viewType.")
+            throw Throwable("ERROR: Invalid viewType>. Be sure to set the viewType in <EntryImageAdapter>.setViewType().")
         }
 
     }
