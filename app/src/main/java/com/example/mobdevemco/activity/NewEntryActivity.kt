@@ -78,9 +78,7 @@ class NewEntryActivity : AppCompatActivity(), LocationListener{
 
         this.recyclerView.adapter = this.newImagesAdapter
 
-        viewBinding.locationText.text =  this.currentlocation
         viewBinding.createBtn.setOnClickListener(View.OnClickListener {
-            viewBinding.locationText.text = this.currentlocation
             finish()
         })
         viewBinding.cancelBtn.setOnClickListener(View.OnClickListener {
@@ -154,10 +152,9 @@ class NewEntryActivity : AppCompatActivity(), LocationListener{
         val geocoder = Geocoder(this, Locale.getDefault())
         val list: MutableList<Address>? =
             geocoder.getFromLocation(location.latitude, location.longitude, 1)
-        this.currentlocation = "Address\n${list?.get(0)?.getAddressLine(0)}"
-//        viewBinding.apply {
-//            textView5.text = "hello"
-//        }
+
+        viewBinding.locationText.text = "${list?.get(0)?.locality}"
+//        viewBinding.locationText.text = "${list?.get(0)?.getAddressLine(0)}"
         Log.d("TAG", location.latitude.toString())
         Log.d("TAG", location.longitude.toString())
         Log.d("TAG", "Address\n${list?.get(0)?.getAddressLine(0)}")

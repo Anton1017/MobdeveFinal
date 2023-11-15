@@ -52,7 +52,6 @@
             android:layout_height="0dp"
             android:fontFamily="sans-serif-light"
             android:gravity="center|left"
-            android:text="@string/tournal_placeholder_place"
             android:textColor="?attr/colorPrimary"
             android:textColorHint="?attr/colorTertiary"
             android:textSize="20sp"
