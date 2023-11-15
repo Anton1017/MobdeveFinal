@@ -74,6 +74,8 @@ class NewEntryActivity : AppCompatActivity(), LocationListener{
 
         this.recyclerView = viewBinding.imageListRecyclerView
         this.newImagesAdapter = EntryImageAdapter(newImageArray)
+        this.newImagesAdapter.setViewType(EntryImageAdapter.NEW_IMAGE_LAYOUT)
+
         this.recyclerView.adapter = this.newImagesAdapter
 
         viewBinding.locationText.text =  this.currentlocation

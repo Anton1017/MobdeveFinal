@@ -20,7 +20,11 @@ class EntryViewHolder(private val viewBinding: EntryItemBinding): RecyclerView.V
         this.viewBinding.entryDescription.text = entry.getDescription()
         this.viewBinding.entryCreatedAt.text = entry.getCreatedAt().toStringFormatted()
         recyclerView = viewBinding.entryImageRecyclerView
+
         entryImageAdapter = EntryImageAdapter(entry.getImages())
+        //REQUIRED: SET VIEW TYPE BEFORE ASSIGNING TO ADAPTER
+        entryImageAdapter.setViewType(EntryImageAdapter.ENTRY_IMAGE_LAYOUT)
+
         recyclerView.adapter = entryImageAdapter
         val linearLayoutManager = LinearLayoutManager(itemView.context)
         linearLayoutManager.orientation = LinearLayoutManager.HORIZONTAL
