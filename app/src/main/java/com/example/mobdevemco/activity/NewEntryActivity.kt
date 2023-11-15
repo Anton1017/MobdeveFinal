@@ -44,13 +44,18 @@ class NewEntryActivity : AppCompatActivity(), LocationListener{
         if (result.resultCode == RESULT_OK) {
             try {
                 if (result.data != null) {
+                    newImageArray.clear()
                     val count: Int? = result.data!!.clipData?.itemCount
-                    for (i in 0 until count!!) {
-                        result.data!!.clipData?.getItemAt(i)?.uri?.let {
-                            newImageArray.add( EntryImages(it) )
+                    if(count != null){
+                        for (i in 0 until count!!) {
+                            result.data!!.clipData?.getItemAt(i)?.uri?.let {
+                                newImageArray.add( EntryImages(it) )
+                            }
                         }
+                    }else{
+                        result.data!!.data?.let { EntryImages(it) }?.let { newImageArray.add(it) }
                     }
-                    newImagesAdapter.updateData(newImageArray)
+                    newImagesAdapter.updateData()
                 }
             } catch (exception: Exception) {
                 Log.d("TAG", "" + exception.localizedMessage)
@@ -87,7 +92,7 @@ class NewEntryActivity : AppCompatActivity(), LocationListener{
         viewBinding.addImageBtn.setOnClickListener(View.OnClickListener {
             val i = Intent()
             i.type = "image/*"
-            i.action = Intent.ACTION_OPEN_DOCUMENT
+            i.action = Intent.ACTION_GET_CONTENT
             i.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true)
             myActivityResultLauncher.launch(Intent.createChooser(i, "Select Pictures"))
         })

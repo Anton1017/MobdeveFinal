@@ -29,9 +29,7 @@ class EntryImageAdapter(private var data: ArrayList<EntryImages>) : RecyclerView
         holder.bindData(data[position])
     }
 
-    fun updateData(data: ArrayList<EntryImages>) {
-        this.data = data
+    fun updateData() {
         notifyDataSetChanged()
-        Log.d("TAG", "Images: " + data.toString())
     }
 }
