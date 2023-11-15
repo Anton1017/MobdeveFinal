@@ -60,6 +60,9 @@ class NewEntryActivity : AppCompatActivity(), LocationListener{
             } catch (exception: Exception) {
                 Log.d("TAG", "" + exception.localizedMessage)
             }
+        } else{
+            newImageArray.clear()
+            newImagesAdapter.updateData()
         }
     }
     override fun onCreate(savedInstanceState: Bundle?) {
