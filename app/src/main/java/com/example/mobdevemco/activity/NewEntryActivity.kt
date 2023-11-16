@@ -24,8 +24,11 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.mobdevemco.adapter.EntryImageAdapter
 import com.example.mobdevemco.databinding.ActivityCreateEntryBinding
+import com.example.mobdevemco.helper.EntryDbHelper
+import com.example.mobdevemco.model.Entry
 import com.example.mobdevemco.model.EntryImages
 import java.util.Locale
+import java.util.concurrent.Executors
 
 
 class NewEntryActivity : AppCompatActivity(), LocationListener{
@@ -37,6 +40,9 @@ class NewEntryActivity : AppCompatActivity(), LocationListener{
     private lateinit var newImagesAdapter: EntryImageAdapter
     private val newImageArray: ArrayList<EntryImages> = ArrayList<EntryImages>()
 
+    private var entryDbHelper: EntryDbHelper? = null
+    private val executorService = Executors.newSingleThreadExecutor()
+
     private val myActivityResultLauncher = registerForActivityResult<Intent, ActivityResult>(
         ActivityResultContracts.StartActivityForResult()
     ) { result ->
@@ -46,7 +52,7 @@ class NewEntryActivity : AppCompatActivity(), LocationListener{
                     newImageArray.clear()
                     val count: Int? = result.data!!.clipData?.itemCount
                     if(count != null){
-                        for (i in 0 until count!!) {
+                        for (i in 0 until count) {
                             result.data!!.clipData?.getItemAt(i)?.uri?.let {
                                 newImageArray.add( EntryImages(it) )
                             }
@@ -78,8 +84,44 @@ class NewEntryActivity : AppCompatActivity(), LocationListener{
         this.recyclerView.adapter = this.newImagesAdapter
 
         viewBinding.createBtn.setOnClickListener(View.OnClickListener {
+            if(doAllFieldHaveEntries()){
+                // LOGIC FOR EDIT/UPDATE
+                executorService.execute {
+                    // Get the DB
+                    entryDbHelper = EntryDbHelper.getInstance(this@NewEntryActivity)
+                    // Perform the update method we defined in the DB helper class. For
+                    // more info, check the MyDbHelper class.
+                    entryDbHelper?.insertEntry(
+                        Entry(
+                            viewBinding.titleText.text.toString(),
+                            viewBinding.locationText.text.toString(),
+                            newImageArray,
+                            viewBinding.descriptionText.text.toString()
+                        )
+                    )
+
+                    // After performing the DB operation, run the code below on the
+                    // UI/main thread. While I don't think all the intent code needs to
+                    // be in the thread, I'm calling this specifically because finish()
+                    // is best called on the main thread. There are many ways to do this
+                    // but I decided to just use the runOnUiThread(). We'll discuss more
+                    // on this in the Process Management module.
+                    runOnUiThread {
+
+                        finish()
+                    }
+                }
+            }else{
+                Toast.makeText(
+                    this@NewEntryActivity,
+                    "Please make sure to fill up every field.",
+                    Toast.LENGTH_SHORT
+                ).show()
+            }
+
             finish()
         })
+
         viewBinding.cancelBtn.setOnClickListener(View.OnClickListener {
 
             finish()
@@ -176,6 +218,12 @@ class NewEntryActivity : AppCompatActivity(), LocationListener{
     override fun onProviderDisabled(provider: String) {}
 
     override fun onStatusChanged(provider: String?, status: Int, extras: Bundle?) {}
+
+    private fun doAllFieldHaveEntries(): Boolean {
+        return viewBinding.titleText.text.toString().isNotEmpty() &&
+                viewBinding.descriptionText.text.toString().isNotEmpty() &&
+                viewBinding.locationText.text.toString().isNotEmpty()
+    }
 
     companion object {
         const val POSITION_KEY = "POSITION_KEY"
