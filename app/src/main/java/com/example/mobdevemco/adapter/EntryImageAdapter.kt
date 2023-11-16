@@ -47,10 +47,6 @@ class EntryImageAdapter(private var data: ArrayList<EntryImages>) : RecyclerView
         holder.bindData(data[position])
     }
 
-    fun updateData() {
-        notifyDataSetChanged()
-    }
-
     fun setViewType(viewType: Int){
         this.viewType = viewType
     }

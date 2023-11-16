@@ -35,23 +35,33 @@ import java.util.concurrent.Executors
 class ActivityMain : AppCompatActivity(), LocationListener {
 
     private var entryData = DataGenerator.loadEntryData()
+    private val entries: ArrayList<Entry> = ArrayList<Entry>()
     private lateinit var viewBinding: ActivityMainBinding
     private lateinit var recyclerView: RecyclerView
     private lateinit var myAdapter: EntryAdapter
     private val locationPermissionCode = 2
     private lateinit var locationManager: LocationManager
 
+    private var entryDbHelper: EntryDbHelper? = null
+    private val executorService = Executors.newSingleThreadExecutor()
+
+
     private val newEntryResultLauncher = registerForActivityResult(
         ActivityResultContracts.StartActivityForResult()) { result: ActivityResult ->
-        // Check to see if the result returned is appropriate (i.e. OK)
         if (result.resultCode == RESULT_OK) {
-            val title : String = result.data?.getStringExtra(NewEntryActivity.TITLE_KEY)!!
-            val locationName : String = result.data?.getStringExtra(NewEntryActivity.LOCATION_NAME_KEY)!!
-            val images : ArrayList<EntryImages> = result.data?.getSerializableExtra(NewEntryActivity.IMAGE_KEY)!! as ArrayList<EntryImages>
-            val description : String = result.data?.getStringExtra(NewEntryActivity.DESCRIPTION_KEY)!!
-
-            val entry = Entry(title, locationName, images, description)
-
+            val id : Long = result.data?.getLongExtra(EntryDbHelper.ENTRY_ID, -1)!!
+            executorService.execute {
+                // Get all contacts from the database
+                entryDbHelper = EntryDbHelper.getInstance(this@ActivityMain)
+                val entry = entryDbHelper?.getEntry(id)
+                runOnUiThread { // Pass in the contacts to the needed components and set the adapter
+                    if (entry != null) {
+                        entries.add(0, entry)
+                    }
+                    myAdapter.notifyItemInserted(0)
+                    recyclerView.smoothScrollToPosition(0);
+                }
+            }
 //            if(position != -1){
 //                ActivityMain.data.set(position, email)
 //                this.myAdapter.notifyItemChanged(position)
@@ -64,19 +74,29 @@ class ActivityMain : AppCompatActivity(), LocationListener {
 
         }
     }
-
-    private var entryDbHelper: EntryDbHelper? = null
-    private val executorService = Executors.newSingleThreadExecutor()
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         this.viewBinding = ActivityMainBinding.inflate(layoutInflater)
+
+        executorService.execute {
+            // Get all contacts from the database
+            entryDbHelper = EntryDbHelper.getInstance(this@ActivityMain)
+            entryDbHelper?.allEntriesDefault?.let { entries.addAll(it) }
+            Log.d("TAG", entries.toString())
+
+            runOnUiThread { // Pass in the contacts to the needed components and set the adapter
+                myAdapter = entries.let { EntryAdapter(it, newEntryResultLauncher) }
+                this.recyclerView.adapter = myAdapter
+            }
+        }
+
+
         setContentView(viewBinding.root)
         getLocation()
         //Logic for adding a new entry
         viewBinding.entryAddBtn.setOnClickListener(View.OnClickListener {
             val intent = Intent(this@ActivityMain, NewEntryActivity::class.java)
-            this.startActivity(intent)
+            newEntryResultLauncher.launch(intent)
         })
 
         viewBinding.searchLogo.setOnClickListener(View.OnClickListener {
@@ -87,16 +107,6 @@ class ActivityMain : AppCompatActivity(), LocationListener {
 //        this.myAdapter = EntryAdapter(entryData,newEntryResultLauncher)
 //        this.recyclerView.adapter = myAdapter
 
-        executorService.execute {
-            // Get all contacts from the database
-            entryDbHelper = EntryDbHelper.getInstance(this@ActivityMain)
-            val entries = entryDbHelper?.allEntriesDefault
-
-            runOnUiThread { // Pass in the contacts to the needed components and set the adapter
-                myAdapter = entries?.let { EntryAdapter(it, newEntryResultLauncher) }!!
-                this.recyclerView.adapter = myAdapter
-            }
-        }
 
         this.recyclerView.layoutManager = LinearLayoutManager(this)
     }

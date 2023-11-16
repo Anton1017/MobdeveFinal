@@ -60,14 +60,14 @@ class NewEntryActivity : AppCompatActivity(), LocationListener{
                     }else{
                         result.data!!.data?.let { EntryImages(it) }?.let { newImageArray.add(it) }
                     }
-                    newImagesAdapter.updateData()
+                    newImagesAdapter.notifyDataSetChanged()
                 }
             } catch (exception: Exception) {
                 Log.d("TAG", "" + exception.localizedMessage)
             }
         } else{
             newImageArray.clear()
-            newImagesAdapter.updateData()
+            newImagesAdapter.notifyDataSetChanged()
         }
     }
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -91,7 +91,7 @@ class NewEntryActivity : AppCompatActivity(), LocationListener{
                     entryDbHelper = EntryDbHelper.getInstance(this@NewEntryActivity)
                     // Perform the update method we defined in the DB helper class. For
                     // more info, check the MyDbHelper class.
-                    entryDbHelper?.insertEntry(
+                    val newEntryId: Long? = entryDbHelper?.insertEntry(
                         Entry(
                             viewBinding.titleText.text.toString(),
                             viewBinding.locationText.text.toString(),
@@ -100,14 +100,17 @@ class NewEntryActivity : AppCompatActivity(), LocationListener{
                         )
                     )
 
-                    // After performing the DB operation, run the code below on the
-                    // UI/main thread. While I don't think all the intent code needs to
-                    // be in the thread, I'm calling this specifically because finish()
-                    // is best called on the main thread. There are many ways to do this
-                    // but I decided to just use the runOnUiThread(). We'll discuss more
-                    // on this in the Process Management module.
-                    runOnUiThread {
+                    Log.d("TAG", newEntryId.toString())
 
+
+                    runOnUiThread {
+                        val i: Intent = Intent()
+                        i.putExtra(EntryDbHelper.ENTRY_ID, newEntryId)
+
+                        Log.d("TAG", "Before setResult")
+
+                        // We set the result code based on our own standard
+                        setResult(RESULT_OK, i)
                         finish()
                     }
                 }
@@ -118,8 +121,6 @@ class NewEntryActivity : AppCompatActivity(), LocationListener{
                     Toast.LENGTH_SHORT
                 ).show()
             }
-
-            finish()
         })
 
         viewBinding.cancelBtn.setOnClickListener(View.OnClickListener {

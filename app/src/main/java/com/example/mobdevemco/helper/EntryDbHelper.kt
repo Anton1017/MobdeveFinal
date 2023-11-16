@@ -5,6 +5,7 @@ import android.content.Context
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
 import android.net.Uri
+import android.util.Log
 import com.example.mobdevemco.model.CustomDateTime
 import com.example.mobdevemco.model.Entry
 import com.example.mobdevemco.model.EntryImages
@@ -110,6 +111,60 @@ class EntryDbHelper(context: Context?) :
         return _id
     }
 
+    @Synchronized
+    fun getEntry(id: Long): Entry? {
+        val database = this.readableDatabase
+        val e = database.query(
+            DbReferences.TABLE_NAME_ENTRIES,
+            null,
+            DbReferences._ID + " =?",
+            arrayOf(id.toString()),
+            null,
+            null,
+            null,
+            null
+        )
+        Log.d("TAG", e.toString())
+        val imgArray : ArrayList<EntryImages> = ArrayList<EntryImages>()
+
+        val imgQuery = database.query(
+            DbReferences.TABLE_NAME_ENTRY_IMAGES,
+            null,
+            DbReferences.ENTRY_IMAGES_COLUMN_NAME_ENTRY_ID + "=?",
+            arrayOf(id.toString()),
+            null,
+            null,
+            DbReferences._ID,
+            null,
+        )
+        while(imgQuery.moveToNext()){
+            imgArray.add(
+                EntryImages(
+                    imgQuery.getLong(imgQuery.getColumnIndexOrThrow(DbReferences.ENTRY_IMAGES_COLUMN_NAME_ENTRY_ID)),
+                    Uri.parse(imgQuery.getString(imgQuery.getColumnIndexOrThrow(DbReferences.ENTRY_IMAGES_COLUMN_NAME_URI))),
+                    imgQuery.getLong(imgQuery.getColumnIndexOrThrow(DbReferences.ENTRY_IMAGES_COLUMN_NAME_ENTRY_ID))
+                )
+            )
+        }
+        imgQuery.close()
+
+        var entry: Entry? = null
+        while(e.moveToNext()){
+            entry = Entry(
+                e.getString(e.getColumnIndexOrThrow(DbReferences.ENTRIES_COLUMN_NAME_TITLE)),
+                e.getString(e.getColumnIndexOrThrow(DbReferences.ENTRIES_COLUMN_NAME_LOCATION_NAME)),
+                imgArray,
+                e.getString(e.getColumnIndexOrThrow(DbReferences.ENTRIES_COLUMN_NAME_DESCRIPTION)),
+                CustomDateTime(e.getString(e.getColumnIndexOrThrow(DbReferences.ENTRIES_COLUMN_NAME_CREATED_AT))),
+                e.getLong(e.getColumnIndexOrThrow(DbReferences._ID))
+            )
+        }
+
+        e.close()
+        database.close()
+        return entry
+    }
+
 //    // Performs an UPDATE operation by comparing the old contact with the new contact. This method
 //    // tries to reduce the length of the update statement by only including attributes that have
 //    // been changed. If no changed are present, the update statement is simply not called.
@@ -188,6 +243,7 @@ class EntryDbHelper(context: Context?) :
     }
 
     companion object {
+        val ENTRY_ID = "ENTRY_ID"
         // Our single instance of the class
         var instance: EntryDbHelper? = null
 
