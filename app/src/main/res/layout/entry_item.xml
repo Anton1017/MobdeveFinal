@@ -119,6 +119,7 @@
         android:padding="2dp" />
 
     <LinearLayout
+        android:id="@+id/imageCountView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_gravity="top"

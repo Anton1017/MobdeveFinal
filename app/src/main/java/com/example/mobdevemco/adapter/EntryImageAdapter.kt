@@ -18,7 +18,7 @@ class EntryImageAdapter(private var data: ArrayList<EntryImages>) : RecyclerView
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CustomImageViewHolder {
         // Initialize the ViewBinding of an item's layout
 
-
+        Log.d("TAG", data.toString())
         val customImageViewHolder: CustomImageViewHolder
         return if(this.viewType == NEW_IMAGE_LAYOUT){
             val itemViewBinding: EntryNewImageItemBinding = EntryNewImageItemBinding.inflate(

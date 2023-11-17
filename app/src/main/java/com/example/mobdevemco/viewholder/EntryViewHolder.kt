@@ -1,5 +1,7 @@
 package com.example.mobdevemco.viewholder
 
+import android.util.Log
+import android.view.View
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.mobdevemco.databinding.EntryItemBinding
@@ -21,11 +23,19 @@ class EntryViewHolder(private val viewBinding: EntryItemBinding): RecyclerView.V
         this.viewBinding.entryCreatedAt.text = entry.getCreatedAt().toStringFormatted()
         recyclerView = viewBinding.entryImageRecyclerView
 
+        Log.d("TAG", entry.getImages().toString())
+
         entryImageAdapter = EntryImageAdapter(entry.getImages())
         //REQUIRED: SET VIEW TYPE BEFORE ASSIGNING TO ADAPTER
         entryImageAdapter.setViewType(EntryImageAdapter.ENTRY_IMAGE_LAYOUT)
 
         recyclerView.adapter = entryImageAdapter
+
+        //For removing image recycler view if no images are present
+//        recyclerView.visibility = View.GONE
+//        viewBinding.imageCountView.visibility = View.GONE
+
+
         val linearLayoutManager = LinearLayoutManager(itemView.context)
         linearLayoutManager.orientation = LinearLayoutManager.HORIZONTAL
         recyclerView.layoutManager = linearLayoutManager

@@ -47,14 +47,16 @@ class EntryDbHelper(context: Context?) :
                     DbReferences.TABLE_NAME_ENTRY_IMAGES,
                     null,
                     DbReferences.ENTRY_IMAGES_COLUMN_NAME_ENTRY_ID + "=?",
-                    arrayOf(e.getString(e.getColumnIndexOrThrow(DbReferences.ENTRIES_COLUMN_NAME_TITLE))),
+                    arrayOf(e.getLong(e.getColumnIndexOrThrow(DbReferences._ID)).toString()),
                     null,
                     null,
                     DbReferences._ID,
                     null,
                 )
+                Log.d("imgQuery", e.getLong(e.getColumnIndexOrThrow(DbReferences._ID)).toString())
                 val imgArray : ArrayList<EntryImages> = ArrayList<EntryImages>()
                 while(imgQuery.moveToNext()){
+                    Log.d("imgQuery2", imgQuery.getLong(imgQuery.getColumnIndexOrThrow(DbReferences.ENTRY_IMAGES_COLUMN_NAME_ENTRY_ID)).toString())
                     imgArray.add(
                         EntryImages(
                             imgQuery.getLong(imgQuery.getColumnIndexOrThrow(DbReferences.ENTRY_IMAGES_COLUMN_NAME_ENTRY_ID)),
@@ -101,10 +103,11 @@ class EntryDbHelper(context: Context?) :
 
         for(image in e.getImages()){
             val imgValues = ContentValues()
-            imgValues.put(DbReferences.ENTRY_IMAGES_COLUMN_NAME_ENTRY_ID, e.getId())
-            imgValues.put(DbReferences.ENTRY_IMAGES_COLUMN_NAME_URI, image.getEntryId())
+            imgValues.put(DbReferences.ENTRY_IMAGES_COLUMN_NAME_ENTRY_ID, _id)
+            imgValues.put(DbReferences.ENTRY_IMAGES_COLUMN_NAME_URI, image.getImageUri().toString())
 
             val imgId = database.insert(DbReferences.TABLE_NAME_ENTRY_IMAGES, null, imgValues)
+            Log.d("ImageId", imgId.toString())
         }
 
         database.close()

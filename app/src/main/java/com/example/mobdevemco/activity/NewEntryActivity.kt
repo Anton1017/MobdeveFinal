@@ -91,6 +91,7 @@ class NewEntryActivity : AppCompatActivity(), LocationListener{
                     entryDbHelper = EntryDbHelper.getInstance(this@NewEntryActivity)
                     // Perform the update method we defined in the DB helper class. For
                     // more info, check the MyDbHelper class.
+                    Log.d("TAG", newImageArray.toString())
                     val newEntryId: Long? = entryDbHelper?.insertEntry(
                         Entry(
                             viewBinding.titleText.text.toString(),
