@@ -1,18 +1,24 @@
 package com.example.mobdevemco.model
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.net.Uri
 import com.example.mobdevemco.R
 import java.util.ArrayList
 
 class DataGenerator {
     companion object {
+        val imgBitmap: Bitmap = BitmapFactory.decodeFile(
+            Uri.parse("android.resource://com.example.mobdevemco/" + R.mipmap.mario_kart).toString()
+        )
         fun loadEntryData(): ArrayList<Entry> {
             val data = ArrayList<Entry>()
             val images1 = ArrayList<EntryImages>()
-            images1.add(EntryImages(Uri.parse("android.resource://com.example.mobdevemco/" + R.mipmap.mario_kart)))
-            images1.add(EntryImages(Uri.parse("android.resource://com.example.mobdevemco/" + R.mipmap.mario_kart)))
-            images1.add(EntryImages(Uri.parse("android.resource://com.example.mobdevemco/" + R.mipmap.mario_kart)))
-            images1.add(EntryImages(Uri.parse("android.resource://com.example.mobdevemco/" + R.mipmap.mario_kart)))
-            images1.add(EntryImages(Uri.parse("android.resource://com.example.mobdevemco/" + R.mipmap.mario_kart)))
+
+            images1.add(EntryImages(imgBitmap))
+            images1.add(EntryImages(imgBitmap))
+            images1.add(EntryImages(imgBitmap))
+            images1.add(EntryImages(imgBitmap))
+            images1.add(EntryImages(imgBitmap))
             data.add(
                 Entry(
                     "Mario Kart IRL",
@@ -146,11 +152,11 @@ class DataGenerator {
         }
         fun loadEntryImageData(): ArrayList<EntryImages>{
             val imagedata = ArrayList<EntryImages>()
-            imagedata.add(EntryImages(Uri.parse("android.resource://com.example.mobdevemco/" + R.mipmap.mario_kart)))
-            imagedata.add(EntryImages(Uri.parse("android.resource://com.example.mobdevemco/" + R.mipmap.mario_kart)))
-            imagedata.add(EntryImages(Uri.parse("android.resource://com.example.mobdevemco/" + R.mipmap.mario_kart)))
-            imagedata.add(EntryImages(Uri.parse("android.resource://com.example.mobdevemco/" + R.mipmap.mario_kart)))
-            imagedata.add(EntryImages(Uri.parse("android.resource://com.example.mobdevemco/" + R.mipmap.mario_kart)))
+            imagedata.add(EntryImages(imgBitmap))
+            imagedata.add(EntryImages(imgBitmap))
+            imagedata.add(EntryImages(imgBitmap))
+            imagedata.add(EntryImages(imgBitmap))
+            imagedata.add(EntryImages(imgBitmap))
             return imagedata
         }
 

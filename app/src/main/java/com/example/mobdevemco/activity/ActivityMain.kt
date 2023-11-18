@@ -34,7 +34,7 @@ import java.util.concurrent.Executors
 
 class ActivityMain : AppCompatActivity(), LocationListener {
 
-    private var entryData = DataGenerator.loadEntryData()
+    //private var entryData = DataGenerator.loadEntryData()
     private val entries: ArrayList<Entry> = ArrayList<Entry>()
     private lateinit var viewBinding: ActivityMainBinding
     private lateinit var recyclerView: RecyclerView

@@ -5,6 +5,8 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.location.Address
 import android.location.Geocoder
 import android.location.Location
@@ -27,6 +29,7 @@ import com.example.mobdevemco.databinding.ActivityCreateEntryBinding
 import com.example.mobdevemco.helper.EntryDbHelper
 import com.example.mobdevemco.model.Entry
 import com.example.mobdevemco.model.EntryImages
+import java.io.InputStream
 import java.util.Locale
 import java.util.concurrent.Executors
 
@@ -51,14 +54,32 @@ class NewEntryActivity : AppCompatActivity(), LocationListener{
                 if (result.data != null) {
                     newImageArray.clear()
                     val count: Int? = result.data!!.clipData?.itemCount
+                    // IF there are 2 or more images picked
                     if(count != null){
                         for (i in 0 until count) {
-                            result.data!!.clipData?.getItemAt(i)?.uri?.let {
-                                newImageArray.add( EntryImages(it) )
+                            val inputStream: InputStream? = result.data!!.clipData?.getItemAt(i)?.uri?.let {
+                                contentResolver.openInputStream(
+                                    it
+                                )
                             }
+                            val bitmap: Bitmap = BitmapFactory.decodeStream(
+                                inputStream
+                            )
+//                            val stream = ByteArrayOutputStream()
+//                            bitmap.compress( Bitmap.CompressFormat.PNG, 100, stream)
+//                            val byteArray = stream.toByteArray()
+                            newImageArray.add( EntryImages(bitmap) )
                         }
+                    //if only one image was picked
                     }else{
-                        result.data!!.data?.let { EntryImages(it) }?.let { newImageArray.add(it) }
+                        val inputStream: InputStream? = result.data!!.data?.let {
+                            contentResolver.openInputStream(
+                                it
+                            )
+                        }
+                        BitmapFactory.decodeStream(
+                            inputStream
+                        ).let { EntryImages(it) }.let { newImageArray.add(it) }
                     }
                     newImagesAdapter.notifyDataSetChanged()
                 }

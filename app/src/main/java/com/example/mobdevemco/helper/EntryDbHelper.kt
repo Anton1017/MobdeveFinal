@@ -4,13 +4,12 @@ import android.content.ContentValues
 import android.content.Context
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
+import android.graphics.BitmapFactory
 import android.net.Uri
 import android.util.Log
 import com.example.mobdevemco.model.CustomDateTime
 import com.example.mobdevemco.model.Entry
 import com.example.mobdevemco.model.EntryImages
-import kotlin.Int
-import kotlin.arrayOf
 
 
 class EntryDbHelper(context: Context?) :
@@ -57,10 +56,14 @@ class EntryDbHelper(context: Context?) :
                 val imgArray : ArrayList<EntryImages> = ArrayList<EntryImages>()
                 while(imgQuery.moveToNext()){
                     Log.d("imgQuery2", imgQuery.getLong(imgQuery.getColumnIndexOrThrow(DbReferences.ENTRY_IMAGES_COLUMN_NAME_ENTRY_ID)).toString())
+                    val byteArray: ByteArray = imgQuery.getBlob(
+                        imgQuery.getColumnIndexOrThrow(DbReferences.ENTRY_IMAGES_COLUMN_NAME_IMAGE_BLOB)
+                    )
+                    val bm = BitmapFactory.decodeByteArray(byteArray, 0, byteArray.size)
                     imgArray.add(
                         EntryImages(
                             imgQuery.getLong(imgQuery.getColumnIndexOrThrow(DbReferences.ENTRY_IMAGES_COLUMN_NAME_ENTRY_ID)),
-                            Uri.parse(imgQuery.getString(imgQuery.getColumnIndexOrThrow(DbReferences.ENTRY_IMAGES_COLUMN_NAME_URI))),
+                            bm,
                             imgQuery.getLong(imgQuery.getColumnIndexOrThrow(DbReferences.ENTRY_IMAGES_COLUMN_NAME_ENTRY_ID))
                         )
                     )
@@ -104,7 +107,7 @@ class EntryDbHelper(context: Context?) :
         for(image in e.getImages()){
             val imgValues = ContentValues()
             imgValues.put(DbReferences.ENTRY_IMAGES_COLUMN_NAME_ENTRY_ID, _id)
-            imgValues.put(DbReferences.ENTRY_IMAGES_COLUMN_NAME_URI, image.getImageUri().toString())
+            imgValues.put(DbReferences.ENTRY_IMAGES_COLUMN_NAME_IMAGE_BLOB, image.toByteArrayStream())
 
             val imgId = database.insert(DbReferences.TABLE_NAME_ENTRY_IMAGES, null, imgValues)
             Log.d("ImageId", imgId.toString())
@@ -141,10 +144,14 @@ class EntryDbHelper(context: Context?) :
             null,
         )
         while(imgQuery.moveToNext()){
+            val byteArray: ByteArray = imgQuery.getBlob(
+                imgQuery.getColumnIndexOrThrow(DbReferences.ENTRY_IMAGES_COLUMN_NAME_IMAGE_BLOB)
+            )
+            val bm = BitmapFactory.decodeByteArray(byteArray, 0, byteArray.size)
             imgArray.add(
                 EntryImages(
                     imgQuery.getLong(imgQuery.getColumnIndexOrThrow(DbReferences.ENTRY_IMAGES_COLUMN_NAME_ENTRY_ID)),
-                    Uri.parse(imgQuery.getString(imgQuery.getColumnIndexOrThrow(DbReferences.ENTRY_IMAGES_COLUMN_NAME_URI))),
+                    bm,
                     imgQuery.getLong(imgQuery.getColumnIndexOrThrow(DbReferences.ENTRY_IMAGES_COLUMN_NAME_ENTRY_ID))
                 )
             )
@@ -234,12 +241,12 @@ class EntryDbHelper(context: Context?) :
 
         const val TABLE_NAME_ENTRY_IMAGES = "entry_images"
         const val ENTRY_IMAGES_COLUMN_NAME_ENTRY_ID = "entry_id"
-        const val ENTRY_IMAGES_COLUMN_NAME_URI = "uri"
+        const val ENTRY_IMAGES_COLUMN_NAME_IMAGE_BLOB = "image_blob"
         const val ENTRY_IMAGES_CREATE_TABLE_STATEMENT =
             "CREATE TABLE IF NOT EXISTS " + TABLE_NAME_ENTRY_IMAGES + " (" +
                     _ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
                     ENTRY_IMAGES_COLUMN_NAME_ENTRY_ID + " INTEGER, " +
-                    ENTRY_IMAGES_COLUMN_NAME_URI + " TEXT," +
+                    ENTRY_IMAGES_COLUMN_NAME_IMAGE_BLOB + " BLOB," +
                     "FOREIGN KEY (" + ENTRY_IMAGES_COLUMN_NAME_ENTRY_ID + ") REFERENCES " + TABLE_NAME_ENTRIES + " (" + _ID + "))"
 
         const val ENTRY_IMAGES_DROP_TABLE_STATEMENT = "DROP TABLE IF EXISTS " + TABLE_NAME_ENTRY_IMAGES
