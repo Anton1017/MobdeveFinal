@@ -20,6 +20,7 @@ import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
+import androidx.core.view.size
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.mobdevemco.adapter.EntryAdapter
@@ -103,10 +104,28 @@ class ActivityMain : AppCompatActivity(), LocationListener {
             val intent = Intent(this@ActivityMain, EntrySearchActivity::class.java)
             this.startActivity(intent)
         })
+
         this.recyclerView = viewBinding.entryRecyclerView
 //        this.myAdapter = EntryAdapter(entryData,newEntryResultLauncher)
 //        this.recyclerView.adapter = myAdapter
 
+        recyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                super.onScrolled(recyclerView, dx, dy)
+                if(recyclerView.computeVerticalScrollOffset() == 0 && recyclerView.size != 0){
+                    viewBinding.addressBar.alpha = 0.5F
+                }else{
+                    viewBinding.addressBar.alpha = 1F
+                }
+
+            }
+        })
+
+
+        viewBinding.entryRecyclerView.setOnClickListener(View.OnClickListener {
+            val intent = Intent(this@ActivityMain, EntrySearchActivity::class.java)
+            this.startActivity(intent)
+        })
 
         this.recyclerView.layoutManager = LinearLayoutManager(this)
     }

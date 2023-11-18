@@ -1,16 +1,17 @@
 package com.example.mobdevemco.adapter
 
 import android.content.Intent
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import android.widget.LinearLayout
 import androidx.activity.result.ActivityResultLauncher
-import androidx.recyclerview.widget.RecyclerView
-import com.example.mobdevemco.databinding.EntryItemBinding
 import androidx.appcompat.app.AlertDialog
+import androidx.recyclerview.widget.RecyclerView
 import com.example.mobdevemco.activity.EntryDetailsActivity
+import com.example.mobdevemco.databinding.EntryItemBinding
 import com.example.mobdevemco.model.Entry
 import com.example.mobdevemco.viewholder.EntryViewHolder
+
 
 class EntryAdapter(private val data: ArrayList<Entry>, private val myActivityResultLauncher: ActivityResultLauncher<Intent>) : RecyclerView.Adapter<EntryViewHolder>() {
 
@@ -22,6 +23,15 @@ class EntryAdapter(private val data: ArrayList<Entry>, private val myActivityRes
             false
         )
         val entryViewHolder = EntryViewHolder(itemViewBinding)
+
+        if(entryViewHolder.adapterPosition == 1){
+            val lp = LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.MATCH_PARENT,
+                LinearLayout.LayoutParams.WRAP_CONTENT
+            )
+            lp.setMargins(0, 16, 0, 8)
+            entryViewHolder.itemView.setLayoutParams(lp)
+        }
 
         val builder = AlertDialog.Builder(entryViewHolder.itemView.context)
 

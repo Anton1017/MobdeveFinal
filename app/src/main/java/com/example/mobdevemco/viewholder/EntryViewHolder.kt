@@ -3,12 +3,12 @@ package com.example.mobdevemco.viewholder
 import android.util.Log
 import android.view.View
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
-import com.example.mobdevemco.databinding.EntryItemBinding
-import androidx.recyclerview.widget.SnapHelper
 import androidx.recyclerview.widget.PagerSnapHelper
-import com.example.mobdevemco.adapter.EntryImageAdapter
+import androidx.recyclerview.widget.RecyclerView
+import androidx.recyclerview.widget.SnapHelper
 import com.example.mobdevemco.activity.SnapOnScrollListener
+import com.example.mobdevemco.adapter.EntryImageAdapter
+import com.example.mobdevemco.databinding.EntryItemBinding
 import com.example.mobdevemco.model.Entry
 
 class EntryViewHolder(private val viewBinding: EntryItemBinding): RecyclerView.ViewHolder(viewBinding.root) {
@@ -31,9 +31,12 @@ class EntryViewHolder(private val viewBinding: EntryItemBinding): RecyclerView.V
 
         recyclerView.adapter = entryImageAdapter
 
-        //For removing image recycler view if no images are present
-//        recyclerView.visibility = View.GONE
-//        viewBinding.imageCountView.visibility = View.GONE
+        // For removing image recycler view if no images are present
+        // Might keep recyclerview disabled after editing entry with images
+        if(entry.getImages().size == 0){
+            recyclerView.visibility = View.GONE
+            viewBinding.imageCountView.visibility = View.GONE
+        }
 
 
         val linearLayoutManager = LinearLayoutManager(itemView.context)

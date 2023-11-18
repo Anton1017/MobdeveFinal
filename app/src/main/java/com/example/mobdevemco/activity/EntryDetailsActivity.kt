@@ -41,6 +41,8 @@ class EntryDetailsActivity: AppCompatActivity() {
                 if (e != null) {
                     this.entry = e
 
+
+
                     viewBinding.entryTitle.text = entry.getTitle()
                     viewBinding.entryCreatedAt.text = entry.getCreatedAt().toStringFormatted()
                     viewBinding.entryLocationName.text = entry.getLocationName()
@@ -85,6 +87,11 @@ class EntryDetailsActivity: AppCompatActivity() {
                         viewBinding.currentImg.text = curr_pos.toString().replace(" ", "")
                     })
                     viewBinding.totalImg.text = entry.getImages().size.toString()
+
+                    if(entry.getImages().size == 0){
+                        recyclerView.visibility = View.GONE
+                        viewBinding.imageCountView.visibility = View.GONE
+                    }
                 }
             }
         }

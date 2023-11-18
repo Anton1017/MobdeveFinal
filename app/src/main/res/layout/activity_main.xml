@@ -87,7 +87,6 @@
             android:background="?attr/colorOnPrimary"
             android:clipToPadding="true"
             android:paddingLeft="8dp"
-            android:paddingTop="8dp"
             android:paddingRight="8dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -95,6 +94,7 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/addressBar"
             android:layout_width="match_parent"
             android:layout_height="30dp"
             android:layout_marginLeft="24dp"
