@@ -26,7 +26,9 @@ class EntryAdapter(private val data: ArrayList<Entry>, private val myActivityRes
         val builder = AlertDialog.Builder(entryViewHolder.itemView.context)
 
         entryViewHolder.itemView.setOnClickListener{
+            val entry = data.get(entryViewHolder.adapterPosition)
             val intent : Intent = Intent(entryViewHolder.itemView.context, EntryDetailsActivity::class.java)
+            intent.putExtra(Entry.ID, entry.getId())
             parent.context.startActivity(intent)
         }
 

@@ -1,12 +1,13 @@
 package com.example.mobdevemco.model
 
+import java.io.Serializable
 import java.text.SimpleDateFormat
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 import java.util.Locale
 
 
-class CustomDateTime {
+class CustomDateTime: Serializable {
     private var dateTime : LocalDateTime
 
     constructor() {

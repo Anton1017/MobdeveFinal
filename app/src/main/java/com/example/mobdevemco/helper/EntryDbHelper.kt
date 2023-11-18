@@ -5,7 +5,6 @@ import android.content.Context
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
 import android.graphics.BitmapFactory
-import android.net.Uri
 import android.util.Log
 import com.example.mobdevemco.model.CustomDateTime
 import com.example.mobdevemco.model.Entry

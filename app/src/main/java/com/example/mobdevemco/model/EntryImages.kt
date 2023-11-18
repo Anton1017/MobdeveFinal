@@ -4,8 +4,9 @@ import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.net.Uri
 import java.io.ByteArrayOutputStream
+import java.io.Serializable
 
-class EntryImages (private var bitmap: Bitmap){
+class EntryImages (private var bitmap: Bitmap) {
     private var entryId: Long = -1
     private var id: Long = -1
     constructor(entryId: Long,

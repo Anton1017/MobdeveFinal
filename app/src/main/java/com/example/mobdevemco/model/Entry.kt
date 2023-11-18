@@ -16,12 +16,13 @@ class Entry (private var title: String, private var locationName: String, privat
         this.description = description
         this.createdAt = createdAt
     }
-    constructor(title: String,
-                locationName: String,
-                images: ArrayList<EntryImages>,
-                description: String,
-                createdAt: CustomDateTime,
-                id: Long)
+    constructor(
+        title: String,
+        locationName: String,
+        images: ArrayList<EntryImages>,
+        description: String,
+        createdAt: CustomDateTime,
+        id: Long)
             : this(title, locationName, images, description) {
         this.title = title
         this.locationName = locationName
@@ -53,6 +54,15 @@ class Entry (private var title: String, private var locationName: String, privat
 
     fun getId(): Long {
         return this.id
+    }
+
+    companion object {
+        val TITLE = "TITLE"
+        val LOCATION_NAME = "LOCATION_NAME"
+        val IMAGES = "IMAGES"
+        val DESCRIPTION = "DESCRIPTION"
+        val CREATED_AT = "CREATED_AT"
+        val ID = "ID"
     }
 }
 
