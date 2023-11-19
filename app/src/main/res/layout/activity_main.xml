@@ -19,29 +19,13 @@
             android:layout_width="0dp"
             android:layout_height="0dp"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/entryAddBtn"
-            app:layout_constraintHorizontal_bias="0.15"
+            app:layout_constraintEnd_toStartOf="@+id/linearLayout"
+            app:layout_constraintHorizontal_bias="0.04"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintWidth_percent="0.25"
             app:srcCompat="@drawable/app_name_logo"
             app:tint="?attr/colorOnPrimary" />
-
-        <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/entryAddBtn"
-            android:layout_width="48dp"
-            android:layout_height="0dp"
-            android:clickable="true"
-            android:contentDescription="add entry"
-            android:tint="?attr/colorPrimary"
-            android:tintMode="multiply"
-            android:visibility="visible"
-            app:fabCustomSize="48dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@drawable/baseline_add_24" />
 
         <LinearLayout
             android:id="@+id/linearLayout"
@@ -51,7 +35,6 @@
             android:orientation="horizontal"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/entryAddBtn"
             app:layout_constraintTop_toTopOf="parent">
 
 
@@ -69,9 +52,9 @@
                 android:layout_height="match_parent"
                 android:layout_gravity="center"
                 android:layout_marginRight="8dp"
-                app:tint="?attr/colorOnPrimary"
                 android:tintMode="multiply"
-                app:srcCompat="@drawable/ic_search_api_material" />
+                app:srcCompat="@drawable/ic_search_api_material"
+                app:tint="?attr/colorOnPrimary" />
         </LinearLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
@@ -106,7 +89,7 @@
             android:paddingBottom="4dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/entryRecyclerView">
+            app:layout_constraintTop_toTopOf="parent">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -134,6 +117,24 @@
             </LinearLayout>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/entryAddBtn"
+            android:layout_width="56dp"
+            android:layout_height="56dp"
+            android:clickable="true"
+            android:contentDescription="add entry"
+            android:visibility="visible"
+            app:backgroundTint="?attr/colorPrimary"
+            app:fabCustomSize="56dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.95"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.96"
+            app:srcCompat="@drawable/baseline_add_24"
+            app:tint="@null" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

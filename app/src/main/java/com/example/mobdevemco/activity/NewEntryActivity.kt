@@ -249,11 +249,8 @@ class NewEntryActivity : AppCompatActivity(), LocationListener{
     }
 
     companion object {
-        const val POSITION_KEY = "POSITION_KEY"
-        const val TITLE_KEY = "TITLE_KEY"
-        const val LOCATION_NAME_KEY = "LOCATION_NAME_KEY"
-        const val IMAGE_KEY = "IMAGE_KEY"
-        const val DESCRIPTION_KEY = "DESCRIPTION_KEY"
-        const val CREATED_AT_KEY = "CREATED_AT_KEY"
+        const val ACTIVITY_TYPE = "ACTIVITY_TYPE"
+        const val ADD_ENTRY = "ADD_ENTRY"
+        const val EDIT_ENTRY = "EDIT_ENTRY"
     }
 }

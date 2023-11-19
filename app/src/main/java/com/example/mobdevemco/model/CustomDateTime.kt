@@ -1,5 +1,6 @@
 package com.example.mobdevemco.model
 
+import android.util.Log
 import java.io.Serializable
 import java.text.SimpleDateFormat
 import java.time.LocalDateTime
@@ -23,6 +24,19 @@ class CustomDateTime: Serializable {
         this.dateTime = LocalDateTime.of(year, month, dayOfMonth, hour, minute)
     }
 
+    override fun equals(other: Any?): Boolean {
+        try{
+            return this.toString() == other.toString()
+        } catch(e: NoSuchMethodError){
+            Log.d("TAG", e.toString())
+        } finally{
+            return false
+        }
+    }
+    override fun toString(): String {
+        return this.dateTime.format(DateTimeFormatter.ofPattern(sqliteFormat))
+    }
+
     fun getLocalDateTime(): String {
         return this.dateTime.toString()
     }
@@ -36,10 +50,6 @@ class CustomDateTime: Serializable {
 
     fun getDay(): Int {
         return this.dateTime.format(DateTimeFormatter.ofPattern("dd")).toInt()
-    }
-
-    override fun toString(): String {
-        return this.dateTime.format(DateTimeFormatter.ofPattern(sqliteFormat))
     }
 
     fun toStringFormatted(): String {

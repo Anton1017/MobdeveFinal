@@ -41,39 +41,11 @@ class EntryDbHelper(context: Context?) :
             )
             val entries: ArrayList<Entry> = ArrayList<Entry>()
             while (e.moveToNext()) {
-                val imgQuery = database.query(
-                    DbReferences.TABLE_NAME_ENTRY_IMAGES,
-                    null,
-                    DbReferences.ENTRY_IMAGES_COLUMN_NAME_ENTRY_ID + "=?",
-                    arrayOf(e.getLong(e.getColumnIndexOrThrow(DbReferences._ID)).toString()),
-                    null,
-                    null,
-                    DbReferences._ID,
-                    null,
-                )
-                Log.d("imgQuery", e.getLong(e.getColumnIndexOrThrow(DbReferences._ID)).toString())
-                val imgArray : ArrayList<EntryImages> = ArrayList<EntryImages>()
-                while(imgQuery.moveToNext()){
-                    Log.d("imgQuery2", imgQuery.getLong(imgQuery.getColumnIndexOrThrow(DbReferences.ENTRY_IMAGES_COLUMN_NAME_ENTRY_ID)).toString())
-                    val byteArray: ByteArray = imgQuery.getBlob(
-                        imgQuery.getColumnIndexOrThrow(DbReferences.ENTRY_IMAGES_COLUMN_NAME_IMAGE_BLOB)
-                    )
-                    val bm = BitmapFactory.decodeByteArray(byteArray, 0, byteArray.size)
-                    imgArray.add(
-                        EntryImages(
-                            imgQuery.getLong(imgQuery.getColumnIndexOrThrow(DbReferences.ENTRY_IMAGES_COLUMN_NAME_ENTRY_ID)),
-                            bm,
-                            imgQuery.getLong(imgQuery.getColumnIndexOrThrow(DbReferences.ENTRY_IMAGES_COLUMN_NAME_ENTRY_ID))
-                        )
-                    )
-                }
-                imgQuery.close()
-
                 entries.add(
                     Entry(
                         e.getString(e.getColumnIndexOrThrow(DbReferences.ENTRIES_COLUMN_NAME_TITLE)),
                         e.getString(e.getColumnIndexOrThrow(DbReferences.ENTRIES_COLUMN_NAME_LOCATION_NAME)),
-                        imgArray,
+                        this.getEntryImages(e.getLong(e.getColumnIndexOrThrow(DbReferences._ID)), database),
                         e.getString(e.getColumnIndexOrThrow(DbReferences.ENTRIES_COLUMN_NAME_DESCRIPTION)),
                         CustomDateTime(e.getString(e.getColumnIndexOrThrow(DbReferences.ENTRIES_COLUMN_NAME_CREATED_AT))),
                         e.getLong(e.getColumnIndexOrThrow(DbReferences._ID))
@@ -103,14 +75,7 @@ class EntryDbHelper(context: Context?) :
         // ID the new contact was referenced with.
         val _id = database.insert(DbReferences.TABLE_NAME_ENTRIES, null, values)
 
-        for(image in e.getImages()){
-            val imgValues = ContentValues()
-            imgValues.put(DbReferences.ENTRY_IMAGES_COLUMN_NAME_ENTRY_ID, _id)
-            imgValues.put(DbReferences.ENTRY_IMAGES_COLUMN_NAME_IMAGE_BLOB, image.toByteArrayStream())
-
-            val imgId = database.insert(DbReferences.TABLE_NAME_ENTRY_IMAGES, null, imgValues)
-            Log.d("ImageId", imgId.toString())
-        }
+        this.insertEntryImages(_id, e.getImages(), database)
 
         database.close()
         return _id
@@ -130,8 +95,92 @@ class EntryDbHelper(context: Context?) :
             null
         )
         Log.d("TAG", e.toString())
-        val imgArray : ArrayList<EntryImages> = ArrayList<EntryImages>()
 
+
+        var entry: Entry? = null
+        while(e.moveToNext()){
+            entry = Entry(
+                e.getString(e.getColumnIndexOrThrow(DbReferences.ENTRIES_COLUMN_NAME_TITLE)),
+                e.getString(e.getColumnIndexOrThrow(DbReferences.ENTRIES_COLUMN_NAME_LOCATION_NAME)),
+                this.getEntryImages(e.getLong(e.getColumnIndexOrThrow(DbReferences._ID)), database),
+                e.getString(e.getColumnIndexOrThrow(DbReferences.ENTRIES_COLUMN_NAME_DESCRIPTION)),
+                CustomDateTime(e.getString(e.getColumnIndexOrThrow(DbReferences.ENTRIES_COLUMN_NAME_CREATED_AT))),
+                e.getLong(e.getColumnIndexOrThrow(DbReferences._ID))
+            )
+        }
+
+        e.close()
+        database.close()
+        return entry
+    }
+
+    // Performs an UPDATE operation by comparing the old contact with the new contact. This method
+    // tries to reduce the length of the update statement by only including attributes that have
+    // been changed. If no changed are present, the update statement is simply not called.
+    fun updateEntry(eOld: Entry, eNew: Entry) {
+        var withChanges = false
+        val values = ContentValues()
+        if (eNew.getTitle() != eOld.getTitle()) {
+            values.put(DbReferences.ENTRIES_COLUMN_NAME_TITLE, eNew.getTitle())
+            withChanges = true
+        }
+        if (eNew.getLocationName() != eOld.getLocationName()) {
+            values.put(DbReferences.ENTRIES_COLUMN_NAME_LOCATION_NAME, eNew.getLocationName())
+            withChanges = true
+        }
+        if (eNew.getImages() != eOld.getImages()) {
+            this.deleteAllEntryImages(eNew.getId())
+            val db = this.writableDatabase
+            this.insertEntryImages(eNew.getId(), eNew.getImages(), db)
+            db.close()
+            withChanges = true
+        }
+        if (eNew.getDescription() != eOld.getDescription()) {
+            values.put(DbReferences.ENTRIES_COLUMN_NAME_DESCRIPTION, eNew.getDescription())
+            withChanges = true
+        }
+        if (eNew.getCreatedAt() != eOld.getCreatedAt()) {
+            values.put(DbReferences.ENTRIES_COLUMN_NAME_CREATED_AT, eNew.getCreatedAt().toString())
+            withChanges = true
+        }
+
+        if (withChanges) {
+            val database = this.writableDatabase
+            database.update(
+                DbReferences.TABLE_NAME_ENTRIES,
+                values,
+                DbReferences._ID + " = ?", arrayOf(eNew.getId().toString())
+            )
+            database.close()
+        }
+    }
+
+    // The delete contact method that takes in a contact object and uses its ID to find and delete
+    // the entry.
+    fun deleteEntry(e: Entry) {
+        this.deleteAllEntryImages(e.getId())
+
+        val database = this.writableDatabase
+        database.delete(
+            DbReferences.TABLE_NAME_ENTRIES,
+            DbReferences._ID + " = ?", arrayOf(e.getId().toString())
+        )
+        database.close()
+    }
+
+    private fun deleteAllEntryImages(id: Long) {
+        val database = this.writableDatabase
+
+        database.delete(
+            DbReferences.TABLE_NAME_ENTRY_IMAGES,
+            DbReferences.ENTRY_IMAGES_COLUMN_NAME_ENTRY_ID + "=?",
+            arrayOf(id.toString())
+        )
+
+        database.close()
+    }
+
+    private fun getEntryImages(id: Long, database: SQLiteDatabase): ArrayList<EntryImages> {
         val imgQuery = database.query(
             DbReferences.TABLE_NAME_ENTRY_IMAGES,
             null,
@@ -142,7 +191,10 @@ class EntryDbHelper(context: Context?) :
             DbReferences._ID,
             null,
         )
+        Log.d("imgQuery", id.toString())
+        val imgArray : ArrayList<EntryImages> = ArrayList<EntryImages>()
         while(imgQuery.moveToNext()){
+            Log.d("imgQuery2", imgQuery.getLong(imgQuery.getColumnIndexOrThrow(DbReferences.ENTRY_IMAGES_COLUMN_NAME_ENTRY_ID)).toString())
             val byteArray: ByteArray = imgQuery.getBlob(
                 imgQuery.getColumnIndexOrThrow(DbReferences.ENTRY_IMAGES_COLUMN_NAME_IMAGE_BLOB)
             )
@@ -157,66 +209,19 @@ class EntryDbHelper(context: Context?) :
         }
         imgQuery.close()
 
-        var entry: Entry? = null
-        while(e.moveToNext()){
-            entry = Entry(
-                e.getString(e.getColumnIndexOrThrow(DbReferences.ENTRIES_COLUMN_NAME_TITLE)),
-                e.getString(e.getColumnIndexOrThrow(DbReferences.ENTRIES_COLUMN_NAME_LOCATION_NAME)),
-                imgArray,
-                e.getString(e.getColumnIndexOrThrow(DbReferences.ENTRIES_COLUMN_NAME_DESCRIPTION)),
-                CustomDateTime(e.getString(e.getColumnIndexOrThrow(DbReferences.ENTRIES_COLUMN_NAME_CREATED_AT))),
-                e.getLong(e.getColumnIndexOrThrow(DbReferences._ID))
-            )
-        }
-
-        e.close()
-        database.close()
-        return entry
+        return imgArray
     }
 
-//    // Performs an UPDATE operation by comparing the old contact with the new contact. This method
-//    // tries to reduce the length of the update statement by only including attributes that have
-//    // been changed. If no changed are present, the update statement is simply not called.
-//    fun updateContact(cOld: Contact, cNew: Contact) {
-//        var withChanges = false
-//        val values = ContentValues()
-//        if (!cNew.getLastName().equals(cOld.getLastName())) {
-//            values.put(DbReferences.COLUMN_NAME_LAST_NAME, cNew.getLastName())
-//            withChanges = true
-//        }
-//        if (!cNew.getFirstName().equals(cOld.getFirstName())) {
-//            values.put(DbReferences.COLUMN_NAME_FIRST_NAME, cNew.getFirstName())
-//            withChanges = true
-//        }
-//        if (!cNew.getNumber().equals(cOld.getNumber())) {
-//            values.put(DbReferences.COLUMN_NAME_NUMBER, cNew.getNumber())
-//            withChanges = true
-//        }
-//        if (!cNew.getImageUri().equals(cOld.getImageUri())) {
-//            values.put(DbReferences.COLUMN_NAME_IMAGE_URI, cNew.getImageUri().toString())
-//            withChanges = true
-//        }
-//        if (withChanges) {
-//            val database = this.writableDatabase
-//            database.update(
-//                DbReferences.TABLE_NAME,
-//                values,
-//                DbReferences._ID + " = ?", arrayOf(String.valueOf(cNew.getId()))
-//            )
-//            database.close()
-//        }
-//    }
-//
-//    // The delete contact method that takes in a contact object and uses its ID to find and delete
-//    // the entry.
-//    fun deleteContact(c: Contact) {
-//        val database = this.writableDatabase
-//        database.delete(
-//            DbReferences.TABLE_NAME,
-//            DbReferences._ID + " = ?", arrayOf(String.valueOf(c.getId()))
-//        )
-//        database.close()
-//    }
+    private fun insertEntryImages(id: Long, imgArray: ArrayList<EntryImages>, database: SQLiteDatabase){
+        for(image in imgArray){
+            val imgValues = ContentValues()
+            imgValues.put(DbReferences.ENTRY_IMAGES_COLUMN_NAME_ENTRY_ID, id)
+            imgValues.put(DbReferences.ENTRY_IMAGES_COLUMN_NAME_IMAGE_BLOB, image.toByteArrayStream())
+
+            val imgId = database.insert(DbReferences.TABLE_NAME_ENTRY_IMAGES, null, imgValues)
+            Log.d("ImageId", imgId.toString())
+        }
+    }
 
     // Our class for holding DB references.
     private object DbReferences {

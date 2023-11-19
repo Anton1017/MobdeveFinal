@@ -41,13 +41,10 @@ class EntryDetailsActivity: AppCompatActivity() {
                 if (e != null) {
                     this.entry = e
 
-
-
                     viewBinding.entryTitle.text = entry.getTitle()
                     viewBinding.entryCreatedAt.text = entry.getCreatedAt().toStringFormatted()
                     viewBinding.entryLocationName.text = entry.getLocationName()
                     viewBinding.entryDescription.text = entry.getDescription()
-
 
                     val builder = AlertDialog.Builder(this)
                     viewBinding.deletebtn.setOnClickListener(View.OnClickListener{
@@ -67,9 +64,11 @@ class EntryDetailsActivity: AppCompatActivity() {
                     })
 
                     viewBinding.editBtn.setOnClickListener(View.OnClickListener {
-                        val intent = Intent(this@EntryDetailsActivity, EntryEditActivity::class.java)
-                        this.startActivity(intent)
+                        val i = Intent(this@EntryDetailsActivity, NewEntryActivity::class.java)
+                        i.putExtra(NewEntryActivity.ACTIVITY_TYPE, NewEntryActivity.EDIT_ENTRY)
+                        this.startActivity(i)
                     })
+
                     this.recyclerView = viewBinding.entryImageRecyclerView
                     this.myAdapter = EntryImageAdapter(entry.getImages())
                     this.myAdapter.setViewType(EntryImageAdapter.ENTRY_IMAGE_LAYOUT)

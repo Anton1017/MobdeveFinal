@@ -97,6 +97,7 @@ class ActivityMain : AppCompatActivity(), LocationListener {
         //Logic for adding a new entry
         viewBinding.entryAddBtn.setOnClickListener(View.OnClickListener {
             val intent = Intent(this@ActivityMain, NewEntryActivity::class.java)
+            intent.putExtra(NewEntryActivity.ACTIVITY_TYPE, NewEntryActivity.ADD_ENTRY)
             newEntryResultLauncher.launch(intent)
         })
 
@@ -116,6 +117,14 @@ class ActivityMain : AppCompatActivity(), LocationListener {
                     viewBinding.addressBar.alpha = 0.5F
                 }else{
                     viewBinding.addressBar.alpha = 1F
+                }
+
+                if(recyclerView.canScrollVertically(-1) && !recyclerView.canScrollVertically(1)
+
+                    ){
+                    viewBinding.entryAddBtn.alpha = 0.1F
+                }else{
+                    viewBinding.entryAddBtn.alpha = 1F
                 }
 
             }
