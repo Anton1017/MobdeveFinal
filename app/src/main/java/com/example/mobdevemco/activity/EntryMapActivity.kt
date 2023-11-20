@@ -8,15 +8,25 @@ import androidx.appcompat.app.AppCompatActivity
 import com.example.mobdevemco.databinding.ActivityCreateEntryBinding
 import androidx.core.app.ActivityCompat
 import android.Manifest
+import android.location.Address
+import android.location.Geocoder
+import android.location.Location
 import android.location.LocationListener
 import android.os.PersistableBundle
+import android.util.Log
+import android.widget.TextView
 import com.example.mobdevemco.R
 import com.example.mobdevemco.databinding.ActivityEditMapBinding
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.MapView
 import com.google.android.gms.maps.OnMapReadyCallback
+import java.io.IOException
+import java.lang.IndexOutOfBoundsException
+import java.util.Locale
 
-class EntryMapActivity : AppCompatActivity(), OnMapReadyCallback{
+class EntryMapActivity : AppCompatActivity(), OnMapReadyCallback, LocationListener,  GoogleMap.OnCameraIdleListener{
+    private lateinit var newaddress : TextView
+    private lateinit var viewBinding: ActivityEditMapBinding
     private var mMap: GoogleMap? = null
     lateinit var mapView: MapView
     private val MAP_VIEW_BUNDLE_KEY = "MapViewBundleKey"
@@ -34,11 +44,11 @@ class EntryMapActivity : AppCompatActivity(), OnMapReadyCallback{
             return
         }
         mMap!!.setMyLocationEnabled(true)
+        mMap!!.setOnCameraIdleListener(this)
     }
     override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
         val viewBinding : ActivityEditMapBinding = ActivityEditMapBinding.inflate(layoutInflater)
+        super.onCreate(savedInstanceState)
         setContentView(viewBinding.root)
         mapView = findViewById<MapView>(R.id.map)
         var mapViewBundle: Bundle? = null
@@ -65,6 +75,46 @@ class EntryMapActivity : AppCompatActivity(), OnMapReadyCallback{
             outState.putBundle(MAP_VIEW_BUNDLE_KEY, mapViewBundle)
         }
         mapView.onSaveInstanceState(mapViewBundle)
+    }
+
+    override fun onLocationChanged(location: Location) {
+        val geocoder = Geocoder(this, Locale.getDefault())
+        var addresses: List<Address>? = null
+        try{
+            addresses = geocoder.getFromLocation(location.latitude, location.longitude, 1)
+        }catch (e: IOException){
+            e.printStackTrace()
+        }
+        setAddress(addresses!![0])
+    }
+
+    private fun setAddress(address: Address) {
+        if (address != null){
+            if (address.getAddressLine(0) != null){
+                newaddress = findViewById(R.id.adress)
+                newaddress.text = address.getAddressLine((0))
+            }
+            if (address.getAddressLine(1) != null){
+                newaddress = findViewById(R.id.adress)
+                newaddress.text = address.getAddressLine(1)
+//                Log.d("TAG", address.getAddressLine((1)))
+            }
+        }
+    }
+
+
+
+    override fun onCameraIdle() {
+        var addresses: List<Address>? = null
+        val geocoder = Geocoder(this, Locale.getDefault())
+        try{
+            addresses = geocoder.getFromLocation(mMap!!.getCameraPosition().target.latitude, mMap!!.getCameraPosition().target.longitude, 1)
+            setAddress(addresses!![0])
+        }catch (e:IndexOutOfBoundsException){
+            e.printStackTrace()
+        }catch (e:IOException){
+            e.printStackTrace()
+        }
     }
 
 

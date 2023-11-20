@@ -248,9 +248,9 @@ class NewEntryActivity : AppCompatActivity(), LocationListener{
 
 //        viewBinding.locationText.text = "${list?.get(0)?.locality}"
         viewBinding.locationText.text = "${list?.get(0)?.getAddressLine(0)}"
-        Log.d("TAG", location.latitude.toString())
-        Log.d("TAG", location.longitude.toString())
-        Log.d("TAG", "Address\n${list?.get(0)?.getAddressLine(0)}")
+//        Log.d("TAG", location.latitude.toString())
+//        Log.d("TAG", location.longitude.toString())
+//        Log.d("TAG", "Address\n${list?.get(0)?.getAddressLine(0)}")
 
     }
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
