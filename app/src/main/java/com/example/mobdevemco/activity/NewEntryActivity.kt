@@ -41,7 +41,9 @@ class NewEntryActivity : AppCompatActivity(), LocationListener{
 
     private lateinit var recyclerView: RecyclerView
     private lateinit var newImagesAdapter: EntryImageAdapter
+
     private val newImageArray: ArrayList<EntryImages> = ArrayList<EntryImages>()
+    private var currEntry: Entry? = null
 
     private var entryDbHelper: EntryDbHelper? = null
     private val executorService = Executors.newSingleThreadExecutor()
@@ -96,44 +98,73 @@ class NewEntryActivity : AppCompatActivity(), LocationListener{
 
         this.viewBinding = ActivityCreateEntryBinding.inflate(layoutInflater)
         setContentView(viewBinding.root)
-        getLocation()
 
         this.recyclerView = viewBinding.imageListRecyclerView
         this.newImagesAdapter = EntryImageAdapter(newImageArray)
         this.newImagesAdapter.setViewType(EntryImageAdapter.NEW_IMAGE_LAYOUT)
 
+        val intent: Intent = intent
+        val activityType = intent.getStringExtra(ACTIVITY_TYPE).orEmpty()
+
+        if(activityType == ADD_ENTRY){
+            getLocation()
+        }else if(activityType == EDIT_ENTRY){
+            executorService.execute {
+                entryDbHelper = EntryDbHelper.getInstance(this@NewEntryActivity)
+
+                currEntry = entryDbHelper?.getEntry(intent.getLongExtra(Entry.ID, -1))
+                currEntry?.let { newImageArray.addAll(it.getImages()) }
+
+                runOnUiThread {
+                    viewBinding.locationText.text = currEntry?.getLocationName()
+                    viewBinding.titleText.setText(currEntry?.getTitle())
+                    viewBinding.descriptionText.setText(currEntry?.getDescription())
+                    newImagesAdapter.notifyDataSetChanged()
+                }
+            }
+        }
+
         this.recyclerView.adapter = this.newImagesAdapter
 
         viewBinding.createBtn.setOnClickListener(View.OnClickListener {
             if(doAllFieldHaveEntries()){
-                // LOGIC FOR EDIT/UPDATE
                 executorService.execute {
-                    // Get the DB
                     entryDbHelper = EntryDbHelper.getInstance(this@NewEntryActivity)
-                    // Perform the update method we defined in the DB helper class. For
-                    // more info, check the MyDbHelper class.
-                    Log.d("TAG", newImageArray.toString())
-                    val newEntryId: Long? = entryDbHelper?.insertEntry(
-                        Entry(
-                            viewBinding.titleText.text.toString(),
-                            viewBinding.locationText.text.toString(),
-                            newImageArray,
-                            viewBinding.descriptionText.text.toString()
+
+                    if(activityType == ADD_ENTRY){
+                        val newEntryId: Long? = entryDbHelper?.insertEntry(
+                            Entry(
+                                viewBinding.titleText.text.toString(),
+                                viewBinding.locationText.text.toString(),
+                                newImageArray,
+                                viewBinding.descriptionText.text.toString()
+                            )
                         )
-                    )
-
-                    Log.d("TAG", newEntryId.toString())
-
-
-                    runOnUiThread {
-                        val i: Intent = Intent()
-                        i.putExtra(EntryDbHelper.ENTRY_ID, newEntryId)
-
-                        Log.d("TAG", "Before setResult")
-
-                        // We set the result code based on our own standard
-                        setResult(RESULT_OK, i)
-                        finish()
+                        runOnUiThread {
+                            val i: Intent = Intent()
+                            i.putExtra(EntryDbHelper.ENTRY_ID, newEntryId)
+                            setResult(RESULT_OK, i)
+                            finish()
+                        }
+                    }else if(activityType == EDIT_ENTRY){
+                        currEntry?.let { it1 ->
+                            entryDbHelper?.updateEntry(
+                                it1,
+                                Entry(
+                                    viewBinding.titleText.text.toString(),
+                                    viewBinding.locationText.text.toString(),
+                                    newImageArray,
+                                    viewBinding.descriptionText.text.toString(),
+                                    it1.getCreatedAt(),
+                                    it1.getId()
+                                )
+                            )
+                        }
+                        runOnUiThread {
+                            val i: Intent = Intent()
+                            setResult(RESULT_OK, i)
+                            finish()
+                        }
                     }
                 }
             }else{
@@ -146,9 +177,7 @@ class NewEntryActivity : AppCompatActivity(), LocationListener{
         })
 
         viewBinding.cancelBtn.setOnClickListener(View.OnClickListener {
-
             finish()
-
         })
 
         val galleryImage = registerForActivityResult(ActivityResultContracts.GetContent(),

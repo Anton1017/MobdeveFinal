@@ -24,12 +24,9 @@ import androidx.core.view.size
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.mobdevemco.adapter.EntryAdapter
-import com.example.mobdevemco.databinding.ActivityCreateEntryBinding
 import com.example.mobdevemco.databinding.ActivityMainBinding
 import com.example.mobdevemco.helper.EntryDbHelper
-import com.example.mobdevemco.model.DataGenerator
 import com.example.mobdevemco.model.Entry
-import com.example.mobdevemco.model.EntryImages
 import java.util.Locale
 import java.util.concurrent.Executors
 
@@ -47,31 +44,37 @@ class ActivityMain : AppCompatActivity(), LocationListener {
     private val executorService = Executors.newSingleThreadExecutor()
 
 
-    private val newEntryResultLauncher = registerForActivityResult(
+    private val entryResultLauncher = registerForActivityResult(
         ActivityResultContracts.StartActivityForResult()) { result: ActivityResult ->
         if (result.resultCode == RESULT_OK) {
-            val id : Long = result.data?.getLongExtra(EntryDbHelper.ENTRY_ID, -1)!!
-            executorService.execute {
-                // Get all contacts from the database
-                entryDbHelper = EntryDbHelper.getInstance(this@ActivityMain)
-                val entry = entryDbHelper?.getEntry(id)
-                runOnUiThread { // Pass in the contacts to the needed components and set the adapter
-                    if (entry != null) {
-                        entries.add(0, entry)
+            val editCode: Int = result.data?.getIntExtra(EntryDetailsActivity.EDIT_CODE, -1)!!
+            // If activity is either adding or editing
+            if(editCode != 0){
+                executorService.execute {
+                    val id : Long = result.data?.getLongExtra(EntryDbHelper.ENTRY_ID, -1)!!
+                    entryDbHelper = EntryDbHelper.getInstance(this@ActivityMain)
+                    val entry = entryDbHelper?.getEntry(id)
+
+                    runOnUiThread { // Pass in the contacts to the needed components and set the adapter
+                        // Adding entry
+                        if(editCode == -1){
+                            if (entry != null) {
+                                entries.add(0, entry)
+                            }
+                            myAdapter.notifyItemInserted(0)
+                            recyclerView.smoothScrollToPosition(0);
+                        // Editing entry
+                        } else if(editCode == 1){
+                            val position : Int = result.data?.getIntExtra(EntryAdapter.ADAPTER_POS, -1)!!
+                            Log.d("TAG", entry.toString())
+                            if (entry != null) {
+                                entries[position] = entry
+                            }
+                            myAdapter.notifyItemChanged(position)
+                        }
                     }
-                    myAdapter.notifyItemInserted(0)
-                    recyclerView.smoothScrollToPosition(0);
                 }
             }
-//            if(position != -1){
-//                ActivityMain.data.set(position, email)
-//                this.myAdapter.notifyItemChanged(position)
-//            }
-//            else{
-//
-//                ActivityMain.data.add(email)
-//                this.myAdapter.notifyDataSetChanged()
-//            }
 
         }
     }
@@ -86,7 +89,7 @@ class ActivityMain : AppCompatActivity(), LocationListener {
             Log.d("TAG", entries.toString())
 
             runOnUiThread { // Pass in the contacts to the needed components and set the adapter
-                myAdapter = entries.let { EntryAdapter(it, newEntryResultLauncher) }
+                myAdapter = entries.let { EntryAdapter(it, entryResultLauncher) }
                 this.recyclerView.adapter = myAdapter
             }
         }
@@ -98,7 +101,7 @@ class ActivityMain : AppCompatActivity(), LocationListener {
         viewBinding.entryAddBtn.setOnClickListener(View.OnClickListener {
             val intent = Intent(this@ActivityMain, NewEntryActivity::class.java)
             intent.putExtra(NewEntryActivity.ACTIVITY_TYPE, NewEntryActivity.ADD_ENTRY)
-            newEntryResultLauncher.launch(intent)
+            entryResultLauncher.launch(intent)
         })
 
         viewBinding.searchLogo.setOnClickListener(View.OnClickListener {

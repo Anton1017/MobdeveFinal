@@ -13,7 +13,7 @@ import com.example.mobdevemco.model.Entry
 import com.example.mobdevemco.viewholder.EntryViewHolder
 
 
-class EntryAdapter(private val data: ArrayList<Entry>, private val myActivityResultLauncher: ActivityResultLauncher<Intent>) : RecyclerView.Adapter<EntryViewHolder>() {
+class EntryAdapter(private val data: ArrayList<Entry>, private val entryResultLauncher: ActivityResultLauncher<Intent>) : RecyclerView.Adapter<EntryViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): EntryViewHolder {
         // Initialize the ViewBinding of an item's layout
@@ -39,7 +39,8 @@ class EntryAdapter(private val data: ArrayList<Entry>, private val myActivityRes
             val entry = data.get(entryViewHolder.adapterPosition)
             val intent : Intent = Intent(entryViewHolder.itemView.context, EntryDetailsActivity::class.java)
             intent.putExtra(Entry.ID, entry.getId())
-            parent.context.startActivity(intent)
+            intent.putExtra(ADAPTER_POS, entryViewHolder.adapterPosition)
+            entryResultLauncher.launch(intent)
         }
 
 //        entryViewHolder.setDeleteOnClickListener(View.OnClickListener{
@@ -65,6 +66,10 @@ class EntryAdapter(private val data: ArrayList<Entry>, private val myActivityRes
 
     override fun onBindViewHolder(holder: EntryViewHolder, position: Int) {
         holder.bindData(data[position])
+    }
+
+    companion object {
+        val ADAPTER_POS = "ADAPTER_POS"
     }
 
 }
