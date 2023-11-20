@@ -71,6 +71,13 @@ class ActivityMain : AppCompatActivity(), LocationListener {
                                 entries[position] = entry
                             }
                             myAdapter.notifyItemChanged(position)
+                        // Deleting entry
+                        } else if(editCode == 2){
+                            val position : Int = result.data?.getIntExtra(EntryAdapter.ADAPTER_POS, -1)!!
+                            if (entry != null) {
+                                entries.removeAt(position)
+                            }
+                            myAdapter.notifyItemRemoved(position)
                         }
                     }
                 }

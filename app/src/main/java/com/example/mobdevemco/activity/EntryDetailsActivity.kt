@@ -101,23 +101,6 @@ class EntryDetailsActivity: AppCompatActivity() {
                     entryLocationNameTextView.text = entry.getLocationName()
                     entryDescriptionTextView.text = entry.getDescription()
 
-                    val builder = AlertDialog.Builder(this)
-                    viewBinding.deletebtn.setOnClickListener(View.OnClickListener{
-                        builder.setTitle("Alert!")
-                            .setMessage("Are you sure you want to delete " + viewBinding.entryTitle.text)
-                            .setCancelable(true)
-                            .setPositiveButton("Yes"){dialogInterface,it ->
-                                finish()
-                            }
-                            .setNegativeButton("No"){dialogInterface,it ->
-                                dialogInterface.cancel()
-                            }
-                            .show()
-                    })
-                    viewBinding.backBtn.setOnClickListener(View.OnClickListener{
-                        onBackPressed()
-                    })
-
                     viewBinding.editBtn.setOnClickListener(View.OnClickListener {
                         val i = Intent(this@EntryDetailsActivity, NewEntryActivity::class.java)
                         i.putExtra(NewEntryActivity.ACTIVITY_TYPE, NewEntryActivity.EDIT_ENTRY)
@@ -149,6 +132,34 @@ class EntryDetailsActivity: AppCompatActivity() {
                 }
             }
         }
+
+
+
+        val builder = AlertDialog.Builder(this)
+        viewBinding.deletebtn.setOnClickListener(View.OnClickListener{
+            builder.setTitle("Alert!")
+                .setMessage("Are you sure you want to delete the entry?")
+                .setCancelable(true)
+                .setPositiveButton("Yes"){dialogInterface,it ->
+                    executorService.execute {
+                        val e = entryDbHelper?.deleteEntry(entry)
+                    }
+                    editCode = 2
+                    val i: Intent = Intent()
+                    i.putExtra(EDIT_CODE, editCode)
+                    i.putExtra(EntryAdapter.ADAPTER_POS, adapterPos)
+                    i.putExtra(EntryDbHelper.ENTRY_ID, entry.getId())
+                    setResult(RESULT_OK, i)
+                    finish()
+                }
+                .setNegativeButton("No"){dialogInterface,it ->
+                    dialogInterface.cancel()
+                }
+                .show()
+        })
+        viewBinding.backBtn.setOnClickListener(View.OnClickListener{
+            onBackPressed()
+        })
     }
 
     override fun onStart(){
