@@ -53,7 +53,7 @@ class ActivityMain : AppCompatActivity(), LocationListener {
                 executorService.execute {
                     val id : Long = result.data?.getLongExtra(EntryDbHelper.ENTRY_ID, -1)!!
                     entryDbHelper = EntryDbHelper.getInstance(this@ActivityMain)
-                    val entry = entryDbHelper?.getEntry(id)
+                    val entry: Entry? = entryDbHelper?.getEntry(id)
 
                     runOnUiThread { // Pass in the contacts to the needed components and set the adapter
                         // Adding entry
@@ -74,10 +74,10 @@ class ActivityMain : AppCompatActivity(), LocationListener {
                         // Deleting entry
                         } else if(editCode == 2){
                             val position : Int = result.data?.getIntExtra(EntryAdapter.ADAPTER_POS, -1)!!
-                            if (entry != null) {
+                            if (entry == null) {
                                 entries.removeAt(position)
                             }
-                            myAdapter.notifyItemRemoved(position)
+                            myAdapter.notifyDataSetChanged()
                         }
                     }
                 }
