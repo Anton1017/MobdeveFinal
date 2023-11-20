@@ -52,7 +52,7 @@
             </activity>
             <meta-data
             android:name="com.google.android.gms.API_KEY"
-            android:value="AIzaSyBc3z0nG2fsL22TSctfwEp0k6HTw9IMpXI"/>
+            android:value="AIzaSyBGQ1sy_smMCikh2SgVihZWMpV1ros1O4Q"/>
     </application>
 
 
