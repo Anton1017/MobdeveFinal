@@ -36,6 +36,9 @@ class EntryViewHolder(private val viewBinding: EntryItemBinding): RecyclerView.V
         if(entry.getImages().size == 0){
             recyclerView.visibility = View.GONE
             viewBinding.imageCountView.visibility = View.GONE
+        } else{
+            recyclerView.visibility = View.VISIBLE
+            viewBinding.imageCountView.visibility = View.VISIBLE
         }
 
 

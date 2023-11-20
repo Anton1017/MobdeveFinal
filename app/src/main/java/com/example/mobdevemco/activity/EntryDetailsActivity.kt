@@ -3,6 +3,7 @@ package com.example.mobdevemco.activity
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
+import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.result.ActivityResult
@@ -35,6 +36,7 @@ class EntryDetailsActivity: AppCompatActivity() {
     private lateinit var entryLocationNameTextView: TextView
     private lateinit var entryDescriptionTextView: TextView
     private lateinit var totalImagesTextView: TextView
+    private lateinit var imageCountLinearLayout: LinearLayout
 
     private var adapterPos = -1
     private var editCode: Int = 0
@@ -60,6 +62,8 @@ class EntryDetailsActivity: AppCompatActivity() {
                         entryImagesArray.clear()
                         entryImagesArray.addAll(entry.getImages())
                         totalImagesTextView.text = entry.getImages().size.toString()
+                        disableRecyclerViewOnNoImage()
+
                         myAdapter.notifyDataSetChanged()
                         editCode = 1
 
@@ -80,6 +84,7 @@ class EntryDetailsActivity: AppCompatActivity() {
         entryLocationNameTextView = viewBinding.entryLocationName
         entryDescriptionTextView = viewBinding.entryDescription
         totalImagesTextView = viewBinding.totalImg
+        imageCountLinearLayout = viewBinding.imageCountView
 
         val intent: Intent = intent
         adapterPos = intent.getIntExtra(EntryAdapter.ADAPTER_POS, -1)
@@ -140,10 +145,7 @@ class EntryDetailsActivity: AppCompatActivity() {
 
                     totalImagesTextView.text = entry.getImages().size.toString()
 
-                    if(entry.getImages().size == 0){
-                        recyclerView.visibility = View.GONE
-                        viewBinding.imageCountView.visibility = View.GONE
-                    }
+                    disableRecyclerViewOnNoImage()
                 }
             }
         }
@@ -161,6 +163,16 @@ class EntryDetailsActivity: AppCompatActivity() {
         i.putExtra(EntryDbHelper.ENTRY_ID, entry.getId())
         setResult(RESULT_OK, i)
         finish()
+    }
+
+    private fun disableRecyclerViewOnNoImage(){
+        if(entry.getImages().size == 0){
+            recyclerView.visibility = View.GONE
+            imageCountLinearLayout.visibility = View.GONE
+        } else{
+            recyclerView.visibility = View.VISIBLE
+            imageCountLinearLayout.visibility = View.VISIBLE
+        }
     }
 
     companion object {
