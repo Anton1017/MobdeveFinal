@@ -15,4 +15,6 @@
         in Mario Kart reminds me of my Childhood Kart reminds me of my Childhood, excited to
         be like Mario while my friend is Luigi</string>
     <string name="tournal_edit_save">Save</string>
+
+    <string name="tournal_retrieving_addr">Retrieving address...</string>
 </resources>

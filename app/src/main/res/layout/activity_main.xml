@@ -113,7 +113,8 @@
                     android:layout_height="match_parent"
                     android:ellipsize="end"
                     android:gravity="center|left"
-                    android:maxLines="1" />
+                    android:maxLines="1"
+                    android:text="@string/tournal_retrieving_addr" />
             </LinearLayout>
 
         </androidx.constraintlayout.widget.ConstraintLayout>

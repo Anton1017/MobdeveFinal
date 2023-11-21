@@ -23,6 +23,7 @@ import androidx.core.app.ActivityCompat
 import androidx.core.view.size
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.mobdevemco.R
 import com.example.mobdevemco.adapter.EntryAdapter
 import com.example.mobdevemco.databinding.ActivityMainBinding
 import com.example.mobdevemco.helper.EntryDbHelper
@@ -195,7 +196,11 @@ class ActivityMain : AppCompatActivity(), LocationListener {
             geocoder.getFromLocation(location.latitude, location.longitude, 1)
 
 //        viewBinding.locationText.text = "${list?.get(0)?.locality}"
-        viewBinding.currentLocationMain.text = "${list?.get(0)?.getAddressLine(0)}"
+        var locationAddress = "${list?.get(0)?.getAddressLine(0)}"
+        viewBinding.currentLocationMain.text =
+            if (locationAddress != "") locationAddress
+            else getString(R.string.tournal_retrieving_addr)
+
         currentLocation = "${list?.get(0)?.getAddressLine(0)}"
         Log.d("TAG", location.latitude.toString())
         Log.d("TAG", location.longitude.toString())
