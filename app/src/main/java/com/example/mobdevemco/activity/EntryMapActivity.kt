@@ -1,25 +1,24 @@
 package com.example.mobdevemco.activity
 
 import android.Manifest
-import com.example.mobdevemco.R
+import android.app.Activity
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.location.Address
 import android.location.Geocoder
 import android.location.Location
 import android.location.LocationListener
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
+import com.example.mobdevemco.R
 import com.example.mobdevemco.databinding.ActivityEditMapBinding
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.MapView
 import com.google.android.gms.maps.OnMapReadyCallback
-import com.google.android.gms.maps.model.BitmapDescriptorFactory
-import com.google.android.gms.maps.model.GroundOverlayOptions
 import com.google.android.gms.maps.model.LatLng
 import java.io.IOException
 import java.util.Locale
@@ -27,6 +26,7 @@ import java.util.Locale
 
 class EntryMapActivity : AppCompatActivity(), OnMapReadyCallback, LocationListener,  GoogleMap.OnCameraIdleListener{
     private lateinit var newaddress : TextView
+    private lateinit var newaddresstext : String
     private var longitude :Double = 0.0
     private var latitude :Double = 0.0
     private lateinit var viewBinding: ActivityEditMapBinding
@@ -34,6 +34,7 @@ class EntryMapActivity : AppCompatActivity(), OnMapReadyCallback, LocationListen
     lateinit var mapView: MapView
     private val MAP_VIEW_BUNDLE_KEY = "MapViewBundleKey"
     override fun onMapReady(googleMap: GoogleMap) {
+        val zoomLevel = 13.0f
         mapView.onResume()
         mMap = googleMap
 
@@ -48,9 +49,9 @@ class EntryMapActivity : AppCompatActivity(), OnMapReadyCallback, LocationListen
             return
         }
         val original_location = LatLng(latitude, longitude)
-        Log.d("TAG", "longgitude" + longitude.toString())
-        Log.d("TAG", "lattitude" + latitude.toString())
-        mMap!!.moveCamera(CameraUpdateFactory.newLatLng(original_location));
+
+        mMap!!.moveCamera(CameraUpdateFactory.newLatLngZoom(original_location, zoomLevel))
+//        mMap!!.moveCamera(CameraUpdateFactory.newLatLng(original_location));
         mMap!!.setMyLocationEnabled(true)
         mMap!!.setOnCameraIdleListener(this)
     }
@@ -69,7 +70,12 @@ class EntryMapActivity : AppCompatActivity(), OnMapReadyCallback, LocationListen
         mapView.onCreate(mapViewBundle)
         mapView.getMapAsync(this)
         viewBinding.confirmBtn.setOnClickListener(View.OnClickListener {
+            val intent= Intent()
+            intent.putExtra(EntryMapActivity.CURRENTLOCATION, newaddresstext)
+            intent.putExtra(EntryMapActivity.LONGITUDE, longitude)
+            intent.putExtra(EntryMapActivity.LATTITUDE, latitude)
 
+            setResult(Activity.RESULT_OK, intent)
             finish()
         })
         viewBinding.backBtn.setOnClickListener(View.OnClickListener {
@@ -93,6 +99,7 @@ class EntryMapActivity : AppCompatActivity(), OnMapReadyCallback, LocationListen
         var addresses: List<Address>? = null
         try{
             addresses = geocoder.getFromLocation(location.latitude, location.longitude, 1)
+
         }catch (e: IOException){
             e.printStackTrace()
         }
@@ -104,11 +111,13 @@ class EntryMapActivity : AppCompatActivity(), OnMapReadyCallback, LocationListen
             if (address.getAddressLine(0) != null){
                 newaddress = findViewById(R.id.currentLocationMap)
                 newaddress.text = address.getAddressLine((0))
+                newaddresstext = address.getAddressLine((0))
             }
             if (address.getAddressLine(1) != null){
                 newaddress = findViewById(R.id.currentLocationMap)
                 newaddress.text = address.getAddressLine(1)
 //                Log.d("TAG", address.getAddressLine((1)))
+                newaddresstext = address.getAddressLine((1))
             }
         }
     }
@@ -121,15 +130,19 @@ class EntryMapActivity : AppCompatActivity(), OnMapReadyCallback, LocationListen
         try{
             addresses = geocoder.getFromLocation(mMap!!.getCameraPosition().target.latitude, mMap!!.getCameraPosition().target.longitude, 1)
             setAddress(addresses!![0])
+            longitude = mMap!!.getCameraPosition().target.longitude
+            latitude = mMap!!.getCameraPosition().target.latitude
         }catch (e:IndexOutOfBoundsException){
             e.printStackTrace()
         }catch (e:IOException){
             e.printStackTrace()
         }
+
     }
     companion object {
         const val LONGITUDE = "LONGITUDE"
         const val LATTITUDE = "LATTITUDE"
+        const val CURRENTLOCATION = "CURRENTLOCATION"
     }
 
 }

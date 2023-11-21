@@ -27,6 +27,7 @@ import java.util.concurrent.Executors
 class NewEntryActivity : AppCompatActivity(){
     private var longitude :Double = 0.0
     private var latitude :Double = 0.0
+
     private lateinit var viewBinding: ActivityCreateEntryBinding
     private val locationPermissionCode = 2
     private lateinit var locationManager: LocationManager
@@ -39,6 +40,18 @@ class NewEntryActivity : AppCompatActivity(){
 
     private var entryDbHelper: EntryDbHelper? = null
     private val executorService = Executors.newSingleThreadExecutor()
+
+    private val editlocation = registerForActivityResult<Intent, ActivityResult>(
+        ActivityResultContracts.StartActivityForResult()
+    ) { result ->
+        if (result.resultCode == RESULT_OK) {
+            viewBinding.locationText.text = result.data?.getStringExtra(EntryMapActivity.CURRENTLOCATION)!!
+            longitude = result.data?.getDoubleExtra(EntryMapActivity.LONGITUDE, 0.0)!!
+            latitude = result.data?.getDoubleExtra(EntryMapActivity.LATTITUDE, 0.0)!!
+            Log.d("TAG", "longgitude" + longitude.toString())
+            Log.d("TAG", "lattitude" + latitude.toString())
+        }
+    }
 
     private val myActivityResultLauncher = registerForActivityResult<Intent, ActivityResult>(
         ActivityResultContracts.StartActivityForResult()
@@ -84,8 +97,10 @@ class NewEntryActivity : AppCompatActivity(){
 
         if(activityType == ADD_ENTRY){
             viewBinding.locationText.text = intent.getStringExtra(CURRENT_LOCATION)
-            longitude = intent.getDoubleExtra(LONGITUDE, 0.0)
             latitude = intent.getDoubleExtra(LATTITUDE, 0.0)
+            longitude = intent.getDoubleExtra(LONGITUDE, 0.0)
+
+
 //            getLocation()
             Log.d("TAG", "add entry")
         }else if(activityType == EDIT_ENTRY){
@@ -181,7 +196,8 @@ class NewEntryActivity : AppCompatActivity(){
             val intent = Intent(this@NewEntryActivity, EntryMapActivity::class.java)
             intent.putExtra(EntryMapActivity.LATTITUDE, latitude)
             intent.putExtra(EntryMapActivity.LONGITUDE, longitude)
-            this.startActivity(intent)
+
+            editlocation.launch(intent)
         })
 
         this.recyclerView.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
