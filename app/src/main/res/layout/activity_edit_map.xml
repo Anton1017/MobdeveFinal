@@ -3,8 +3,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:background="?attr/colorOnPrimary"
     android:layout_height="match_parent"
+    android:background="?attr/colorSecondaryVariant"
     android:orientation="vertical">
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -28,7 +28,10 @@
             android:id="@+id/confirmBtn"
             android:layout_width="104dp"
             android:layout_height="0dp"
-            android:layout_marginRight="8dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="8dp"
+            android:backgroundTint="?attr/colorPrimary"
             android:text="@string/tournal_confirm_action"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
