@@ -108,6 +108,7 @@ class NewEntryActivity : AppCompatActivity(), LocationListener{
 
         if(activityType == ADD_ENTRY){
             getLocation()
+            Log.d("TAG", "add entry")
         }else if(activityType == EDIT_ENTRY){
             executorService.execute {
                 entryDbHelper = EntryDbHelper.getInstance(this@NewEntryActivity)
@@ -204,9 +205,10 @@ class NewEntryActivity : AppCompatActivity(), LocationListener{
 
     @SuppressLint("MissingPermission")
     private fun getLocation() {
+        Log.d("TAG", "getLocation")
         if(checkPermissions()){
             if(isLocationEnabled()) {
-                this.locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 5000, 5f, this)
+                this.locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 5000, 5f, this)
             }
             else {
 
@@ -216,17 +218,18 @@ class NewEntryActivity : AppCompatActivity(), LocationListener{
             }
         }
         else {
-
             requestPermission()
         }
     }
     private fun isLocationEnabled(): Boolean {
+        Log.d("TAG", "isLocationEnabled")
         this.locationManager = getSystemService(Context.LOCATION_SERVICE) as LocationManager
         return locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)
                 || locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)
     }
 
     private fun checkPermissions(): Boolean {
+        Log.d("TAG", "checkPermissions")
         if(ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED
             && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED)
             return true
@@ -235,6 +238,7 @@ class NewEntryActivity : AppCompatActivity(), LocationListener{
     }
 
     private fun requestPermission() {
+        Log.d("TAG", "requestPermission")
         ActivityCompat.requestPermissions(this,
             arrayOf(Manifest.permission.ACCESS_COARSE_LOCATION,
                 Manifest.permission.ACCESS_FINE_LOCATION),
@@ -242,15 +246,17 @@ class NewEntryActivity : AppCompatActivity(), LocationListener{
     }
 
     override fun onLocationChanged(location: Location) {
+        Log.d("TAG", "Went to get location")
         val geocoder = Geocoder(this, Locale.getDefault())
         val list: MutableList<Address>? =
             geocoder.getFromLocation(location.latitude, location.longitude, 1)
 
 //        viewBinding.locationText.text = "${list?.get(0)?.locality}"
         viewBinding.locationText.text = "${list?.get(0)?.getAddressLine(0)}"
-//        Log.d("TAG", location.latitude.toString())
-//        Log.d("TAG", location.longitude.toString())
-//        Log.d("TAG", "Address\n${list?.get(0)?.getAddressLine(0)}")
+
+        Log.d("TAG", location.latitude.toString())
+        Log.d("TAG", location.longitude.toString())
+        Log.d("TAG", "Address\n${list?.get(0)?.getAddressLine(0)}")
 
     }
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
