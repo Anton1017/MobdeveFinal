@@ -40,7 +40,8 @@ class ActivityMain : AppCompatActivity(), LocationListener {
     private lateinit var myAdapter: EntryAdapter
     private val locationPermissionCode = 2
     private lateinit var locationManager: LocationManager
-
+    private var longitude: Double = 0.0
+    private var latitude: Double = 0.0
     private var entryDbHelper: EntryDbHelper? = null
     private val executorService = Executors.newSingleThreadExecutor()
     private lateinit var currentLocation: String
@@ -63,7 +64,7 @@ class ActivityMain : AppCompatActivity(), LocationListener {
                                 entries.add(0, entry)
                             }
                             myAdapter.notifyItemInserted(0)
-                            recyclerView.smoothScrollToPosition(0);
+                            recyclerView.smoothScrollToPosition(0)
                         // Editing entry
                         } else if(editCode == 1){
                             val position : Int = result.data?.getIntExtra(EntryAdapter.ADAPTER_POS, -1)!!
@@ -119,6 +120,8 @@ class ActivityMain : AppCompatActivity(), LocationListener {
                 val intent = Intent(this@ActivityMain, NewEntryActivity::class.java)
                 intent.putExtra(NewEntryActivity.ACTIVITY_TYPE, NewEntryActivity.ADD_ENTRY)
                 intent.putExtra(NewEntryActivity.CURRENT_LOCATION, currentLocation)
+                intent.putExtra(NewEntryActivity.LATTITUDE, latitude)
+                intent.putExtra(NewEntryActivity.LONGITUDE, longitude)
                 entryResultLauncher.launch(intent)
             }
         })
@@ -211,7 +214,8 @@ class ActivityMain : AppCompatActivity(), LocationListener {
         val geocoder = Geocoder(this, Locale.getDefault())
         val list: MutableList<Address>? =
             geocoder.getFromLocation(location.latitude, location.longitude, 1)
-
+        longitude = location.longitude
+        latitude = location.latitude
 //        viewBinding.locationText.text = "${list?.get(0)?.locality}"
         var locationAddress = "${list?.get(0)?.getAddressLine(0)}"
         viewBinding.currentLocationMain.text =

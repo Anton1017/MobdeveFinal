@@ -1,19 +1,10 @@
 package com.example.mobdevemco.activity
 
-import android.Manifest
-import android.annotation.SuppressLint
-import android.content.Context
 import android.content.Intent
-import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
-import android.location.Address
-import android.location.Geocoder
-import android.location.Location
-import android.location.LocationListener
 import android.location.LocationManager
 import android.os.Bundle
-import android.provider.Settings
 import android.util.Log
 import android.view.View
 import android.widget.Toast
@@ -21,7 +12,6 @@ import androidx.activity.result.ActivityResult
 import androidx.activity.result.ActivityResultCallback
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.app.ActivityCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.mobdevemco.adapter.EntryImageAdapter
@@ -30,11 +20,12 @@ import com.example.mobdevemco.helper.EntryDbHelper
 import com.example.mobdevemco.model.Entry
 import com.example.mobdevemco.model.EntryImages
 import java.io.InputStream
-import java.util.Locale
 import java.util.concurrent.Executors
 
 
 class NewEntryActivity : AppCompatActivity(){
+    private var longitude :Double = 0.0
+    private var latitude :Double = 0.0
     private lateinit var viewBinding: ActivityCreateEntryBinding
     private val locationPermissionCode = 2
     private lateinit var locationManager: LocationManager
@@ -108,6 +99,8 @@ class NewEntryActivity : AppCompatActivity(){
 
         if(activityType == ADD_ENTRY){
             viewBinding.locationText.text = intent.getStringExtra(CURRENT_LOCATION)
+            longitude = intent.getDoubleExtra(LONGITUDE, 0.0)
+            latitude = intent.getDoubleExtra(LATTITUDE, 0.0)
 //            getLocation()
             Log.d("TAG", "add entry")
         }else if(activityType == EDIT_ENTRY){
@@ -199,6 +192,8 @@ class NewEntryActivity : AppCompatActivity(){
 
         viewBinding.editLocationBtn.setOnClickListener(View.OnClickListener {
             val intent = Intent(this@NewEntryActivity, EntryMapActivity::class.java)
+            intent.putExtra(EntryMapActivity.LATTITUDE, latitude)
+            intent.putExtra(EntryMapActivity.LONGITUDE, longitude)
             this.startActivity(intent)
         })
 
@@ -291,5 +286,7 @@ class NewEntryActivity : AppCompatActivity(){
         const val ADD_ENTRY = "ADD_ENTRY"
         const val EDIT_ENTRY = "EDIT_ENTRY"
         const val CURRENT_LOCATION = "CURRENT_LOCATION"
+        const val LONGITUDE = "LONGITUDE"
+        const val LATTITUDE = "LATTITUDE"
     }
 }
