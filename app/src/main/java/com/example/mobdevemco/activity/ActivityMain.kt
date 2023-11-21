@@ -112,8 +112,8 @@ class ActivityMain : AppCompatActivity(), LocationListener {
 
                 Toast.makeText(this,
                     "Cannot create entry. Wait for address retrieval.",
-                    Toast.LENGTH_SHORT)
-                    .show()
+                    Toast.LENGTH_SHORT
+                ).show()
 
             }else{
                 val intent = Intent(this@ActivityMain, NewEntryActivity::class.java)
@@ -164,7 +164,12 @@ class ActivityMain : AppCompatActivity(), LocationListener {
     private fun getLocation() {
         if(checkPermissions()){
             if(isLocationEnabled()) {
-                this.locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 5000, 5f, this)
+                this.locationManager.requestLocationUpdates(
+                    LocationManager.NETWORK_PROVIDER,
+                    5000,
+                    5f,
+                    this
+                )
             }
             else {
 
@@ -185,8 +190,10 @@ class ActivityMain : AppCompatActivity(), LocationListener {
     }
 
     private fun checkPermissions(): Boolean {
-        if(ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED
-            && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED)
+        if(ActivityCompat.checkSelfPermission(this,
+                Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED
+            && ActivityCompat.checkSelfPermission(this,
+                Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED)
             return true
 
         return false
