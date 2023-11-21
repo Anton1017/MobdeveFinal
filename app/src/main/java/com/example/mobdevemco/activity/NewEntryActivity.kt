@@ -34,7 +34,7 @@ import java.util.Locale
 import java.util.concurrent.Executors
 
 
-class NewEntryActivity : AppCompatActivity(), LocationListener{
+class NewEntryActivity : AppCompatActivity(){
     private lateinit var viewBinding: ActivityCreateEntryBinding
     private val locationPermissionCode = 2
     private lateinit var locationManager: LocationManager
@@ -107,7 +107,8 @@ class NewEntryActivity : AppCompatActivity(), LocationListener{
         val activityType = intent.getStringExtra(ACTIVITY_TYPE).orEmpty()
 
         if(activityType == ADD_ENTRY){
-            getLocation()
+            viewBinding.locationText.text = intent.getStringExtra(CURRENT_LOCATION)
+//            getLocation()
             Log.d("TAG", "add entry")
         }else if(activityType == EDIT_ENTRY){
             executorService.execute {
@@ -115,6 +116,7 @@ class NewEntryActivity : AppCompatActivity(), LocationListener{
 
                 currEntry = entryDbHelper?.getEntry(intent.getLongExtra(Entry.ID, -1))
                 currEntry?.let { newImageArray.addAll(it.getImages()) }
+
 
                 runOnUiThread {
                     viewBinding.locationText.text = currEntry?.getLocationName()
@@ -203,79 +205,79 @@ class NewEntryActivity : AppCompatActivity(), LocationListener{
     }
 
 
-    @SuppressLint("MissingPermission")
-    private fun getLocation() {
-        Log.d("TAG", "getLocation")
-        if(checkPermissions()){
-            if(isLocationEnabled()) {
-                this.locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 5000, 5f, this)
-            }
-            else {
-
-                Toast.makeText(this, "Permission Granted", Toast.LENGTH_SHORT).show()
-                val intent = Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS)
-                startActivity(intent)
-            }
-        }
-        else {
-            requestPermission()
-        }
-    }
-    private fun isLocationEnabled(): Boolean {
-        Log.d("TAG", "isLocationEnabled")
-        this.locationManager = getSystemService(Context.LOCATION_SERVICE) as LocationManager
-        return locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)
-                || locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)
-    }
-
-    private fun checkPermissions(): Boolean {
-        Log.d("TAG", "checkPermissions")
-        if(ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED
-            && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED)
-            return true
-
-        return false
-    }
-
-    private fun requestPermission() {
-        Log.d("TAG", "requestPermission")
-        ActivityCompat.requestPermissions(this,
-            arrayOf(Manifest.permission.ACCESS_COARSE_LOCATION,
-                Manifest.permission.ACCESS_FINE_LOCATION),
-            locationPermissionCode)
-    }
-
-    override fun onLocationChanged(location: Location) {
-        Log.d("TAG", "Went to get location")
-        val geocoder = Geocoder(this, Locale.getDefault())
-        val list: MutableList<Address>? =
-            geocoder.getFromLocation(location.latitude, location.longitude, 1)
-
-//        viewBinding.locationText.text = "${list?.get(0)?.locality}"
-        viewBinding.locationText.text = "${list?.get(0)?.getAddressLine(0)}"
-
-        Log.d("TAG", location.latitude.toString())
-        Log.d("TAG", location.longitude.toString())
-        Log.d("TAG", "Address\n${list?.get(0)?.getAddressLine(0)}")
-
-    }
-    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        if (requestCode == locationPermissionCode) {
-            if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                Toast.makeText(this, "Permission Granted", Toast.LENGTH_SHORT).show()
-            }
-            else {
-                Toast.makeText(this, "Permission Denied", Toast.LENGTH_SHORT).show()
-            }
-        }
-    }
-
-    override fun onProviderEnabled(provider: String) {}
-
-    override fun onProviderDisabled(provider: String) {}
-
-    override fun onStatusChanged(provider: String?, status: Int, extras: Bundle?) {}
+//    @SuppressLint("MissingPermission")
+//    private fun getLocation() {
+//        Log.d("TAG", "getLocation")
+//        if(checkPermissions()){
+//            if(isLocationEnabled()) {
+//                this.locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 5000, 5f, this)
+//            }
+//            else {
+//
+//                Toast.makeText(this, "Permission Granted", Toast.LENGTH_SHORT).show()
+//                val intent = Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS)
+//                startActivity(intent)
+//            }
+//        }
+//        else {
+//            requestPermission()
+//        }
+//    }
+//    private fun isLocationEnabled(): Boolean {
+//        Log.d("TAG", "isLocationEnabled")
+//        this.locationManager = getSystemService(Context.LOCATION_SERVICE) as LocationManager
+//        return locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)
+//                || locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)
+//    }
+//
+//    private fun checkPermissions(): Boolean {
+//        Log.d("TAG", "checkPermissions")
+//        if(ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED
+//            && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED)
+//            return true
+//
+//        return false
+//    }
+//
+//    private fun requestPermission() {
+//        Log.d("TAG", "requestPermission")
+//        ActivityCompat.requestPermissions(this,
+//            arrayOf(Manifest.permission.ACCESS_COARSE_LOCATION,
+//                Manifest.permission.ACCESS_FINE_LOCATION),
+//            locationPermissionCode)
+//    }
+//
+//    override fun onLocationChanged(location: Location) {
+//        Log.d("TAG", "Went to get location")
+//        val geocoder = Geocoder(this, Locale.getDefault())
+//        val list: MutableList<Address>? =
+//            geocoder.getFromLocation(location.latitude, location.longitude, 1)
+//
+////        viewBinding.locationText.text = "${list?.get(0)?.locality}"
+//        viewBinding.locationText.text = "${list?.get(0)?.getAddressLine(0)}"
+//
+//        Log.d("TAG", location.latitude.toString())
+//        Log.d("TAG", location.longitude.toString())
+//        Log.d("TAG", "Address\n${list?.get(0)?.getAddressLine(0)}")
+//
+//    }
+//    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
+//        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+//        if (requestCode == locationPermissionCode) {
+//            if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+//                Toast.makeText(this, "Permission Granted", Toast.LENGTH_SHORT).show()
+//            }
+//            else {
+//                Toast.makeText(this, "Permission Denied", Toast.LENGTH_SHORT).show()
+//            }
+//        }
+//    }
+//
+//    override fun onProviderEnabled(provider: String) {}
+//
+//    override fun onProviderDisabled(provider: String) {}
+//
+//    override fun onStatusChanged(provider: String?, status: Int, extras: Bundle?) {}
 
     private fun doAllFieldHaveEntries(): Boolean {
         return viewBinding.titleText.text.toString().isNotEmpty() &&
@@ -287,5 +289,6 @@ class NewEntryActivity : AppCompatActivity(), LocationListener{
         const val ACTIVITY_TYPE = "ACTIVITY_TYPE"
         const val ADD_ENTRY = "ADD_ENTRY"
         const val EDIT_ENTRY = "EDIT_ENTRY"
+        const val CURRENT_LOCATION = "CURRENT_LOCATION"
     }
 }

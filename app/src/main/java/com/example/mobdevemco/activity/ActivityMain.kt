@@ -42,7 +42,7 @@ class ActivityMain : AppCompatActivity(), LocationListener {
 
     private var entryDbHelper: EntryDbHelper? = null
     private val executorService = Executors.newSingleThreadExecutor()
-
+    private lateinit var currentLocation: String
 
     private val entryResultLauncher = registerForActivityResult(
         ActivityResultContracts.StartActivityForResult()) { result: ActivityResult ->
@@ -108,6 +108,7 @@ class ActivityMain : AppCompatActivity(), LocationListener {
         viewBinding.entryAddBtn.setOnClickListener(View.OnClickListener {
             val intent = Intent(this@ActivityMain, NewEntryActivity::class.java)
             intent.putExtra(NewEntryActivity.ACTIVITY_TYPE, NewEntryActivity.ADD_ENTRY)
+            intent.putExtra(NewEntryActivity.CURRENT_LOCATION, currentLocation)
             entryResultLauncher.launch(intent)
         })
 
@@ -195,6 +196,7 @@ class ActivityMain : AppCompatActivity(), LocationListener {
 
 //        viewBinding.locationText.text = "${list?.get(0)?.locality}"
         viewBinding.currentLocationMain.text = "${list?.get(0)?.getAddressLine(0)}"
+        currentLocation = "${list?.get(0)?.getAddressLine(0)}"
         Log.d("TAG", location.latitude.toString())
         Log.d("TAG", location.longitude.toString())
         Log.d("TAG", "Address\n${list?.get(0)?.getAddressLine(0)}")
