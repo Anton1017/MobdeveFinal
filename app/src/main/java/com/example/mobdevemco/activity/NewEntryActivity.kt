@@ -65,12 +65,16 @@ class NewEntryActivity : AppCompatActivity(){
                     if(count != null){
                         for (i in 0 until count) {
                             val inputUri: Uri? = result.data!!.clipData?.getItemAt(i)?.uri
-                            inputUri?.let { EntryImages(it) }?.let { newImageArray.add(it) }
+                            val entry = EntryImages(inputUri!!)
+                            entry.setTemporaryImage(true)
+                            newImageArray.add(entry)
                         }
                     //if only one image was picked
                     }else{
                         val inputUri = result.data!!.data
-                        inputUri?.let { EntryImages(it) }?.let { newImageArray.add(it) }
+                        val entry = EntryImages(inputUri!!)
+                        entry.setTemporaryImage(true)
+                        newImageArray.add(entry)
                     }
                     newImagesAdapter.notifyDataSetChanged()
                 }

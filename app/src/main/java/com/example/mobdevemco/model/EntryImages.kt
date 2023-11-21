@@ -5,12 +5,14 @@ import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.net.Uri
 import java.io.ByteArrayOutputStream
+import java.io.File
 import java.io.InputStream
 import java.io.Serializable
 
 class EntryImages (private var uri: Uri) {
     private var entryId: Long = -1
     private var id: Long = -1
+    private var isTemporaryImage = false
     constructor(entryId: Long,
                 uri: Uri,
                 id: Long)
@@ -21,7 +23,8 @@ class EntryImages (private var uri: Uri) {
     }
 
     fun getBitmapFromInputStream(context: Context): Bitmap {
-        val inputStream: InputStream? = context.contentResolver.openInputStream(this.uri)
+        val fileUri = if (isTemporaryImage) this.uri else Uri.fromFile(File(this.uri.toString()))
+        val inputStream: InputStream? = context.contentResolver.openInputStream(fileUri)
         return BitmapFactory.decodeStream(
             inputStream
         )
@@ -37,6 +40,10 @@ class EntryImages (private var uri: Uri) {
 
     fun getId(): Long {
         return this.id
+    }
+
+    fun setTemporaryImage(isTemporaryImage: Boolean) {
+        this.isTemporaryImage = isTemporaryImage
     }
 
 //    fun toByteArrayStream(): ByteArray {

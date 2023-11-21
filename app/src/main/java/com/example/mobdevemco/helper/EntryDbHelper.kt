@@ -247,6 +247,7 @@ class EntryDbHelper(context: Context?) :
                 values,
                 DbReferences._ID + " = ?", arrayOf(imgId.toString())
             )
+            image.setTemporaryImage(false)
         }
     }
     private fun saveImageToInternalStorage(uri: Uri, fileName: String, context: Context): String? {
