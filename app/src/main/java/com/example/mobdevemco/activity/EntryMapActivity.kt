@@ -1,6 +1,7 @@
 package com.example.mobdevemco.activity
 
 import android.Manifest
+import com.example.mobdevemco.R
 import android.content.pm.PackageManager
 import android.location.Address
 import android.location.Geocoder
@@ -12,15 +13,17 @@ import android.view.View
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
-import com.example.mobdevemco.R
 import com.example.mobdevemco.databinding.ActivityEditMapBinding
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.MapView
 import com.google.android.gms.maps.OnMapReadyCallback
+import com.google.android.gms.maps.model.BitmapDescriptorFactory
+import com.google.android.gms.maps.model.GroundOverlayOptions
 import com.google.android.gms.maps.model.LatLng
 import java.io.IOException
 import java.util.Locale
+
 
 class EntryMapActivity : AppCompatActivity(), OnMapReadyCallback, LocationListener,  GoogleMap.OnCameraIdleListener{
     private lateinit var newaddress : TextView
