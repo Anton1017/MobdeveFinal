@@ -107,10 +107,20 @@ class ActivityMain : AppCompatActivity(), LocationListener {
         getLocation()
         //Logic for adding a new entry
         viewBinding.entryAddBtn.setOnClickListener(View.OnClickListener {
-            val intent = Intent(this@ActivityMain, NewEntryActivity::class.java)
-            intent.putExtra(NewEntryActivity.ACTIVITY_TYPE, NewEntryActivity.ADD_ENTRY)
-            intent.putExtra(NewEntryActivity.CURRENT_LOCATION, currentLocation)
-            entryResultLauncher.launch(intent)
+            if(viewBinding.currentLocationMain.text.toString()
+                == getString(R.string.tournal_retrieving_addr)){
+
+                Toast.makeText(this,
+                    "Cannot create entry. Wait for address retrieval.",
+                    Toast.LENGTH_SHORT)
+                    .show()
+
+            }else{
+                val intent = Intent(this@ActivityMain, NewEntryActivity::class.java)
+                intent.putExtra(NewEntryActivity.ACTIVITY_TYPE, NewEntryActivity.ADD_ENTRY)
+                intent.putExtra(NewEntryActivity.CURRENT_LOCATION, currentLocation)
+                entryResultLauncher.launch(intent)
+            }
         })
 
         viewBinding.searchLogo.setOnClickListener(View.OnClickListener {
