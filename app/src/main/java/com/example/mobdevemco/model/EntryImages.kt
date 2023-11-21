@@ -35,4 +35,17 @@ class EntryImages (private var bitmap: Bitmap) {
         this.bitmap.compress( Bitmap.CompressFormat.PNG, 100, stream)
         return stream.toByteArray()
     }
+
+    companion object{
+        val supportedImageFormats = arrayOf<String>(
+            "image/jpeg",
+            "image/png",
+            "image/webp"
+        )
+        val supportedCompressFormats = arrayOf<Bitmap.CompressFormat>(
+            Bitmap.CompressFormat.JPEG,
+            Bitmap.CompressFormat.PNG,
+            Bitmap.CompressFormat.WEBP
+        )
+    }
 }

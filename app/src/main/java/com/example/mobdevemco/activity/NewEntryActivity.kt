@@ -192,6 +192,7 @@ class NewEntryActivity : AppCompatActivity(){
             val i = Intent()
             i.type = "image/*"
             i.action = Intent.ACTION_GET_CONTENT
+            i.putExtra(Intent.EXTRA_MIME_TYPES, EntryImages.supportedImageFormats)
             i.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true)
             myActivityResultLauncher.launch(Intent.createChooser(i, "Select Pictures"))
         })
