@@ -152,7 +152,7 @@ class ActivityMain : AppCompatActivity(), LocationListener {
     private fun getLocation() {
         if(checkPermissions()){
             if(isLocationEnabled()) {
-                this.locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 5000, 5f, this)
+                this.locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 5000, 5f, this)
             }
             else {
 
