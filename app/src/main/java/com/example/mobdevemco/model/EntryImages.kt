@@ -1,40 +1,49 @@
 package com.example.mobdevemco.model
 
+import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.net.Uri
 import java.io.ByteArrayOutputStream
+import java.io.InputStream
 import java.io.Serializable
 
-class EntryImages (private var bitmap: Bitmap) {
+class EntryImages (private var uri: Uri) {
     private var entryId: Long = -1
     private var id: Long = -1
     constructor(entryId: Long,
-                bitmap: Bitmap,
+                uri: Uri,
                 id: Long)
-            : this(bitmap) {
+            : this(uri) {
         this.entryId = entryId
-        this.bitmap = bitmap
+        this.uri = uri
         this.id = id
+    }
+
+    fun getBitmapFromInputStream(context: Context): Bitmap {
+        val inputStream: InputStream? = context.contentResolver.openInputStream(this.uri)
+        return BitmapFactory.decodeStream(
+            inputStream
+        )
     }
 
     fun getEntryId(): Long {
         return this.entryId
     }
 
-    fun getBitmap(): Bitmap {
-        return this.bitmap
+    fun getUri(): Uri {
+        return this.uri
     }
 
     fun getId(): Long {
         return this.id
     }
 
-    fun toByteArrayStream(): ByteArray {
-        val stream = ByteArrayOutputStream()
-        this.bitmap.compress( Bitmap.CompressFormat.PNG, 100, stream)
-        return stream.toByteArray()
-    }
+//    fun toByteArrayStream(): ByteArray {
+//        val stream = ByteArrayOutputStream()
+//        this.bitmap.compress( Bitmap.CompressFormat.PNG, 100, stream)
+//        return stream.toByteArray()
+//    }
 
     companion object{
         val supportedImageFormats = arrayOf<String>(

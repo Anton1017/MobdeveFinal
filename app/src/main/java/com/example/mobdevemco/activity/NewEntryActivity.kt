@@ -4,6 +4,7 @@ import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.location.LocationManager
+import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import android.view.View
@@ -50,29 +51,13 @@ class NewEntryActivity : AppCompatActivity(){
                     // IF there are 2 or more images picked
                     if(count != null){
                         for (i in 0 until count) {
-                            val inputStream: InputStream? = result.data!!.clipData?.getItemAt(i)?.uri?.let {
-                                contentResolver.openInputStream(
-                                    it
-                                )
-                            }
-                            val bitmap: Bitmap = BitmapFactory.decodeStream(
-                                inputStream
-                            )
-//                            val stream = ByteArrayOutputStream()
-//                            bitmap.compress( Bitmap.CompressFormat.PNG, 100, stream)
-//                            val byteArray = stream.toByteArray()
-                            newImageArray.add( EntryImages(bitmap) )
+                            val inputUri: Uri? = result.data!!.clipData?.getItemAt(i)?.uri
+                            inputUri?.let { EntryImages(it) }?.let { newImageArray.add(it) }
                         }
                     //if only one image was picked
                     }else{
-                        val inputStream: InputStream? = result.data!!.data?.let {
-                            contentResolver.openInputStream(
-                                it
-                            )
-                        }
-                        BitmapFactory.decodeStream(
-                            inputStream
-                        ).let { EntryImages(it) }.let { newImageArray.add(it) }
+                        val inputUri = result.data!!.data
+                        inputUri?.let { EntryImages(it) }?.let { newImageArray.add(it) }
                     }
                     newImagesAdapter.notifyDataSetChanged()
                 }
@@ -134,7 +119,8 @@ class NewEntryActivity : AppCompatActivity(){
                                 viewBinding.locationText.text.toString(),
                                 newImageArray,
                                 viewBinding.descriptionText.text.toString()
-                            )
+                            ),
+                            this@NewEntryActivity
                         )
                         runOnUiThread {
                             val i: Intent = Intent()
@@ -153,7 +139,8 @@ class NewEntryActivity : AppCompatActivity(){
                                     viewBinding.descriptionText.text.toString(),
                                     it1.getCreatedAt(),
                                     it1.getId()
-                                )
+                                ),
+                                this@NewEntryActivity
                             )
                         }
                         runOnUiThread {
