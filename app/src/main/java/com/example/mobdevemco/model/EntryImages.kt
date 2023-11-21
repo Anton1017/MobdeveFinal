@@ -46,11 +46,6 @@ class EntryImages (private var uri: Uri) {
         this.isTemporaryImage = isTemporaryImage
     }
 
-//    fun toByteArrayStream(): ByteArray {
-//        val stream = ByteArrayOutputStream()
-//        this.bitmap.compress( Bitmap.CompressFormat.PNG, 100, stream)
-//        return stream.toByteArray()
-//    }
 
     companion object{
         val supportedImageFormats = arrayOf<String>(

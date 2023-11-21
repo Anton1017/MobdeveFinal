@@ -182,11 +182,6 @@ class NewEntryActivity : AppCompatActivity(){
             finish()
         })
 
-        val galleryImage = registerForActivityResult(ActivityResultContracts.GetContent(),
-            ActivityResultCallback {
-
-            })
-
         viewBinding.addImageBtn.setOnClickListener(View.OnClickListener {
             val i = Intent()
             i.type = "image/*"
@@ -197,11 +192,11 @@ class NewEntryActivity : AppCompatActivity(){
         })
 
         viewBinding.editLocationBtn.setOnClickListener(View.OnClickListener {
-            val intent = Intent(this@NewEntryActivity, EntryMapActivity::class.java)
-            intent.putExtra(EntryMapActivity.LATTITUDE, latitude)
-            intent.putExtra(EntryMapActivity.LONGITUDE, longitude)
+            val i = Intent(this@NewEntryActivity, EntryMapActivity::class.java)
+            i.putExtra(EntryMapActivity.LATTITUDE, latitude)
+            i.putExtra(EntryMapActivity.LONGITUDE, longitude)
 
-            editlocation.launch(intent)
+            editlocation.launch(i)
         })
 
         this.recyclerView.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
