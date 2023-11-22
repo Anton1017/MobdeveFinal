@@ -27,6 +27,32 @@ class EntryDbHelper(context: Context?) :
 
     // Called when a new version of the DB is present; hence, an "upgrade" to a newer version
     override fun onUpgrade(sqLiteDatabase: SQLiteDatabase, i: Int, i1: Int) {
+        val e = sqLiteDatabase.query(DbReferences.TABLE_NAME_ENTRIES,
+            null,
+            null,
+            null,
+            null,
+            null,
+            DbReferences.ENTRIES_COLUMN_NAME_CREATED_AT + " DESC " ,
+            null
+        )
+        while(e.moveToNext()){
+            val entry = Entry(
+                e.getString(e.getColumnIndexOrThrow(DbReferences.ENTRIES_COLUMN_NAME_TITLE)),
+                e.getString(e.getColumnIndexOrThrow(DbReferences.ENTRIES_COLUMN_NAME_LOCATION_NAME)),
+                this.getEntryImages(e.getLong(e.getColumnIndexOrThrow(DbReferences._ID)), sqLiteDatabase),
+                e.getString(e.getColumnIndexOrThrow(DbReferences.ENTRIES_COLUMN_NAME_DESCRIPTION)),
+                CustomDateTime(e.getString(e.getColumnIndexOrThrow(DbReferences.ENTRIES_COLUMN_NAME_CREATED_AT))),
+                e.getDouble(e.getColumnIndexOrThrow(DbReferences.ENTRIES_COLUMN_NAME_LATITUDE)),
+                e.getDouble(e.getColumnIndexOrThrow(DbReferences.ENTRIES_COLUMN_NAME_LONGITUDE)),
+                e.getDouble(e.getColumnIndexOrThrow(DbReferences.ENTRIES_COLUMN_NAME_ADJUSTED_LATITUDE)),
+                e.getDouble(e.getColumnIndexOrThrow(DbReferences.ENTRIES_COLUMN_NAME_ADJUSTED_LONGITUDE)),
+                e.getFloat(e.getColumnIndexOrThrow(DbReferences.ENTRIES_COLUMN_NAME_ACCURACY)),
+                e.getLong(e.getColumnIndexOrThrow(DbReferences._ID))
+            )
+            deleteAllEntryImages(entry)
+
+        }
         sqLiteDatabase.execSQL(DbReferences.ENTRIES_DROP_TABLE_STATEMENT)
         sqLiteDatabase.execSQL(DbReferences.ENTRY_IMAGES_DROP_TABLE_STATEMENT)
         onCreate(sqLiteDatabase)
