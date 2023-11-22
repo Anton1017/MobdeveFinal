@@ -25,11 +25,14 @@ import java.io.IOException
 import java.util.Locale
 
 
-class EntryMapActivity : AppCompatActivity(), OnMapReadyCallback, LocationListener,  GoogleMap.OnCameraIdleListener{
+class EntryMapActivity : AppCompatActivity(), OnMapReadyCallback, LocationListener,  GoogleMap.OnCameraIdleListener, GoogleMap.OnCameraMoveListener{
     private lateinit var newaddress : TextView
     private lateinit var newaddresstext : String
     private var longitude :Double = 0.0
     private var latitude :Double = 0.0
+    private var editLongitude: Double = 0.0
+    private var editLatitude: Double = 0.0
+    private var accuracy: Float = 0.0F
     private lateinit var viewBinding: ActivityEditMapBinding
     private var mMap: GoogleMap? = null
     lateinit var mapView: MapView
@@ -61,7 +64,10 @@ class EntryMapActivity : AppCompatActivity(), OnMapReadyCallback, LocationListen
         val viewBinding : ActivityEditMapBinding = ActivityEditMapBinding.inflate(layoutInflater)
         setContentView(viewBinding.root)
         longitude = intent.getDoubleExtra(LONGITUDE, 0.0)
-        latitude = intent.getDoubleExtra(LATTITUDE, 0.0)
+        latitude = intent.getDoubleExtra(LATITUDE, 0.0)
+        editLatitude = intent.getDoubleExtra(ADJUSTED_LATITUDE, 0.0)
+        editLongitude = intent.getDoubleExtra(ADJUSTED_LONGITUDE, 0.0)
+        accuracy = intent.getFloatExtra(ACCURACY, 0.0F)
 
         mapView = findViewById<MapView>(R.id.map)
         var mapViewBundle: Bundle? = null
@@ -74,7 +80,7 @@ class EntryMapActivity : AppCompatActivity(), OnMapReadyCallback, LocationListen
             val intent= Intent()
             intent.putExtra(EntryMapActivity.CURRENTLOCATION, newaddresstext)
             intent.putExtra(EntryMapActivity.LONGITUDE, longitude)
-            intent.putExtra(EntryMapActivity.LATTITUDE, latitude)
+            intent.putExtra(EntryMapActivity.LATITUDE, latitude)
 
             setResult(Activity.RESULT_OK, intent)
             finish()
@@ -133,17 +139,26 @@ class EntryMapActivity : AppCompatActivity(), OnMapReadyCallback, LocationListen
             setAddress(addresses!![0])
             longitude = mMap!!.getCameraPosition().target.longitude
             latitude = mMap!!.getCameraPosition().target.latitude
+            //val accuracy = mMap!!.myLocation.accuracy
             Log.d("Location", "Longitude: $longitude, Latitude: $latitude")
         }catch (e:IndexOutOfBoundsException){
             e.printStackTrace()
         }catch (e:IOException){
             e.printStackTrace()
         }
-
     }
+
+    override fun onCameraMove() {
+
+        TODO("Not yet implemented")
+    }
+
     companion object {
         const val LONGITUDE = "LONGITUDE"
-        const val LATTITUDE = "LATTITUDE"
+        const val LATITUDE = "LATITUDE"
+        const val ADJUSTED_LONGITUDE = "ADJUSTED_LONGITUDE"
+        const val ADJUSTED_LATITUDE = "ADJUSTED_LATITUDE"
+        const val ACCURACY = "ACCURACY"
         const val CURRENTLOCATION = "CURRENTLOCATION"
     }
 

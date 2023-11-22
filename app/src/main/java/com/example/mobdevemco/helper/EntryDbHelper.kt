@@ -55,6 +55,11 @@ class EntryDbHelper(context: Context?) :
                         this.getEntryImages(e.getLong(e.getColumnIndexOrThrow(DbReferences._ID)), database),
                         e.getString(e.getColumnIndexOrThrow(DbReferences.ENTRIES_COLUMN_NAME_DESCRIPTION)),
                         CustomDateTime(e.getString(e.getColumnIndexOrThrow(DbReferences.ENTRIES_COLUMN_NAME_CREATED_AT))),
+                        e.getDouble(e.getColumnIndexOrThrow(DbReferences.ENTRIES_COLUMN_NAME_LATITUDE)),
+                        e.getDouble(e.getColumnIndexOrThrow(DbReferences.ENTRIES_COLUMN_NAME_LONGITUDE)),
+                        e.getDouble(e.getColumnIndexOrThrow(DbReferences.ENTRIES_COLUMN_NAME_ADJUSTED_LATITUDE)),
+                        e.getDouble(e.getColumnIndexOrThrow(DbReferences.ENTRIES_COLUMN_NAME_ADJUSTED_LONGITUDE)),
+                        e.getFloat(e.getColumnIndexOrThrow(DbReferences.ENTRIES_COLUMN_NAME_ACCURACY)),
                         e.getLong(e.getColumnIndexOrThrow(DbReferences._ID))
                     )
                 )
@@ -76,6 +81,11 @@ class EntryDbHelper(context: Context?) :
         values.put(DbReferences.ENTRIES_COLUMN_NAME_LOCATION_NAME, e.getLocationName())
         values.put(DbReferences.ENTRIES_COLUMN_NAME_DESCRIPTION, e.getDescription())
         values.put(DbReferences.ENTRIES_COLUMN_NAME_CREATED_AT, e.getCreatedAt().toString())
+        values.put(DbReferences.ENTRIES_COLUMN_NAME_LATITUDE, e.getOriginalLatitude())
+        values.put(DbReferences.ENTRIES_COLUMN_NAME_LONGITUDE, e.getOriginalLongitude())
+        values.put(DbReferences.ENTRIES_COLUMN_NAME_ADJUSTED_LATITUDE, e.getAdjustedLatitude())
+        values.put(DbReferences.ENTRIES_COLUMN_NAME_ADJUSTED_LONGITUDE, e.getAdjustedLongitude())
+        values.put(DbReferences.ENTRIES_COLUMN_NAME_ACCURACY, e.getAccuracy())
 
         // The actual insertion operation. As inserting returns the primary key value of the new
         // row, we can use this and return it to whomever is calling so they can be aware of what
@@ -112,6 +122,11 @@ class EntryDbHelper(context: Context?) :
                 this.getEntryImages(e.getLong(e.getColumnIndexOrThrow(DbReferences._ID)), database),
                 e.getString(e.getColumnIndexOrThrow(DbReferences.ENTRIES_COLUMN_NAME_DESCRIPTION)),
                 CustomDateTime(e.getString(e.getColumnIndexOrThrow(DbReferences.ENTRIES_COLUMN_NAME_CREATED_AT))),
+                e.getDouble(e.getColumnIndexOrThrow(DbReferences.ENTRIES_COLUMN_NAME_LATITUDE)),
+                e.getDouble(e.getColumnIndexOrThrow(DbReferences.ENTRIES_COLUMN_NAME_LONGITUDE)),
+                e.getDouble(e.getColumnIndexOrThrow(DbReferences.ENTRIES_COLUMN_NAME_ADJUSTED_LATITUDE)),
+                e.getDouble(e.getColumnIndexOrThrow(DbReferences.ENTRIES_COLUMN_NAME_ADJUSTED_LONGITUDE)),
+                e.getFloat(e.getColumnIndexOrThrow(DbReferences.ENTRIES_COLUMN_NAME_ACCURACY)),
                 e.getLong(e.getColumnIndexOrThrow(DbReferences._ID))
             )
         }
@@ -148,6 +163,16 @@ class EntryDbHelper(context: Context?) :
         }
         if (eNew.getCreatedAt() != eOld.getCreatedAt()) {
             values.put(DbReferences.ENTRIES_COLUMN_NAME_CREATED_AT, eNew.getCreatedAt().toString())
+            withChanges = true
+        }
+
+        if (eNew.getAdjustedLatitude() != eOld.getAdjustedLatitude()) {
+            values.put(DbReferences.ENTRIES_COLUMN_NAME_ADJUSTED_LATITUDE, eNew.getAdjustedLatitude())
+            withChanges = true
+        }
+
+        if (eNew.getAdjustedLongitude() != eOld.getAdjustedLongitude()) {
+            values.put(DbReferences.ENTRIES_COLUMN_NAME_ADJUSTED_LONGITUDE, eNew.getAdjustedLongitude())
             withChanges = true
         }
 
@@ -289,13 +314,23 @@ class EntryDbHelper(context: Context?) :
         const val ENTRIES_COLUMN_NAME_LOCATION_NAME = "location_name"
         const val ENTRIES_COLUMN_NAME_DESCRIPTION = "description"
         const val ENTRIES_COLUMN_NAME_CREATED_AT = "created_at"
+        const val ENTRIES_COLUMN_NAME_LATITUDE = "latitude"
+        const val ENTRIES_COLUMN_NAME_LONGITUDE = "longitude"
+        const val ENTRIES_COLUMN_NAME_ADJUSTED_LATITUDE = "adjusted_latitude"
+        const val ENTRIES_COLUMN_NAME_ADJUSTED_LONGITUDE = "adjusted_longitude"
+        const val ENTRIES_COLUMN_NAME_ACCURACY = "accuracy"
         const val ENTRIES_CREATE_TABLE_STATEMENT =
             "CREATE TABLE IF NOT EXISTS " + TABLE_NAME_ENTRIES + " (" +
                     _ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
                     ENTRIES_COLUMN_NAME_TITLE + " TEXT, " +
                     ENTRIES_COLUMN_NAME_LOCATION_NAME + " TEXT, " +
                     ENTRIES_COLUMN_NAME_DESCRIPTION + " TEXT, " +
-                    ENTRIES_COLUMN_NAME_CREATED_AT + " TEXT)"
+                    ENTRIES_COLUMN_NAME_CREATED_AT + " TEXT," +
+                    ENTRIES_COLUMN_NAME_LATITUDE + " DOUBLE," +
+                    ENTRIES_COLUMN_NAME_LONGITUDE + " DOUBLE," +
+                    ENTRIES_COLUMN_NAME_ADJUSTED_LATITUDE + " DOUBLE," +
+                    ENTRIES_COLUMN_NAME_ADJUSTED_LONGITUDE + " DOUBLE," +
+                    ENTRIES_COLUMN_NAME_ACCURACY + " FLOAT)"
         const val ENTRIES_DROP_TABLE_STATEMENT = "DROP TABLE IF EXISTS " + TABLE_NAME_ENTRIES
 
         const val TABLE_NAME_ENTRY_IMAGES = "entry_images"

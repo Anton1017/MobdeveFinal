@@ -1,8 +1,6 @@
 package com.example.mobdevemco.activity
 
 import android.content.Intent
-import android.graphics.Bitmap
-import android.graphics.BitmapFactory
 import android.location.LocationManager
 import android.net.Uri
 import android.os.Bundle
@@ -10,7 +8,6 @@ import android.util.Log
 import android.view.View
 import android.widget.Toast
 import androidx.activity.result.ActivityResult
-import androidx.activity.result.ActivityResultCallback
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -20,13 +17,15 @@ import com.example.mobdevemco.databinding.ActivityCreateEntryBinding
 import com.example.mobdevemco.helper.EntryDbHelper
 import com.example.mobdevemco.model.Entry
 import com.example.mobdevemco.model.EntryImages
-import java.io.InputStream
 import java.util.concurrent.Executors
 
 
 class NewEntryActivity : AppCompatActivity(){
-    private var longitude :Double = 0.0
-    private var latitude :Double = 0.0
+    private var longitude: Double = 0.0
+    private var latitude: Double = 0.0
+    private var editLongitude: Double = 0.0
+    private var editLatitude: Double = 0.0
+    private var accuracy: Float = 0.0F
 
     private lateinit var viewBinding: ActivityCreateEntryBinding
     private val locationPermissionCode = 2
@@ -46,8 +45,8 @@ class NewEntryActivity : AppCompatActivity(){
     ) { result ->
         if (result.resultCode == RESULT_OK) {
             viewBinding.locationText.text = result.data?.getStringExtra(EntryMapActivity.CURRENTLOCATION)!!
-            longitude = result.data?.getDoubleExtra(EntryMapActivity.LONGITUDE, 0.0)!!
-            latitude = result.data?.getDoubleExtra(EntryMapActivity.LATTITUDE, 0.0)!!
+            editLongitude = result.data?.getDoubleExtra(EntryMapActivity.LONGITUDE, 0.0)!!
+            editLatitude = result.data?.getDoubleExtra(EntryMapActivity.LATITUDE, 0.0)!!
             Log.d("TAG", "longgitude" + longitude.toString())
             Log.d("TAG", "lattitude" + latitude.toString())
         }
@@ -101,8 +100,11 @@ class NewEntryActivity : AppCompatActivity(){
 
         if(activityType == ADD_ENTRY){
             viewBinding.locationText.text = intent.getStringExtra(CURRENT_LOCATION)
-            latitude = intent.getDoubleExtra(LATTITUDE, 0.0)
+            latitude = intent.getDoubleExtra(LATITUDE, 0.0)
             longitude = intent.getDoubleExtra(LONGITUDE, 0.0)
+            editLatitude = this.latitude
+            editLongitude = this.longitude
+            accuracy = intent.getFloatExtra(ACCURACY, 0.0F)
 
 
 //            getLocation()
@@ -119,6 +121,11 @@ class NewEntryActivity : AppCompatActivity(){
                     viewBinding.locationText.text = currEntry?.getLocationName()
                     viewBinding.titleText.setText(currEntry?.getTitle())
                     viewBinding.descriptionText.setText(currEntry?.getDescription())
+                    latitude = currEntry!!.getOriginalLatitude()
+                    longitude = currEntry!!.getOriginalLongitude()
+                    editLatitude = currEntry!!.getAdjustedLatitude()
+                    editLongitude = currEntry!!.getAdjustedLongitude()
+                    accuracy = currEntry!!.getAccuracy()
                     newImagesAdapter.notifyDataSetChanged()
                 }
             }
@@ -137,7 +144,12 @@ class NewEntryActivity : AppCompatActivity(){
                                 viewBinding.titleText.text.toString(),
                                 viewBinding.locationText.text.toString(),
                                 newImageArray,
-                                viewBinding.descriptionText.text.toString()
+                                viewBinding.descriptionText.text.toString(),
+                                latitude,
+                                longitude,
+                                editLongitude,
+                                editLatitude,
+                                accuracy
                             ),
                             this@NewEntryActivity
                         )
@@ -157,6 +169,11 @@ class NewEntryActivity : AppCompatActivity(){
                                     newImageArray,
                                     viewBinding.descriptionText.text.toString(),
                                     it1.getCreatedAt(),
+                                    it1.getOriginalLatitude(),
+                                    it1.getOriginalLongitude(),
+                                    it1.getAdjustedLatitude(),
+                                    it1.getAdjustedLongitude(),
+                                    it1.getAccuracy(),
                                     it1.getId()
                                 ),
                                 this@NewEntryActivity
@@ -193,8 +210,11 @@ class NewEntryActivity : AppCompatActivity(){
 
         viewBinding.editLocationBtn.setOnClickListener(View.OnClickListener {
             val i = Intent(this@NewEntryActivity, EntryMapActivity::class.java)
-            i.putExtra(EntryMapActivity.LATTITUDE, latitude)
+            i.putExtra(EntryMapActivity.LATITUDE, latitude)
             i.putExtra(EntryMapActivity.LONGITUDE, longitude)
+            i.putExtra(EntryMapActivity.ADJUSTED_LATITUDE, editLatitude)
+            i.putExtra(EntryMapActivity.ADJUSTED_LONGITUDE, editLongitude)
+            i.putExtra(EntryMapActivity.ACCURACY, accuracy)
 
             editlocation.launch(i)
         })
@@ -289,6 +309,7 @@ class NewEntryActivity : AppCompatActivity(){
         const val EDIT_ENTRY = "EDIT_ENTRY"
         const val CURRENT_LOCATION = "CURRENT_LOCATION"
         const val LONGITUDE = "LONGITUDE"
-        const val LATTITUDE = "LATTITUDE"
+        const val LATITUDE = "LATITUDE"
+        const val ACCURACY = "ACCURACY"
     }
 }

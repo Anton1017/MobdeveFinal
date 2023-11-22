@@ -42,6 +42,7 @@ class ActivityMain : AppCompatActivity(), LocationListener {
     private lateinit var locationManager: LocationManager
     private var longitude: Double = 0.0
     private var latitude: Double = 0.0
+    private var accuracy: Float = 0.0F
     private var entryDbHelper: EntryDbHelper? = null
     private val executorService = Executors.newSingleThreadExecutor()
     private lateinit var currentLocation: String
@@ -120,8 +121,9 @@ class ActivityMain : AppCompatActivity(), LocationListener {
                 val intent = Intent(this@ActivityMain, NewEntryActivity::class.java)
                 intent.putExtra(NewEntryActivity.ACTIVITY_TYPE, NewEntryActivity.ADD_ENTRY)
                 intent.putExtra(NewEntryActivity.CURRENT_LOCATION, currentLocation)
-                intent.putExtra(NewEntryActivity.LATTITUDE, latitude)
+                intent.putExtra(NewEntryActivity.LATITUDE, latitude)
                 intent.putExtra(NewEntryActivity.LONGITUDE, longitude)
+                intent.putExtra(NewEntryActivity.ACCURACY, accuracy)
                 entryResultLauncher.launch(intent)
             }
         })
@@ -216,6 +218,7 @@ class ActivityMain : AppCompatActivity(), LocationListener {
             geocoder.getFromLocation(location.latitude, location.longitude, 1)
         longitude = location.longitude
         latitude = location.latitude
+        accuracy = location.accuracy
 //        viewBinding.locationText.text = "${list?.get(0)?.locality}"
         var locationAddress = "${list?.get(0)?.getAddressLine(0)}"
         viewBinding.currentLocationMain.text =
