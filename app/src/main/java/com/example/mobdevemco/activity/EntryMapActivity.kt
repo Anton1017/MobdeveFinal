@@ -9,6 +9,7 @@ import android.location.Geocoder
 import android.location.Location
 import android.location.LocationListener
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
@@ -132,6 +133,7 @@ class EntryMapActivity : AppCompatActivity(), OnMapReadyCallback, LocationListen
             setAddress(addresses!![0])
             longitude = mMap!!.getCameraPosition().target.longitude
             latitude = mMap!!.getCameraPosition().target.latitude
+            Log.d("Location", "Longitude: $longitude, Latitude: $latitude")
         }catch (e:IndexOutOfBoundsException){
             e.printStackTrace()
         }catch (e:IOException){
