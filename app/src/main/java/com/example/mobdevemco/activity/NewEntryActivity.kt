@@ -12,6 +12,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.mobdevemco.R
 import com.example.mobdevemco.adapter.EntryImageAdapter
 import com.example.mobdevemco.databinding.ActivityCreateEntryBinding
 import com.example.mobdevemco.helper.EntryDbHelper
@@ -110,6 +111,7 @@ class NewEntryActivity : AppCompatActivity(){
 //            getLocation()
             Log.d("TAG", "add entry")
         }else if(activityType == EDIT_ENTRY){
+            viewBinding.createBtn.text = getString(R.string.tournal_edit_action)
             executorService.execute {
                 entryDbHelper = EntryDbHelper.getInstance(this@NewEntryActivity)
 

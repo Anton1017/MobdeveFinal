@@ -3,6 +3,7 @@
     <string name="tournal_placeholder_place">Pasay City, Metro Manila</string>
 
     <string name="tournal_create_action">CREATE</string>
+    <string name="tournal_edit_action">SAVE</string>
     <string name="tournal_search_action">SEARCH</string>
     <string name="tournal_confirm_action">CONFIRM</string>
 
