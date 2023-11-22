@@ -79,8 +79,8 @@ class EntryMapActivity : AppCompatActivity(), OnMapReadyCallback, LocationListen
         viewBinding.confirmBtn.setOnClickListener(View.OnClickListener {
             val intent= Intent()
             intent.putExtra(EntryMapActivity.CURRENTLOCATION, newaddresstext)
-            intent.putExtra(EntryMapActivity.LONGITUDE, longitude)
-            intent.putExtra(EntryMapActivity.LATITUDE, latitude)
+            intent.putExtra(EntryMapActivity.LONGITUDE, editLongitude)
+            intent.putExtra(EntryMapActivity.LATITUDE, editLatitude)
 
             setResult(Activity.RESULT_OK, intent)
             finish()
@@ -137,8 +137,8 @@ class EntryMapActivity : AppCompatActivity(), OnMapReadyCallback, LocationListen
         try{
             addresses = geocoder.getFromLocation(mMap!!.getCameraPosition().target.latitude, mMap!!.getCameraPosition().target.longitude, 1)
             setAddress(addresses!![0])
-            longitude = mMap!!.getCameraPosition().target.longitude
-            latitude = mMap!!.getCameraPosition().target.latitude
+            editLongitude = mMap!!.getCameraPosition().target.longitude
+            editLatitude = mMap!!.getCameraPosition().target.latitude
             //val accuracy = mMap!!.myLocation.accuracy
             Log.d("Location", "Longitude: $longitude, Latitude: $latitude")
         }catch (e:IndexOutOfBoundsException){
