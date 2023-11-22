@@ -160,7 +160,7 @@ class NewEntryActivity : AppCompatActivity(), OnMapReadyCallback {
             editLongitude = this.longitude
             accuracy = intent.getFloatExtra(ACCURACY, 0.0F)
 
-            mapView = findViewById<MapView>(R.id.map)
+            mapView = viewBinding.mapView2
             var mapViewBundle: Bundle? = null
             if (savedInstanceState != null){
                 mapViewBundle = savedInstanceState.getBundle(EntryMapActivity.MAP_VIEW_BUNDLE_KEY)
