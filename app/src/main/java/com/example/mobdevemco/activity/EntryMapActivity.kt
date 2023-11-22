@@ -4,6 +4,7 @@ import android.Manifest
 import android.app.Activity
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.graphics.Color
 import android.location.Address
 import android.location.Geocoder
 import android.location.Location
@@ -14,12 +15,15 @@ import android.view.View
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
+import androidx.lifecycle.Transformations.map
 import com.example.mobdevemco.R
 import com.example.mobdevemco.databinding.ActivityEditMapBinding
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.MapView
 import com.google.android.gms.maps.OnMapReadyCallback
+import com.google.android.gms.maps.model.Circle
+import com.google.android.gms.maps.model.CircleOptions
 import com.google.android.gms.maps.model.LatLng
 import java.io.IOException
 import java.util.Locale
@@ -33,6 +37,7 @@ class EntryMapActivity : AppCompatActivity(), OnMapReadyCallback, LocationListen
     private var editLongitude: Double = 0.0
     private var editLatitude: Double = 0.0
     private var accuracy: Float = 0.0F
+    private lateinit var circle: Circle
     private lateinit var viewBinding: ActivityEditMapBinding
     private var mMap: GoogleMap? = null
     lateinit var mapView: MapView
@@ -53,7 +58,13 @@ class EntryMapActivity : AppCompatActivity(), OnMapReadyCallback, LocationListen
             return
         }
         val original_location = LatLng(latitude, longitude)
-
+        circle = mMap!!.addCircle(
+            CircleOptions()
+                .center(original_location)
+                .radius(accuracy.toDouble())
+                .strokeColor(R.color.seal_brown)
+                .fillColor(R.color.beige)
+        )
         mMap!!.moveCamera(CameraUpdateFactory.newLatLngZoom(original_location, zoomLevel))
 //        mMap!!.moveCamera(CameraUpdateFactory.newLatLng(original_location));
         mMap!!.setMyLocationEnabled(true)
