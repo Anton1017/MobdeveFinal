@@ -48,8 +48,8 @@ class NewEntryActivity : AppCompatActivity(){
             viewBinding.locationText.text = result.data?.getStringExtra(EntryMapActivity.CURRENTLOCATION)!!
             editLongitude = result.data?.getDoubleExtra(EntryMapActivity.LONGITUDE, 0.0)!!
             editLatitude = result.data?.getDoubleExtra(EntryMapActivity.LATITUDE, 0.0)!!
-            Log.d("TAG", "longgitude" + longitude.toString())
-            Log.d("TAG", "lattitude" + latitude.toString())
+            Log.d("longitude", "longitude" + editLongitude.toString())
+            Log.d("latitude", "latitude" + editLatitude.toString())
         }
     }
 
@@ -118,6 +118,8 @@ class NewEntryActivity : AppCompatActivity(){
                 currEntry = entryDbHelper?.getEntry(intent.getLongExtra(Entry.ID, -1))
                 currEntry?.let { newImageArray.addAll(it.getImages()) }
 
+                Log.d("ADJUSTED", currEntry!!.getAdjustedLatitude().toString() + " " + currEntry!!.getAdjustedLongitude().toString())
+
 
                 runOnUiThread {
                     viewBinding.locationText.text = currEntry?.getLocationName()
@@ -129,6 +131,9 @@ class NewEntryActivity : AppCompatActivity(){
                     editLongitude = currEntry!!.getAdjustedLongitude()
                     accuracy = currEntry!!.getAccuracy()
                     newImagesAdapter.notifyDataSetChanged()
+
+                    Log.d("EDIT_longitude", "longitude" + editLatitude.toString())
+                    Log.d("EDIT_latitude", "latitude" + editLongitude.toString())
                 }
             }
         }
@@ -149,8 +154,8 @@ class NewEntryActivity : AppCompatActivity(){
                                 viewBinding.descriptionText.text.toString(),
                                 latitude,
                                 longitude,
-                                editLongitude,
                                 editLatitude,
+                                editLongitude,
                                 accuracy
                             ),
                             this@NewEntryActivity
@@ -217,6 +222,7 @@ class NewEntryActivity : AppCompatActivity(){
             i.putExtra(EntryMapActivity.ADJUSTED_LATITUDE, editLatitude)
             i.putExtra(EntryMapActivity.ADJUSTED_LONGITUDE, editLongitude)
             i.putExtra(EntryMapActivity.ACCURACY, accuracy)
+            i.putExtra(EntryMapActivity.CURRENTLOCATION, viewBinding.locationText.text.toString())
 
             editlocation.launch(i)
         })

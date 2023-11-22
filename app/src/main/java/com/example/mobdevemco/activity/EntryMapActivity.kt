@@ -25,11 +25,12 @@ import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.model.Circle
 import com.google.android.gms.maps.model.CircleOptions
 import com.google.android.gms.maps.model.LatLng
+import com.google.maps.android.SphericalUtil
 import java.io.IOException
 import java.util.Locale
 
 
-class EntryMapActivity : AppCompatActivity(), OnMapReadyCallback, LocationListener,  GoogleMap.OnCameraIdleListener, GoogleMap.OnCameraMoveListener{
+class EntryMapActivity : AppCompatActivity(), OnMapReadyCallback, LocationListener, GoogleMap.OnCameraIdleListener{
     private lateinit var newaddress : TextView
     private lateinit var newaddresstext : String
     private var longitude :Double = 0.0
@@ -37,13 +38,13 @@ class EntryMapActivity : AppCompatActivity(), OnMapReadyCallback, LocationListen
     private var editLongitude: Double = 0.0
     private var editLatitude: Double = 0.0
     private var accuracy: Float = 0.0F
+    private val zoomLevel = 25.0f
     private lateinit var circle: Circle
     private lateinit var viewBinding: ActivityEditMapBinding
     private var mMap: GoogleMap? = null
     lateinit var mapView: MapView
     private val MAP_VIEW_BUNDLE_KEY = "MapViewBundleKey"
     override fun onMapReady(googleMap: GoogleMap) {
-        val zoomLevel = 13.0f
         mapView.onResume()
         mMap = googleMap
 
@@ -58,6 +59,7 @@ class EntryMapActivity : AppCompatActivity(), OnMapReadyCallback, LocationListen
             return
         }
         val original_location = LatLng(latitude, longitude)
+        val edited_location = LatLng(editLatitude, editLongitude)
         circle = mMap!!.addCircle(
             CircleOptions()
                 .center(original_location)
@@ -65,8 +67,7 @@ class EntryMapActivity : AppCompatActivity(), OnMapReadyCallback, LocationListen
                 .strokeColor(R.color.seal_brown)
                 .fillColor(R.color.beige)
         )
-        mMap!!.moveCamera(CameraUpdateFactory.newLatLngZoom(original_location, zoomLevel))
-//        mMap!!.moveCamera(CameraUpdateFactory.newLatLng(original_location));
+        mMap!!.moveCamera(CameraUpdateFactory.newLatLngZoom(edited_location, zoomLevel))
         mMap!!.setMyLocationEnabled(true)
         mMap!!.setOnCameraIdleListener(this)
     }
@@ -79,7 +80,9 @@ class EntryMapActivity : AppCompatActivity(), OnMapReadyCallback, LocationListen
         editLatitude = intent.getDoubleExtra(ADJUSTED_LATITUDE, 0.0)
         editLongitude = intent.getDoubleExtra(ADJUSTED_LONGITUDE, 0.0)
         accuracy = intent.getFloatExtra(ACCURACY, 0.0F)
-
+        newaddresstext = intent.getStringExtra(CURRENTLOCATION).toString()
+        newaddress = findViewById(R.id.currentLocationMap)
+        newaddress.text = newaddresstext
         mapView = findViewById<MapView>(R.id.map)
         var mapViewBundle: Bundle? = null
         if (savedInstanceState != null){
@@ -145,11 +148,26 @@ class EntryMapActivity : AppCompatActivity(), OnMapReadyCallback, LocationListen
     override fun onCameraIdle() {
         var addresses: List<Address>? = null
         val geocoder = Geocoder(this, Locale.getDefault())
+
+        val original_location = LatLng(latitude, longitude)
+        val edited_location = LatLng(editLatitude, editLongitude)
+        val camera_location = LatLng(mMap!!.getCameraPosition().target.latitude, mMap!!.getCameraPosition().target.longitude)
+//        Log.d("TAG", mMap!!.getCameraPosition().target.latitude.toString() + " " + mMap!!.getCameraPosition().target.longitude.toString())
+        val distanceBetween = SphericalUtil.computeDistanceBetween(
+            original_location,
+            camera_location
+        )
+        Log.d("TAG", distanceBetween.toString() + " " + accuracy.toString())
+        Log.d("TAG_EDITED", editLatitude.toString() + " " + editLongitude.toString())
+        if(distanceBetween >= accuracy){
+            mMap!!.moveCamera(CameraUpdateFactory.newLatLng(edited_location))
+        }
+
         try{
             addresses = geocoder.getFromLocation(mMap!!.getCameraPosition().target.latitude, mMap!!.getCameraPosition().target.longitude, 1)
             setAddress(addresses!![0])
-            editLongitude = mMap!!.getCameraPosition().target.longitude
-            editLatitude = mMap!!.getCameraPosition().target.latitude
+            editLongitude = mMap!!.cameraPosition.target.longitude
+            editLatitude = mMap!!.cameraPosition.target.latitude
             //val accuracy = mMap!!.myLocation.accuracy
             Log.d("Location", "Longitude: $longitude, Latitude: $latitude")
         }catch (e:IndexOutOfBoundsException){
@@ -157,11 +175,8 @@ class EntryMapActivity : AppCompatActivity(), OnMapReadyCallback, LocationListen
         }catch (e:IOException){
             e.printStackTrace()
         }
-    }
 
-    override fun onCameraMove() {
 
-        TODO("Not yet implemented")
     }
 
     companion object {
