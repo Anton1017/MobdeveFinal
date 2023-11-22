@@ -22,9 +22,11 @@ import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.MapView
 import com.google.android.gms.maps.OnMapReadyCallback
+import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.maps.model.Circle
 import com.google.android.gms.maps.model.CircleOptions
 import com.google.android.gms.maps.model.LatLng
+import com.google.android.gms.maps.model.MarkerOptions
 import com.google.maps.android.SphericalUtil
 import java.io.IOException
 import java.util.Locale
@@ -38,7 +40,7 @@ class EntryMapActivity : AppCompatActivity(), OnMapReadyCallback, LocationListen
     private var editLongitude: Double = 0.0
     private var editLatitude: Double = 0.0
     private var accuracy: Float = 0.0F
-    private val zoomLevel = 25.0f
+    private val zoomLevel = 20.0f
     private lateinit var circle: Circle
     private lateinit var viewBinding: ActivityEditMapBinding
     private var mMap: GoogleMap? = null
@@ -68,8 +70,16 @@ class EntryMapActivity : AppCompatActivity(), OnMapReadyCallback, LocationListen
                 .fillColor(R.color.beige)
         )
         mMap!!.moveCamera(CameraUpdateFactory.newLatLngZoom(edited_location, zoomLevel))
-        mMap!!.setMyLocationEnabled(true)
+        mMap!!.setMyLocationEnabled(false)
         mMap!!.setOnCameraIdleListener(this)
+        mMap!!.addMarker(
+            MarkerOptions()
+                .position(original_location)
+                .title("Estimate")
+                .icon(
+                    BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_ORANGE)
+                )
+        )
     }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
