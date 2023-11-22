@@ -82,6 +82,12 @@ class ActivityMain : AppCompatActivity(), LocationListener {
                             }
                             myAdapter.notifyDataSetChanged()
                         }
+                        
+                        if(entries.size != 0){
+                            viewBinding.firstEntryText.visibility = View.GONE
+                        }else{
+                            viewBinding.firstEntryText.visibility = View.VISIBLE
+                        }
                     }
                 }
             }
@@ -96,6 +102,12 @@ class ActivityMain : AppCompatActivity(), LocationListener {
             // Get all contacts from the database
             entryDbHelper = EntryDbHelper.getInstance(this@ActivityMain)
             entryDbHelper?.allEntriesDefault?.let { entries.addAll(it) }
+
+            if(entries.size != 0){
+                viewBinding.firstEntryText.visibility = View.GONE
+            }else{
+                viewBinding.firstEntryText.visibility = View.VISIBLE
+            }
             Log.d("TAG", entries.toString())
 
             runOnUiThread { // Pass in the contacts to the needed components and set the adapter

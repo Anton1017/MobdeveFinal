@@ -97,7 +97,7 @@ class EntryDetailsActivity: AppCompatActivity(), OnMapReadyCallback {
                                     BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_ORANGE)
                                 )
                         )!!
-                        mMap!!.moveCamera(CameraUpdateFactory.newLatLngZoom(edited_location, EntryMapActivity.zoomLevel-5.0F))
+                        mMap!!.moveCamera(CameraUpdateFactory.newLatLngZoom(edited_location, EntryMapActivity.zoomLevel-4.0F))
 
                         editCode = 1
 
@@ -123,7 +123,7 @@ class EntryDetailsActivity: AppCompatActivity(), OnMapReadyCallback {
         }
         val edited_location = LatLng(latitude, longitude)
 
-        mMap!!.moveCamera(CameraUpdateFactory.newLatLngZoom(edited_location, EntryMapActivity.zoomLevel-5.0F))
+        mMap!!.moveCamera(CameraUpdateFactory.newLatLngZoom(edited_location, EntryMapActivity.zoomLevel-4.0F))
         mMap!!.uiSettings.isScrollGesturesEnabled = false
         mMap!!.setMyLocationEnabled(false)
         marker = mMap!!.addMarker(
