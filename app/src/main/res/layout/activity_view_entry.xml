@@ -3,7 +3,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:padding="1dp">
 
     <ScrollView
         android:layout_width="match_parent"
@@ -147,7 +148,8 @@
                 android:id="@+id/entryImageRecyclerView"
                 android:layout_width="match_parent"
                 android:layout_height="300dp"
-                android:backgroundTint="?attr/colorOnPrimary" />
+                android:backgroundTint="?attr/colorSecondary"
+                android:foreground="@drawable/entry_image_background" />
 
             <LinearLayout
                 android:id="@+id/imageCountView"
