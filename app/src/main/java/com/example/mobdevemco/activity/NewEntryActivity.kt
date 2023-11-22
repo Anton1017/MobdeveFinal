@@ -1,6 +1,8 @@
 package com.example.mobdevemco.activity
 
+import android.Manifest
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.location.LocationManager
 import android.net.Uri
 import android.os.Bundle
@@ -10,6 +12,7 @@ import android.widget.Toast
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.mobdevemco.R
@@ -18,15 +21,27 @@ import com.example.mobdevemco.databinding.ActivityCreateEntryBinding
 import com.example.mobdevemco.helper.EntryDbHelper
 import com.example.mobdevemco.model.Entry
 import com.example.mobdevemco.model.EntryImages
+import com.google.android.gms.maps.CameraUpdateFactory
+import com.google.android.gms.maps.GoogleMap
+import com.google.android.gms.maps.MapView
+import com.google.android.gms.maps.OnMapReadyCallback
+import com.google.android.gms.maps.model.BitmapDescriptorFactory
+import com.google.android.gms.maps.model.CircleOptions
+import com.google.android.gms.maps.model.LatLng
+import com.google.android.gms.maps.model.Marker
+import com.google.android.gms.maps.model.MarkerOptions
 import java.util.concurrent.Executors
 
 
-class NewEntryActivity : AppCompatActivity(){
+class NewEntryActivity : AppCompatActivity(), OnMapReadyCallback {
     private var longitude: Double = 0.0
     private var latitude: Double = 0.0
     private var editLongitude: Double = 0.0
     private var editLatitude: Double = 0.0
     private var accuracy: Float = 0.0F
+    private var mMap: GoogleMap? = null
+    lateinit var mapView: MapView
+    private lateinit var marker: Marker
 
     private lateinit var viewBinding: ActivityCreateEntryBinding
     private val locationPermissionCode = 2
@@ -48,8 +63,17 @@ class NewEntryActivity : AppCompatActivity(){
             viewBinding.locationText.text = result.data?.getStringExtra(EntryMapActivity.CURRENTLOCATION)!!
             editLongitude = result.data?.getDoubleExtra(EntryMapActivity.LONGITUDE, 0.0)!!
             editLatitude = result.data?.getDoubleExtra(EntryMapActivity.LATITUDE, 0.0)!!
-            Log.d("longitude", "longitude" + editLongitude.toString())
-            Log.d("latitude", "latitude" + editLatitude.toString())
+            val edited_location = LatLng(editLatitude, editLongitude)
+            marker.remove()
+            marker = mMap!!.addMarker(
+                MarkerOptions()
+                    .position(edited_location)
+                    .title("Estimate")
+                    .icon(
+                        BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_ORANGE)
+                    )
+            )!!
+            mMap!!.moveCamera(CameraUpdateFactory.newLatLngZoom(edited_location, EntryMapActivity.zoomLevel-5.0F))
         }
     }
 
@@ -86,6 +110,35 @@ class NewEntryActivity : AppCompatActivity(){
             newImagesAdapter.notifyDataSetChanged()
         }
     }
+
+    override fun onMapReady(googleMap: GoogleMap) {
+        mapView.onResume()
+        mMap = googleMap
+
+        if(ActivityCompat.checkSelfPermission(
+                this,
+                Manifest.permission.ACCESS_FINE_LOCATION
+            ) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
+                this,
+                Manifest.permission.ACCESS_COARSE_LOCATION
+            ) != PackageManager.PERMISSION_GRANTED
+        ){
+            return
+        }
+        val edited_location = LatLng(editLatitude, editLongitude)
+
+        mMap!!.moveCamera(CameraUpdateFactory.newLatLngZoom(edited_location, EntryMapActivity.zoomLevel-5.0F))
+        mMap!!.uiSettings.isScrollGesturesEnabled = false
+        mMap!!.setMyLocationEnabled(false)
+        marker = mMap!!.addMarker(
+            MarkerOptions()
+                .position(edited_location)
+                .title("Estimate")
+                .icon(
+                    BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_ORANGE)
+                )
+        )!!
+    }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -107,6 +160,13 @@ class NewEntryActivity : AppCompatActivity(){
             editLongitude = this.longitude
             accuracy = intent.getFloatExtra(ACCURACY, 0.0F)
 
+            mapView = findViewById<MapView>(R.id.map)
+            var mapViewBundle: Bundle? = null
+            if (savedInstanceState != null){
+                mapViewBundle = savedInstanceState.getBundle(EntryMapActivity.MAP_VIEW_BUNDLE_KEY)
+            }
+            mapView.onCreate(mapViewBundle)
+            mapView.getMapAsync(this)
 
 //            getLocation()
             Log.d("TAG", "add entry")
@@ -131,6 +191,14 @@ class NewEntryActivity : AppCompatActivity(){
                     editLongitude = currEntry!!.getAdjustedLongitude()
                     accuracy = currEntry!!.getAccuracy()
                     newImagesAdapter.notifyDataSetChanged()
+
+                    mapView = viewBinding.mapView2
+                    var mapViewBundle: Bundle? = null
+                    if (savedInstanceState != null){
+                        mapViewBundle = savedInstanceState.getBundle(EntryMapActivity.MAP_VIEW_BUNDLE_KEY)
+                    }
+                    mapView.onCreate(mapViewBundle)
+                    mapView.getMapAsync(this)
 
                     Log.d("EDIT_longitude", "longitude" + editLatitude.toString())
                     Log.d("EDIT_latitude", "latitude" + editLongitude.toString())
@@ -230,81 +298,6 @@ class NewEntryActivity : AppCompatActivity(){
         this.recyclerView.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
     }
 
-
-//    @SuppressLint("MissingPermission")
-//    private fun getLocation() {
-//        Log.d("TAG", "getLocation")
-//        if(checkPermissions()){
-//            if(isLocationEnabled()) {
-//                this.locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 5000, 5f, this)
-//            }
-//            else {
-//
-//                Toast.makeText(this, "Permission Granted", Toast.LENGTH_SHORT).show()
-//                val intent = Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS)
-//                startActivity(intent)
-//            }
-//        }
-//        else {
-//            requestPermission()
-//        }
-//    }
-//    private fun isLocationEnabled(): Boolean {
-//        Log.d("TAG", "isLocationEnabled")
-//        this.locationManager = getSystemService(Context.LOCATION_SERVICE) as LocationManager
-//        return locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)
-//                || locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)
-//    }
-//
-//    private fun checkPermissions(): Boolean {
-//        Log.d("TAG", "checkPermissions")
-//        if(ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED
-//            && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED)
-//            return true
-//
-//        return false
-//    }
-//
-//    private fun requestPermission() {
-//        Log.d("TAG", "requestPermission")
-//        ActivityCompat.requestPermissions(this,
-//            arrayOf(Manifest.permission.ACCESS_COARSE_LOCATION,
-//                Manifest.permission.ACCESS_FINE_LOCATION),
-//            locationPermissionCode)
-//    }
-//
-//    override fun onLocationChanged(location: Location) {
-//        Log.d("TAG", "Went to get location")
-//        val geocoder = Geocoder(this, Locale.getDefault())
-//        val list: MutableList<Address>? =
-//            geocoder.getFromLocation(location.latitude, location.longitude, 1)
-//
-////        viewBinding.locationText.text = "${list?.get(0)?.locality}"
-//        viewBinding.locationText.text = "${list?.get(0)?.getAddressLine(0)}"
-//
-//        Log.d("TAG", location.latitude.toString())
-//        Log.d("TAG", location.longitude.toString())
-//        Log.d("TAG", "Address\n${list?.get(0)?.getAddressLine(0)}")
-//
-//    }
-//    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
-//        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-//        if (requestCode == locationPermissionCode) {
-//            if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-//                Toast.makeText(this, "Permission Granted", Toast.LENGTH_SHORT).show()
-//            }
-//            else {
-//                Toast.makeText(this, "Permission Denied", Toast.LENGTH_SHORT).show()
-//            }
-//        }
-//    }
-//
-//    override fun onProviderEnabled(provider: String) {}
-//
-//    override fun onProviderDisabled(provider: String) {}
-//
-//    override fun onStatusChanged(provider: String?, status: Int, extras: Bundle?) {}
-
     private fun doAllFieldHaveEntries(): Boolean {
         return viewBinding.titleText.text.toString().isNotEmpty() &&
                 viewBinding.descriptionText.text.toString().isNotEmpty() &&
@@ -320,4 +313,6 @@ class NewEntryActivity : AppCompatActivity(){
         const val LATITUDE = "LATITUDE"
         const val ACCURACY = "ACCURACY"
     }
+
+
 }

@@ -40,12 +40,10 @@ class EntryMapActivity : AppCompatActivity(), OnMapReadyCallback, LocationListen
     private var editLongitude: Double = 0.0
     private var editLatitude: Double = 0.0
     private var accuracy: Float = 0.0F
-    private val zoomLevel = 20.0f
     private lateinit var circle: Circle
     private lateinit var viewBinding: ActivityEditMapBinding
     private var mMap: GoogleMap? = null
     lateinit var mapView: MapView
-    private val MAP_VIEW_BUNDLE_KEY = "MapViewBundleKey"
     override fun onMapReady(googleMap: GoogleMap) {
         mapView.onResume()
         mMap = googleMap
@@ -93,6 +91,7 @@ class EntryMapActivity : AppCompatActivity(), OnMapReadyCallback, LocationListen
         newaddresstext = intent.getStringExtra(CURRENTLOCATION).toString()
         newaddress = findViewById(R.id.currentLocationMap)
         newaddress.text = newaddresstext
+
         mapView = findViewById<MapView>(R.id.map)
         var mapViewBundle: Bundle? = null
         if (savedInstanceState != null){
@@ -100,6 +99,7 @@ class EntryMapActivity : AppCompatActivity(), OnMapReadyCallback, LocationListen
         }
         mapView.onCreate(mapViewBundle)
         mapView.getMapAsync(this)
+
         viewBinding.confirmBtn.setOnClickListener(View.OnClickListener {
             val intent= Intent()
             intent.putExtra(EntryMapActivity.CURRENTLOCATION, newaddresstext)
@@ -196,6 +196,8 @@ class EntryMapActivity : AppCompatActivity(), OnMapReadyCallback, LocationListen
         const val ADJUSTED_LATITUDE = "ADJUSTED_LATITUDE"
         const val ACCURACY = "ACCURACY"
         const val CURRENTLOCATION = "CURRENTLOCATION"
+        const val MAP_VIEW_BUNDLE_KEY = "MapViewBundleKey"
+        const val zoomLevel = 20.0f
     }
 
 }

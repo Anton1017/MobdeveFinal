@@ -17,32 +17,30 @@
         android:clickable="true"
         android:focusable="true">
 
-        <ImageView
-            android:id="@+id/mapView"
-            android:layout_width="wrap_content"
+        <com.google.android.gms.maps.MapView
+            android:id="@+id/mapView2"
+            android:layout_width="112dp"
             android:layout_height="0dp"
-            android:adjustViewBounds="true"
             android:background="@drawable/entry_image_background"
-            android:clickable="false"
-            android:contentDescription="small map view"
-            android:cropToPadding="true"
+            android:clickable="true"
             android:padding="8dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/imageView3"
+            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@mipmap/smallmap_placeholder" />
+            app:layout_constraintTop_toTopOf="parent" />
 
         <ImageView
             android:id="@+id/imageView3"
             android:layout_width="30dp"
             android:layout_height="0dp"
-            android:layout_marginStart="16dp"
+            android:layout_marginStart="8dp"
             android:clickable="false"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/locationText"
-            app:layout_constraintStart_toEndOf="@+id/mapView"
+            app:layout_constraintStart_toEndOf="@+id/mapView2"
             app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.0"
             app:srcCompat="@drawable/baseline_gps_fixed_24" />
 
         <TextView
@@ -67,7 +65,8 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/imageView3"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.48000002" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <EditText
