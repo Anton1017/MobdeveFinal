@@ -1,15 +1,20 @@
 package com.example.mobdevemco.activity
 
+import android.Manifest
+import android.annotation.SuppressLint
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.os.Bundle
+import android.view.MotionEvent
 import android.view.View
 import android.widget.LinearLayout
+import android.widget.ScrollView
 import android.widget.TextView
-import android.widget.Toast
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.PagerSnapHelper
 import androidx.recyclerview.widget.RecyclerView
@@ -20,16 +25,28 @@ import com.example.mobdevemco.databinding.ActivityViewEntryBinding
 import com.example.mobdevemco.helper.EntryDbHelper
 import com.example.mobdevemco.model.Entry
 import com.example.mobdevemco.model.EntryImages
+import com.google.android.gms.maps.CameraUpdateFactory
+import com.google.android.gms.maps.GoogleMap
+import com.google.android.gms.maps.MapView
+import com.google.android.gms.maps.OnMapReadyCallback
+import com.google.android.gms.maps.model.BitmapDescriptorFactory
+import com.google.android.gms.maps.model.LatLng
+import com.google.android.gms.maps.model.Marker
+import com.google.android.gms.maps.model.MarkerOptions
 import java.util.concurrent.Executors
 
 
-class EntryDetailsActivity: AppCompatActivity() {
-    //private var entryDataImages = DataGenerator.loadEntryImageData()
-
+class EntryDetailsActivity: AppCompatActivity(), OnMapReadyCallback {
     private lateinit var recyclerView: RecyclerView
     private lateinit var myAdapter: EntryImageAdapter
     private lateinit var entry: Entry
     private lateinit var entryImagesArray: ArrayList<EntryImages>
+
+    private var longitude: Double = 0.0
+    private var latitude: Double = 0.0
+    private var mMap: GoogleMap? = null
+    lateinit var mapView: MapView
+    private lateinit var marker: Marker
 
     private lateinit var entryTitleTextView: TextView
     private lateinit var entryCreatedAtTextView: TextView
@@ -37,6 +54,7 @@ class EntryDetailsActivity: AppCompatActivity() {
     private lateinit var entryDescriptionTextView: TextView
     private lateinit var totalImagesTextView: TextView
     private lateinit var imageCountLinearLayout: LinearLayout
+    private lateinit var scrollView: ScrollView
 
     private var adapterPos = -1
     private var editCode: Int = 0
@@ -65,12 +83,57 @@ class EntryDetailsActivity: AppCompatActivity() {
                         disableRecyclerViewOnNoImage()
 
                         myAdapter.notifyDataSetChanged()
+
+                        latitude = entry.getAdjustedLatitude()
+                        longitude = entry.getAdjustedLongitude()
+
+                        val edited_location = LatLng(latitude, longitude)
+                        marker.remove()
+                        marker = mMap!!.addMarker(
+                            MarkerOptions()
+                                .position(edited_location)
+                                .title("Estimate")
+                                .icon(
+                                    BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_ORANGE)
+                                )
+                        )!!
+                        mMap!!.moveCamera(CameraUpdateFactory.newLatLngZoom(edited_location, EntryMapActivity.zoomLevel-5.0F))
+
                         editCode = 1
 
                     }
                 }
             }
         }
+    }
+    @SuppressLint("ClickableViewAccessibility")
+    override fun onMapReady(googleMap: GoogleMap) {
+        mapView.onResume()
+        mMap = googleMap
+
+        if(ActivityCompat.checkSelfPermission(
+                this,
+                Manifest.permission.ACCESS_FINE_LOCATION
+            ) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
+                this,
+                Manifest.permission.ACCESS_COARSE_LOCATION
+            ) != PackageManager.PERMISSION_GRANTED
+        ){
+            return
+        }
+        val edited_location = LatLng(latitude, longitude)
+
+        mMap!!.moveCamera(CameraUpdateFactory.newLatLngZoom(edited_location, EntryMapActivity.zoomLevel-5.0F))
+        mMap!!.uiSettings.isScrollGesturesEnabled = false
+        mMap!!.setMyLocationEnabled(false)
+        marker = mMap!!.addMarker(
+            MarkerOptions()
+                .position(edited_location)
+                .title("Estimate")
+                .icon(
+                    BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_ORANGE)
+                )
+        )!!
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -85,6 +148,7 @@ class EntryDetailsActivity: AppCompatActivity() {
         entryDescriptionTextView = viewBinding.entryDescription
         totalImagesTextView = viewBinding.totalImg
         imageCountLinearLayout = viewBinding.imageCountView
+        scrollView = viewBinding.entryScrollView
 
         val intent: Intent = intent
         adapterPos = intent.getIntExtra(EntryAdapter.ADAPTER_POS, -1)
@@ -95,6 +159,26 @@ class EntryDetailsActivity: AppCompatActivity() {
             runOnUiThread {
                 if (e != null) {
                     this.entry = e
+
+                    latitude = entry.getAdjustedLatitude()
+                    longitude = entry.getAdjustedLongitude()
+
+                    mapView = viewBinding.entryMapView
+//                    mapView.setOnTouchListener { v, event ->
+//                        when (event.action) {
+//                            MotionEvent.ACTION_MOVE -> scrollView.requestDisallowInterceptTouchEvent(true)
+//                            MotionEvent.ACTION_UP, MotionEvent.ACTION_CANCEL -> scrollView.requestDisallowInterceptTouchEvent(
+//                                false
+//                            )
+//                        }
+//                        mapView.onTouchEvent(event)
+//                    }
+                    var mapViewBundle: Bundle? = null
+                    if (savedInstanceState != null){
+                        mapViewBundle = savedInstanceState.getBundle(EntryMapActivity.MAP_VIEW_BUNDLE_KEY)
+                    }
+                    mapView.onCreate(mapViewBundle)
+                    mapView.getMapAsync(this)
 
                     entryTitleTextView.text = entry.getTitle()
                     entryCreatedAtTextView.text = entry.getCreatedAt().toStringFormatted()

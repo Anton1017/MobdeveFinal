@@ -7,6 +7,7 @@
     android:padding="1dp">
 
     <ScrollView
+        android:id="@+id/entryScrollView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="?attr/colorSecondary"
@@ -144,10 +145,16 @@
             <!--            android:minHeight="200dp"-->
             <!--            tools:srcCompat="@tools:sample/avatars" />-->
 
+            <com.google.android.gms.maps.MapView
+                android:id="@+id/entryMapView"
+                android:layout_width="match_parent"
+                android:layout_height="180dp" />
+
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/entryImageRecyclerView"
                 android:layout_width="match_parent"
                 android:layout_height="300dp"
+                android:layout_marginTop="8dp"
                 android:backgroundTint="?attr/colorSecondary"
                 android:foreground="@drawable/entry_image_background" />
 

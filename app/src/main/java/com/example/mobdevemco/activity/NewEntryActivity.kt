@@ -246,8 +246,8 @@ class NewEntryActivity : AppCompatActivity(), OnMapReadyCallback {
                                     it1.getCreatedAt(),
                                     it1.getOriginalLatitude(),
                                     it1.getOriginalLongitude(),
-                                    it1.getAdjustedLatitude(),
-                                    it1.getAdjustedLongitude(),
+                                    editLatitude,
+                                    editLongitude,
                                     it1.getAccuracy(),
                                     it1.getId()
                                 ),
