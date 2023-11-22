@@ -7,14 +7,12 @@ class Entry (private var title: String,
              private var description: String,
              private var originalLatitude: Double,
              private var originalLongitude: Double,
-             adjustedLatitude: Double,
-             adjustedLongitude: Double,
+             private var adjustedLatitude: Double,
+             private var adjustedLongitude: Double,
              private var accuracy: Float,
 ){
     private var id: Long = -1
     private var createdAt : CustomDateTime = CustomDateTime()
-    private var adjustedLatitude: Double = 0.0
-    private var adjustedLongitude: Double = 0.0
     constructor(title: String,
                 locationName: String,
                 images: ArrayList<EntryImages>,
