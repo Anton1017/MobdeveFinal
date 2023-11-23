@@ -36,6 +36,7 @@ import java.util.concurrent.Executors
 class ActivityMain : AppCompatActivity(), LocationListener {
 
     //private var entryData = DataGenerator.loadEntryData()
+    private var isClicked: Boolean = false
     private val entries: ArrayList<Entry> = ArrayList<Entry>()
     private lateinit var viewBinding: ActivityMainBinding
     private lateinit var recyclerView: RecyclerView
@@ -162,9 +163,21 @@ class ActivityMain : AppCompatActivity(), LocationListener {
         })
 
         viewBinding.searchLogo.setOnClickListener(View.OnClickListener {
-            val intent = Intent(this@ActivityMain, EntrySearchActivity::class.java)
-            this.startActivity(intent)
+//            val intent = Intent(this@ActivityMain, EntrySearchActivity::class.java)
+//            this.startActivity(intent)
+            if (isClicked == false){
+                viewBinding.searchLogo.setImageDrawable(resources.getDrawable(com.google.android.material.R.drawable.mtrl_ic_cancel))
+                viewBinding.searchEntry.visibility = View.VISIBLE
+                isClicked = true
+            }
+            else if(isClicked == true){
+                viewBinding.searchLogo.setImageDrawable(resources.getDrawable(com.example.mobdevemco.R.drawable.ic_search_api_material))
+                viewBinding.searchEntry.visibility = android.view.View.GONE
+                isClicked = false
+            }
         })
+
+
 
         this.recyclerView = viewBinding.entryRecyclerView
 //        this.myAdapter = EntryAdapter(entryData,newEntryResultLauncher)
