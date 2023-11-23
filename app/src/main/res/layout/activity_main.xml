@@ -5,7 +5,7 @@
     android:id="@+id/add"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="?attr/colorOnPrimary"
+    android:backgroundTint="?attr/colorOnPrimary"
     android:orientation="vertical">
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -46,38 +46,48 @@
             <!--                android:layoutDirection="rtl"-->
             <!--                android:searchIcon="@drawable/baseline_manage_search_24"-->
             <!--                android:showAsAction="collapseActionView|ifRoom" />-->
-<!--            <ImageView-->
-<!--                android:id="@+id/searchLogo"-->
-<!--                android:layout_width="30dp"-->
-<!--                android:layout_height="match_parent"-->
-<!--                android:layout_gravity="center"-->
-<!--                android:layout_marginRight="8dp"-->
-<!--                android:tintMode="multiply"-->
-<!--                app:srcCompat="@drawable/ic_search_api_material"-->
-<!--                app:tint="?attr/colorOnPrimary" />-->
+            <!--            <ImageView-->
+            <!--                android:id="@+id/searchLogo"-->
+            <!--                android:layout_width="30dp"-->
+            <!--                android:layout_height="match_parent"-->
+            <!--                android:layout_gravity="center"-->
+            <!--                android:layout_marginRight="8dp"-->
+            <!--                android:tintMode="multiply"-->
+            <!--                app:srcCompat="@drawable/ic_search_api_material"-->
+            <!--                app:tint="?attr/colorOnPrimary" />-->
         </LinearLayout>
+
+        <ImageView
+            android:id="@+id/searchLogo"
+            android:layout_width="30dp"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:layout_marginEnd="8dp"
+            android:tintMode="multiply"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/ic_search_api_material"
+            app:tint="?attr/colorOnPrimary" />
 
         <androidx.appcompat.widget.SearchView
             android:id="@+id/searchEntry"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_marginStart="8dp"
-            android:layout_marginTop="8dp"
-            android:layout_marginEnd="8dp"
-            android:layout_marginBottom="8dp"
             android:background="@null"
             android:ems="10"
             android:fontFamily="sans-serif-medium"
-            app:queryHint="Search Word"
-            android:visibility="visible"
             android:inputType="text"
             android:textColorHint="?attr/colorTertiary"
             android:textSize="12sp"
+            android:visibility="visible"
+            app:iconifiedByDefault="false"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/linearLayout"
+            app:layout_constraintEnd_toStartOf="@+id/searchLogo"
             app:layout_constraintStart_toEndOf="@+id/imageView"
             app:layout_constraintTop_toTopOf="parent"
-            app:iconifiedByDefault="false" />
+            app:queryHint="Search Word" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

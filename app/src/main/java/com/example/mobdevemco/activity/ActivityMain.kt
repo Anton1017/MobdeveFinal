@@ -6,6 +6,8 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.content.res.Resources.Theme
+import android.content.res.TypedArray
 import android.location.Address
 import android.location.Geocoder
 import android.location.Location
@@ -14,13 +16,16 @@ import android.location.LocationManager
 import android.os.Bundle
 import android.provider.Settings
 import android.util.Log
+import android.util.TypedValue
 import android.view.View
 import android.view.animation.AlphaAnimation
-import androidx.appcompat.widget.SearchView
+import android.widget.EditText
+import android.widget.ImageView
 import android.widget.Toast
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.SearchView
 import androidx.core.app.ActivityCompat
 import androidx.core.view.size
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -43,6 +48,7 @@ class ActivityMain : AppCompatActivity(), LocationListener {
     private lateinit var myAdapter: EntryAdapter
     private val locationPermissionCode = 2
     private lateinit var locationManager: LocationManager
+    private var searchToggle: Boolean = false
     private var longitude: Double = 0.0
     private var latitude: Double = 0.0
     private var accuracy: Float = 0.0F
@@ -115,9 +121,9 @@ class ActivityMain : AppCompatActivity(), LocationListener {
 
         this.viewBinding = ActivityMainBinding.inflate(layoutInflater)
 
-
-
-
+        val typedValue = TypedValue()
+        val theme: Theme = this.theme
+        theme.resolveAttribute(com.google.android.material.R.attr.colorOnPrimary, typedValue, true)
 
         executorService.execute {
             // Get all contacts from the database
@@ -139,6 +145,14 @@ class ActivityMain : AppCompatActivity(), LocationListener {
 
         setContentView(viewBinding.root)
         searchView = findViewById(R.id.searchEntry)
+        val searchIcon = searchView.findViewById<ImageView>(androidx.appcompat.R.id.search_mag_icon)
+        val closeIcon = searchView.findViewById<ImageView>(androidx.appcompat.R.id.search_close_btn)
+        val editText = searchView.findViewById<EditText>(androidx.appcompat.R.id.search_src_text)
+        editText.setTextColor(typedValue.data)
+        editText.setHintTextColor(typedValue.data)
+        searchIcon.setColorFilter(typedValue.data, android.graphics.PorterDuff.Mode.SRC_IN)
+        closeIcon.setColorFilter(typedValue.data, android.graphics.PorterDuff.Mode.SRC_IN)
+        searchView.visibility = View.GONE
 
         requestPermission()
         Log.d("TAG", "location permission request")
@@ -169,11 +183,7 @@ class ActivityMain : AppCompatActivity(), LocationListener {
 
         })
 
-
-
         this.recyclerView = viewBinding.entryRecyclerView
-//        this.myAdapter = EntryAdapter(entryData,newEntryResultLauncher)
-//        this.recyclerView.adapter = myAdapter
 
         recyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
@@ -225,6 +235,17 @@ class ActivityMain : AppCompatActivity(), LocationListener {
         viewBinding.entryRecyclerView.setOnClickListener(View.OnClickListener {
             val intent = Intent(this@ActivityMain, EntrySearchActivity::class.java)
             this.startActivity(intent)
+        })
+
+        viewBinding.searchLogo.setOnClickListener(View.OnClickListener {
+            if(searchToggle){
+                searchView.visibility = View.GONE
+                viewBinding.searchLogo.setImageResource(R.drawable.ic_search_api_material)
+            }else{
+                searchView.visibility = View.VISIBLE
+                viewBinding.searchLogo.setImageResource(R.drawable.baseline_search_off_24)
+            }
+            searchToggle = !searchToggle
         })
 
         this.recyclerView.layoutManager = LinearLayoutManager(this)

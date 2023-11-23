@@ -14,7 +14,7 @@ import com.example.mobdevemco.model.Entry
 import com.example.mobdevemco.viewholder.EntryViewHolder
 
 
-class EntryAdapter(private var data: ArrayList<Entry>, private val entryResultLauncher: ActivityResultLauncher<Intent>) : RecyclerView.Adapter<EntryViewHolder>() {
+class EntryAdapter(private val data: ArrayList<Entry>, private val entryResultLauncher: ActivityResultLauncher<Intent>) : RecyclerView.Adapter<EntryViewHolder>() {
     private lateinit var original_data: ArrayList<Entry>
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): EntryViewHolder {
         // Initialize the ViewBinding of an item's layout
@@ -45,7 +45,8 @@ class EntryAdapter(private var data: ArrayList<Entry>, private val entryResultLa
     }
 
     fun setFilteredList(entries: ArrayList<Entry>){
-        this.data = entries
+        this.data.clear()
+        this.data.addAll(entries)
         notifyDataSetChanged()
     }
     companion object {
