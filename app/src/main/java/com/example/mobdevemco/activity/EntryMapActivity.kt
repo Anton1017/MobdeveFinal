@@ -4,6 +4,7 @@ import android.Manifest
 import android.app.Activity
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.content.res.Configuration
 import android.location.Address
 import android.location.Geocoder
 import android.location.Location
@@ -26,6 +27,7 @@ import com.google.android.gms.maps.model.CameraPosition
 import com.google.android.gms.maps.model.Circle
 import com.google.android.gms.maps.model.CircleOptions
 import com.google.android.gms.maps.model.LatLng
+import com.google.android.gms.maps.model.MapStyleOptions
 import com.google.android.gms.maps.model.MarkerOptions
 import com.google.maps.android.SphericalUtil
 import java.io.IOException
@@ -64,6 +66,7 @@ class EntryMapActivity : AppCompatActivity(), OnMapReadyCallback, LocationListen
             CircleOptions()
                 .center(original_location)
                 .radius(accuracy.toDouble())
+                .zIndex(0f)
                 .strokeColor(R.color.seal_brown)
                 .fillColor(R.color.beige)
         )
@@ -78,6 +81,18 @@ class EntryMapActivity : AppCompatActivity(), OnMapReadyCallback, LocationListen
                     BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_ORANGE)
                 )
         )
+        when (this.resources?.configuration?.uiMode?.and(Configuration.UI_MODE_NIGHT_MASK)) {
+            Configuration.UI_MODE_NIGHT_YES -> {
+                mMap!!.setMapStyle(
+                    MapStyleOptions.loadRawResourceStyle(
+                        this@EntryMapActivity,
+                        R.raw.style_json
+                    )
+                )
+            }
+            Configuration.UI_MODE_NIGHT_NO -> {}
+            Configuration.UI_MODE_NIGHT_UNDEFINED -> {}
+        }
     }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

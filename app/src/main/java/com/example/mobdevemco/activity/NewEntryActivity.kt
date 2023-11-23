@@ -3,6 +3,7 @@ package com.example.mobdevemco.activity
 import android.Manifest
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.content.res.Configuration
 import android.location.LocationManager
 import android.net.Uri
 import android.os.Bundle
@@ -28,6 +29,7 @@ import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.maps.model.CircleOptions
 import com.google.android.gms.maps.model.LatLng
+import com.google.android.gms.maps.model.MapStyleOptions
 import com.google.android.gms.maps.model.Marker
 import com.google.android.gms.maps.model.MarkerOptions
 import java.util.concurrent.Executors
@@ -138,6 +140,18 @@ class NewEntryActivity : AppCompatActivity(), OnMapReadyCallback {
                     BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_ORANGE)
                 )
         )!!
+        when (this.resources?.configuration?.uiMode?.and(Configuration.UI_MODE_NIGHT_MASK)) {
+            Configuration.UI_MODE_NIGHT_YES -> {
+                mMap!!.setMapStyle(
+                    MapStyleOptions.loadRawResourceStyle(
+                        this@NewEntryActivity,
+                        R.raw.style_json
+                    )
+                )
+            }
+            Configuration.UI_MODE_NIGHT_NO -> {}
+            Configuration.UI_MODE_NIGHT_UNDEFINED -> {}
+        }
     }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

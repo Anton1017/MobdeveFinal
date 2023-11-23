@@ -4,6 +4,7 @@ import android.Manifest
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.content.res.Configuration
 import android.os.Bundle
 import android.view.MotionEvent
 import android.view.View
@@ -19,6 +20,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.PagerSnapHelper
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.SnapHelper
+import com.example.mobdevemco.R
 import com.example.mobdevemco.adapter.EntryAdapter
 import com.example.mobdevemco.adapter.EntryImageAdapter
 import com.example.mobdevemco.databinding.ActivityViewEntryBinding
@@ -31,6 +33,7 @@ import com.google.android.gms.maps.MapView
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.maps.model.LatLng
+import com.google.android.gms.maps.model.MapStyleOptions
 import com.google.android.gms.maps.model.Marker
 import com.google.android.gms.maps.model.MarkerOptions
 import java.util.concurrent.Executors
@@ -134,6 +137,19 @@ class EntryDetailsActivity: AppCompatActivity(), OnMapReadyCallback {
                     BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_ORANGE)
                 )
         )!!
+
+        when (this.resources?.configuration?.uiMode?.and(Configuration.UI_MODE_NIGHT_MASK)) {
+            Configuration.UI_MODE_NIGHT_YES -> {
+                mMap!!.setMapStyle(
+                    MapStyleOptions.loadRawResourceStyle(
+                        this@EntryDetailsActivity,
+                        R.raw.style_json
+                    )
+                )
+            }
+            Configuration.UI_MODE_NIGHT_NO -> {}
+            Configuration.UI_MODE_NIGHT_UNDEFINED -> {}
+        }
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
