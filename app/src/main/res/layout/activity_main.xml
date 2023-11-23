@@ -46,18 +46,18 @@
             <!--                android:layoutDirection="rtl"-->
             <!--                android:searchIcon="@drawable/baseline_manage_search_24"-->
             <!--                android:showAsAction="collapseActionView|ifRoom" />-->
-            <ImageView
-                android:id="@+id/searchLogo"
-                android:layout_width="30dp"
-                android:layout_height="match_parent"
-                android:layout_gravity="center"
-                android:layout_marginRight="8dp"
-                android:tintMode="multiply"
-                app:srcCompat="@drawable/ic_search_api_material"
-                app:tint="?attr/colorOnPrimary" />
+<!--            <ImageView-->
+<!--                android:id="@+id/searchLogo"-->
+<!--                android:layout_width="30dp"-->
+<!--                android:layout_height="match_parent"-->
+<!--                android:layout_gravity="center"-->
+<!--                android:layout_marginRight="8dp"-->
+<!--                android:tintMode="multiply"-->
+<!--                app:srcCompat="@drawable/ic_search_api_material"-->
+<!--                app:tint="?attr/colorOnPrimary" />-->
         </LinearLayout>
 
-        <EditText
+        <androidx.appcompat.widget.SearchView
             android:id="@+id/searchEntry"
             android:layout_width="0dp"
             android:layout_height="match_parent"
@@ -68,15 +68,16 @@
             android:background="@null"
             android:ems="10"
             android:fontFamily="sans-serif-medium"
-            android:hint="Search Word"
-            android:visibility="gone"
+            app:queryHint="Search Word"
+            android:visibility="visible"
             android:inputType="text"
             android:textColorHint="?attr/colorTertiary"
             android:textSize="12sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/linearLayout"
             app:layout_constraintStart_toEndOf="@+id/imageView"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            app:iconifiedByDefault="false" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

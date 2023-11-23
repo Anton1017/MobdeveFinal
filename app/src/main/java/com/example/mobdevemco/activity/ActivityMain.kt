@@ -16,6 +16,7 @@ import android.provider.Settings
 import android.util.Log
 import android.view.View
 import android.view.animation.AlphaAnimation
+import androidx.appcompat.widget.SearchView
 import android.widget.Toast
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
@@ -35,8 +36,7 @@ import java.util.concurrent.Executors
 
 class ActivityMain : AppCompatActivity(), LocationListener {
 
-    //private var entryData = DataGenerator.loadEntryData()
-    private var isClicked: Boolean = false
+    private lateinit var searchView: SearchView
     private val entries: ArrayList<Entry> = ArrayList<Entry>()
     private lateinit var viewBinding: ActivityMainBinding
     private lateinit var recyclerView: RecyclerView
@@ -100,8 +100,8 @@ class ActivityMain : AppCompatActivity(), LocationListener {
         }
     }
     override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
 
+        super.onCreate(savedInstanceState)
         val animationFadeOut = AlphaAnimation(1.0f, 0.5f)
         animationFadeOut.duration = 250
         animationFadeOut.startOffset = 350
@@ -113,6 +113,10 @@ class ActivityMain : AppCompatActivity(), LocationListener {
 
         this.viewBinding = ActivityMainBinding.inflate(layoutInflater)
 
+
+
+
+
         executorService.execute {
             // Get all contacts from the database
             entryDbHelper = EntryDbHelper.getInstance(this@ActivityMain)
@@ -123,7 +127,7 @@ class ActivityMain : AppCompatActivity(), LocationListener {
             }else{
                 viewBinding.firstEntryText.visibility = View.VISIBLE
             }
-            Log.d("TAG", entries.toString())
+            Log.d("TAG", "entries$entries")
 
             runOnUiThread { // Pass in the contacts to the needed components and set the adapter
                 myAdapter = entries.let { EntryAdapter(it, entryResultLauncher) }
@@ -131,8 +135,9 @@ class ActivityMain : AppCompatActivity(), LocationListener {
             }
         }
 
-
         setContentView(viewBinding.root)
+        searchView = findViewById(R.id.searchEntry)
+
         requestPermission()
         Log.d("TAG", "location permission request")
         //Logic for adding a new entry
@@ -160,21 +165,6 @@ class ActivityMain : AppCompatActivity(), LocationListener {
                 requestPermission()
             }
 
-        })
-
-        viewBinding.searchLogo.setOnClickListener(View.OnClickListener {
-//            val intent = Intent(this@ActivityMain, EntrySearchActivity::class.java)
-//            this.startActivity(intent)
-            if (isClicked == false){
-                viewBinding.searchLogo.setImageDrawable(resources.getDrawable(com.google.android.material.R.drawable.mtrl_ic_cancel))
-                viewBinding.searchEntry.visibility = View.VISIBLE
-                isClicked = true
-            }
-            else if(isClicked == true){
-                viewBinding.searchLogo.setImageDrawable(resources.getDrawable(com.example.mobdevemco.R.drawable.ic_search_api_material))
-                viewBinding.searchEntry.visibility = android.view.View.GONE
-                isClicked = false
-            }
         })
 
 
@@ -220,6 +210,15 @@ class ActivityMain : AppCompatActivity(), LocationListener {
             }
         })
 
+        searchView.setOnQueryTextListener(object: SearchView.OnQueryTextListener{
+            override fun onQueryTextSubmit(query: String?): Boolean {
+                return false
+            }
+            override fun onQueryTextChange(newText: String?): Boolean {
+                filterList(newText)
+                return true
+            }
+        })
 
         viewBinding.entryRecyclerView.setOnClickListener(View.OnClickListener {
             val intent = Intent(this@ActivityMain, EntrySearchActivity::class.java)
@@ -227,6 +226,22 @@ class ActivityMain : AppCompatActivity(), LocationListener {
         })
 
         this.recyclerView.layoutManager = LinearLayoutManager(this)
+    }
+
+    private fun filterList(query: String?){
+        if (query != null){
+            val filteredList = ArrayList<Entry>()
+            for (i in entries){
+                if (i.getTitle().lowercase(Locale.getDefault()).contains(query.lowercase(Locale.getDefault()))){
+                    filteredList.add(i)
+                }
+            }
+            if (filteredList.isEmpty()){
+                Toast.makeText(this, "No Data found", Toast.LENGTH_SHORT).show()
+            }else{
+                myAdapter.setFilteredList(filteredList)
+            }
+        }
     }
     @SuppressLint("MissingPermission")
     private fun getLocation() {
