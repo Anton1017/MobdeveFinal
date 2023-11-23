@@ -239,6 +239,8 @@ class ActivityMain : AppCompatActivity(), LocationListener {
 
         viewBinding.searchLogo.setOnClickListener(View.OnClickListener {
             if(searchToggle){
+                searchView.setQuery("", false);
+                searchView.clearFocus();
                 searchView.visibility = View.GONE
                 viewBinding.searchLogo.setImageResource(R.drawable.ic_search_api_material)
             }else{
