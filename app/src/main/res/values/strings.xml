@@ -7,6 +7,9 @@
     <string name="tournal_search_action">SEARCH</string>
     <string name="tournal_confirm_action">CONFIRM</string>
     <string name="tournal_create_first_entry">ADD AN ENTRY BY CLICKING THE ADD BUTTON...</string>
+    <string name="tournal_request_location_permission">REQUEST LOCATION PERMISSION BY CLICKING THE ADD BUTTON...</string>
+    <string name="tournal_location_permission_denied">Location permission denied</string>
+
 
     <string name="tournal_title_hint">Title</string>
     <string name="tournal_description_hint">Description</string>

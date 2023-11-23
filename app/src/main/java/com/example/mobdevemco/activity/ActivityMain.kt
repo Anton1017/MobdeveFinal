@@ -47,6 +47,8 @@ class ActivityMain : AppCompatActivity(), LocationListener {
     private val executorService = Executors.newSingleThreadExecutor()
     private lateinit var currentLocation: String
 
+    private var locationPermission: Boolean = false
+
     private val entryResultLauncher = registerForActivityResult(
         ActivityResultContracts.StartActivityForResult()) { result: ActivityResult ->
         if (result.resultCode == RESULT_OK) {
@@ -118,26 +120,33 @@ class ActivityMain : AppCompatActivity(), LocationListener {
 
 
         setContentView(viewBinding.root)
-        getLocation()
+        requestPermission()
+        Log.d("TAG", "location permission request")
         //Logic for adding a new entry
         viewBinding.entryAddBtn.setOnClickListener(View.OnClickListener {
-            if(viewBinding.currentLocationMain.text.toString()
-                == getString(R.string.tournal_retrieving_addr)){
+            if(locationPermission){
+                if(viewBinding.currentLocationMain.text.toString()
+                    == getString(R.string.tournal_retrieving_addr)){
 
-                Toast.makeText(this,
-                    "Cannot create entry. Wait for address retrieval.",
-                    Toast.LENGTH_SHORT
-                ).show()
+                    Toast.makeText(this,
+                        "Cannot create entry. Wait for address retrieval.",
+                        Toast.LENGTH_SHORT
+                    ).show()
 
+                }else{
+                    val intent = Intent(this@ActivityMain, NewEntryActivity::class.java)
+                    intent.putExtra(NewEntryActivity.ACTIVITY_TYPE, NewEntryActivity.ADD_ENTRY)
+                    intent.putExtra(NewEntryActivity.CURRENT_LOCATION, currentLocation)
+                    intent.putExtra(NewEntryActivity.LATITUDE, latitude)
+                    intent.putExtra(NewEntryActivity.LONGITUDE, longitude)
+                    intent.putExtra(NewEntryActivity.ACCURACY, accuracy)
+                    entryResultLauncher.launch(intent)
+                }
             }else{
-                val intent = Intent(this@ActivityMain, NewEntryActivity::class.java)
-                intent.putExtra(NewEntryActivity.ACTIVITY_TYPE, NewEntryActivity.ADD_ENTRY)
-                intent.putExtra(NewEntryActivity.CURRENT_LOCATION, currentLocation)
-                intent.putExtra(NewEntryActivity.LATITUDE, latitude)
-                intent.putExtra(NewEntryActivity.LONGITUDE, longitude)
-                intent.putExtra(NewEntryActivity.ACCURACY, accuracy)
-                entryResultLauncher.launch(intent)
+                Log.d("TAG", "location permission request")
+                requestPermission()
             }
+
         })
 
         viewBinding.searchLogo.setOnClickListener(View.OnClickListener {
@@ -179,27 +188,22 @@ class ActivityMain : AppCompatActivity(), LocationListener {
     }
     @SuppressLint("MissingPermission")
     private fun getLocation() {
-        if(checkPermissions()){
-            if(isLocationEnabled()) {
-                this.locationManager.requestLocationUpdates(
-                    LocationManager.NETWORK_PROVIDER,
-                    5000,
-                    5f,
-                    this
-                )
-            }
-            else {
-
-                Toast.makeText(this, "Permission Granted", Toast.LENGTH_SHORT).show()
-                val intent = Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS)
-                startActivity(intent)
-            }
+        Log.d("TAG", "getting location")
+        if(isLocationEnabled()) {
+            this.locationManager.requestLocationUpdates(
+                LocationManager.NETWORK_PROVIDER,
+                5000,
+                5f,
+                this
+            )
         }
         else {
-
-            requestPermission()
+            Toast.makeText(this, "Permission Granted", Toast.LENGTH_SHORT).show()
+            val intent = Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS)
+            startActivity(intent)
         }
     }
+
     private fun isLocationEnabled(): Boolean {
         this.locationManager = getSystemService(Context.LOCATION_SERVICE) as LocationManager
         return locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)
@@ -231,7 +235,6 @@ class ActivityMain : AppCompatActivity(), LocationListener {
         longitude = location.longitude
         latitude = location.latitude
         accuracy = location.accuracy
-//        viewBinding.locationText.text = "${list?.get(0)?.locality}"
         var locationAddress = "${list?.get(0)?.getAddressLine(0)}"
         viewBinding.currentLocationMain.text =
             if (locationAddress != "") locationAddress
@@ -247,10 +250,18 @@ class ActivityMain : AppCompatActivity(), LocationListener {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         if (requestCode == locationPermissionCode) {
             if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                Toast.makeText(this, "Permission Granted", Toast.LENGTH_SHORT).show()
+                //Toast.makeText(this, "Permission Granted", Toast.LENGTH_SHORT).show()
+                locationPermission = true
+                viewBinding.currentLocationMain.text = getString(R.string.tournal_retrieving_addr)
+                viewBinding.firstEntryText.text = getString(R.string.tournal_create_first_entry)
+
+                getLocation()
             }
             else {
-                Toast.makeText(this, "Permission Denied", Toast.LENGTH_SHORT).show()
+                //Toast.makeText(this, "Permission Denied", Toast.LENGTH_SHORT).show()
+                locationPermission = false
+                viewBinding.currentLocationMain.text = getString(R.string.tournal_location_permission_denied)
+                viewBinding.firstEntryText.text = getString(R.string.tournal_request_location_permission)
             }
         }
     }
