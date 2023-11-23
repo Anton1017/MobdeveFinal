@@ -87,7 +87,9 @@ class ActivityMain : AppCompatActivity(), LocationListener {
                             }
                             myAdapter.notifyDataSetChanged()
                         }
-                        
+                        searchView.setQuery("", true)
+                        searchView.clearFocus()
+                        filterList("")
                         if(entries.size != 0){
                             viewBinding.firstEntryText.visibility = View.GONE
                         }else{
@@ -98,9 +100,9 @@ class ActivityMain : AppCompatActivity(), LocationListener {
             }
 
         }
+
     }
     override fun onCreate(savedInstanceState: Bundle?) {
-
         super.onCreate(savedInstanceState)
         val animationFadeOut = AlphaAnimation(1.0f, 0.5f)
         animationFadeOut.duration = 250

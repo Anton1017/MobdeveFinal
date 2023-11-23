@@ -15,7 +15,7 @@ import com.example.mobdevemco.viewholder.EntryViewHolder
 
 
 class EntryAdapter(private var data: ArrayList<Entry>, private val entryResultLauncher: ActivityResultLauncher<Intent>) : RecyclerView.Adapter<EntryViewHolder>() {
-
+    private lateinit var original_data: ArrayList<Entry>
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): EntryViewHolder {
         // Initialize the ViewBinding of an item's layout
         val itemViewBinding: EntryItemBinding = EntryItemBinding.inflate(
@@ -24,12 +24,12 @@ class EntryAdapter(private var data: ArrayList<Entry>, private val entryResultLa
             false
         )
         val entryViewHolder = EntryViewHolder(itemViewBinding)
-
+        original_data = data
         entryViewHolder.itemView.setOnClickListener{
             val entry = data.get(entryViewHolder.adapterPosition)
             val intent : Intent = Intent(entryViewHolder.itemView.context, EntryDetailsActivity::class.java)
             intent.putExtra(Entry.ID, entry.getId())
-            intent.putExtra(ADAPTER_POS, entryViewHolder.adapterPosition)
+            intent.putExtra(ADAPTER_POS, original_data.indexOf(this.data.get(entryViewHolder.adapterPosition)))
             entryResultLauncher.launch(intent)
         }
 
