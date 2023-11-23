@@ -4,7 +4,6 @@ import android.Manifest
 import android.app.Activity
 import android.content.Intent
 import android.content.pm.PackageManager
-import android.graphics.Color
 import android.location.Address
 import android.location.Geocoder
 import android.location.Location
@@ -23,6 +22,7 @@ import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.MapView
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.model.BitmapDescriptorFactory
+import com.google.android.gms.maps.model.CameraPosition
 import com.google.android.gms.maps.model.Circle
 import com.google.android.gms.maps.model.CircleOptions
 import com.google.android.gms.maps.model.LatLng
@@ -170,22 +170,24 @@ class EntryMapActivity : AppCompatActivity(), OnMapReadyCallback, LocationListen
         Log.d("TAG", distanceBetween.toString() + " " + accuracy.toString())
         Log.d("TAG_EDITED", editLatitude.toString() + " " + editLongitude.toString())
         if(distanceBetween >= accuracy){
-            mMap!!.moveCamera(CameraUpdateFactory.newLatLng(edited_location))
+            val cameraPosition = CameraPosition.fromLatLngZoom(edited_location, zoomLevel)
+            val cu = CameraUpdateFactory.newCameraPosition(cameraPosition)
+            mMap!!.animateCamera(cu)
+            //mMap!!.moveCamera(CameraUpdateFactory.newLatLng(edited_location))
+        }else{
+            try{
+                addresses = geocoder.getFromLocation(mMap!!.getCameraPosition().target.latitude, mMap!!.getCameraPosition().target.longitude, 1)
+                setAddress(addresses!![0])
+                editLongitude = mMap!!.cameraPosition.target.longitude
+                editLatitude = mMap!!.cameraPosition.target.latitude
+                //val accuracy = mMap!!.myLocation.accuracy
+                Log.d("Location", "Longitude: $longitude, Latitude: $latitude")
+            }catch (e:IndexOutOfBoundsException){
+                e.printStackTrace()
+            }catch (e:IOException){
+                e.printStackTrace()
+            }
         }
-
-        try{
-            addresses = geocoder.getFromLocation(mMap!!.getCameraPosition().target.latitude, mMap!!.getCameraPosition().target.longitude, 1)
-            setAddress(addresses!![0])
-            editLongitude = mMap!!.cameraPosition.target.longitude
-            editLatitude = mMap!!.cameraPosition.target.latitude
-            //val accuracy = mMap!!.myLocation.accuracy
-            Log.d("Location", "Longitude: $longitude, Latitude: $latitude")
-        }catch (e:IndexOutOfBoundsException){
-            e.printStackTrace()
-        }catch (e:IOException){
-            e.printStackTrace()
-        }
-
 
     }
 
