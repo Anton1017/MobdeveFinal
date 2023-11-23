@@ -236,9 +236,7 @@ class ActivityMain : AppCompatActivity(), LocationListener {
                     filteredList.add(i)
                 }
             }
-            if (filteredList.isEmpty()){
-                Toast.makeText(this, "No Data found", Toast.LENGTH_SHORT).show()
-            }else{
+            if (filteredList.isNotEmpty()){
                 myAdapter.setFilteredList(filteredList)
             }
         }
