@@ -1,6 +1,7 @@
 package com.example.mobdevemco.adapter
 
 import android.content.Intent
+import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.LinearLayout
@@ -24,17 +25,6 @@ class EntryAdapter(private val data: ArrayList<Entry>, private val entryResultLa
         )
         val entryViewHolder = EntryViewHolder(itemViewBinding)
 
-        if(entryViewHolder.adapterPosition == 1){
-            val lp = LinearLayout.LayoutParams(
-                LinearLayout.LayoutParams.MATCH_PARENT,
-                LinearLayout.LayoutParams.WRAP_CONTENT
-            )
-            lp.setMargins(0, 16, 0, 8)
-            entryViewHolder.itemView.setLayoutParams(lp)
-        }
-
-        val builder = AlertDialog.Builder(entryViewHolder.itemView.context)
-
         entryViewHolder.itemView.setOnClickListener{
             val entry = data.get(entryViewHolder.adapterPosition)
             val intent : Intent = Intent(entryViewHolder.itemView.context, EntryDetailsActivity::class.java)
@@ -42,20 +32,6 @@ class EntryAdapter(private val data: ArrayList<Entry>, private val entryResultLa
             intent.putExtra(ADAPTER_POS, entryViewHolder.adapterPosition)
             entryResultLauncher.launch(intent)
         }
-
-//        entryViewHolder.setDeleteOnClickListener(View.OnClickListener{
-//            builder.setTitle("Alert!")
-//                .setMessage("Are you sure you want to delete " + itemViewBinding.entryTitle.text)
-//                .setCancelable(true)
-//                .setPositiveButton("Yes"){dialogInterface,it ->
-//                    dialogInterface.cancel()
-//                }
-//                .setNegativeButton("No"){dialogInterface,it ->
-//                    dialogInterface.cancel()
-//                }
-//                .show()
-//        })
-
 
         return entryViewHolder
     }
