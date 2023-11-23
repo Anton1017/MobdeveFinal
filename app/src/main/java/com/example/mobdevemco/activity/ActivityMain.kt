@@ -15,6 +15,7 @@ import android.os.Bundle
 import android.provider.Settings
 import android.util.Log
 import android.view.View
+import android.view.animation.AlphaAnimation
 import android.widget.Toast
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
@@ -30,6 +31,7 @@ import com.example.mobdevemco.helper.EntryDbHelper
 import com.example.mobdevemco.model.Entry
 import java.util.Locale
 import java.util.concurrent.Executors
+
 
 class ActivityMain : AppCompatActivity(), LocationListener {
 
@@ -98,6 +100,16 @@ class ActivityMain : AppCompatActivity(), LocationListener {
     }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        val animationFadeOut = AlphaAnimation(1.0f, 0.5f)
+        animationFadeOut.duration = 250
+        animationFadeOut.startOffset = 350
+        animationFadeOut.fillAfter = true
+        val animationFadeIn = AlphaAnimation(0.5f, 1.0f)
+        animationFadeIn.duration = 250
+        animationFadeIn.startOffset = 350
+        animationFadeIn.fillAfter = true
+
         this.viewBinding = ActivityMainBinding.inflate(layoutInflater)
 
         executorService.execute {
@@ -161,18 +173,35 @@ class ActivityMain : AppCompatActivity(), LocationListener {
         recyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                 super.onScrolled(recyclerView, dx, dy)
+
                 if(recyclerView.computeVerticalScrollOffset() == 0 && recyclerView.size != 0){
-                    viewBinding.addressBar.alpha = 0.5F
+                    val animationFadeOutAddressBar = AlphaAnimation(viewBinding.addressBar.alpha, 0.5f)
+                    animationFadeOutAddressBar.duration = 250
+                    animationFadeOutAddressBar.startOffset = 350
+                    animationFadeOutAddressBar.fillAfter = true
+                    viewBinding.addressBar.startAnimation(animationFadeOutAddressBar)
                 }else{
-                    viewBinding.addressBar.alpha = 1F
+
+                    val animationFadeInAddressBar = AlphaAnimation(viewBinding.addressBar.alpha, 1.0f)
+                    animationFadeInAddressBar.duration = 250
+                    animationFadeInAddressBar.startOffset = 350
+                    animationFadeInAddressBar.fillAfter = true
+                    viewBinding.addressBar.startAnimation(animationFadeInAddressBar)
                 }
 
                 if(recyclerView.canScrollVertically(-1) && !recyclerView.canScrollVertically(1)
-
                     ){
-                    viewBinding.entryAddBtn.alpha = 0.1F
+                    val animationFadeOutAddButton = AlphaAnimation(viewBinding.entryAddBtn.alpha, 0.5f)
+                    animationFadeOutAddButton.duration = 250
+                    animationFadeOutAddButton.startOffset = 350
+                    animationFadeOutAddButton.fillAfter = true
+                    viewBinding.entryAddBtn.startAnimation(animationFadeOutAddButton)
                 }else{
-                    viewBinding.entryAddBtn.alpha = 1F
+                    val animationFadeInAddButton = AlphaAnimation(viewBinding.entryAddBtn.alpha, 1.0f)
+                    animationFadeInAddButton.duration = 250
+                    animationFadeInAddButton.startOffset = 350
+                    animationFadeInAddButton.fillAfter = true
+                    viewBinding.entryAddBtn.startAnimation(animationFadeInAddButton)
                 }
 
             }
