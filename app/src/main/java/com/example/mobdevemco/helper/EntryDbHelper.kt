@@ -33,7 +33,7 @@ class EntryDbHelper(context: Context?) :
             null,
             null,
             null,
-            null,
+            DbReferences.ENTRIES_COLUMN_NAME_CREATED_AT + " DESC ",
             null
         )
         while(e.moveToNext()){
@@ -69,7 +69,7 @@ class EntryDbHelper(context: Context?) :
                 null,
                 null,
                 null,
-                null,
+                DbReferences.ENTRIES_COLUMN_NAME_CREATED_AT + " DESC ",
                 null
             )
             val entries: ArrayList<Entry> = ArrayList<Entry>()
@@ -160,6 +160,69 @@ class EntryDbHelper(context: Context?) :
         e.close()
         database.close()
         return entry
+    }
+
+    @Synchronized
+    fun getFilteredEntries(query: String): ArrayList<Entry> {
+        val queryWords = query.split(" ")
+        val queryWordsIterator: Iterator<String> = queryWords.iterator()
+        val selectionArrayList: ArrayList<String> = ArrayList<String>()
+        var selection: String = ""
+
+        while(queryWordsIterator.hasNext()){
+            val currWord = queryWordsIterator.next()
+            val s1: String = DbReferences.ENTRIES_COLUMN_NAME_TITLE + " LIKE \'%$currWord%\' OR "
+            val s2: String = DbReferences.ENTRIES_COLUMN_NAME_CREATED_AT + " LIKE \'%$currWord%\' OR "
+            val s3: String = DbReferences.ENTRIES_COLUMN_NAME_LOCATION_NAME + " LIKE \'%$currWord%\' OR "
+            selectionArrayList.add(s1)
+            selectionArrayList.add(s2)
+            selectionArrayList.add(s3)
+
+            if(!queryWordsIterator.hasNext()){
+                val s3_last: String = DbReferences.ENTRIES_COLUMN_NAME_LOCATION_NAME + " LIKE \'%$currWord%\';"
+                selectionArrayList.removeLast()
+                selectionArrayList.add(s3_last)
+            }
+        }
+
+        for(item in selectionArrayList){
+            selection = selection + item
+        }
+
+        val database = this.readableDatabase
+        val e = database.query(
+            DbReferences.TABLE_NAME_ENTRIES,
+            null,
+            selection,
+            null,
+            null,
+            null,
+            DbReferences.ENTRIES_COLUMN_NAME_CREATED_AT + " DESC ",
+            null
+        )
+
+        val entries: ArrayList<Entry> = ArrayList<Entry>()
+        while(e.moveToNext()){
+            entries.add(
+                Entry(
+                    e.getString(e.getColumnIndexOrThrow(DbReferences.ENTRIES_COLUMN_NAME_TITLE)),
+                    e.getString(e.getColumnIndexOrThrow(DbReferences.ENTRIES_COLUMN_NAME_LOCATION_NAME)),
+                    this.getEntryImages(e.getLong(e.getColumnIndexOrThrow(DbReferences._ID)), database),
+                    e.getString(e.getColumnIndexOrThrow(DbReferences.ENTRIES_COLUMN_NAME_DESCRIPTION)),
+                    CustomDateTime(e.getString(e.getColumnIndexOrThrow(DbReferences.ENTRIES_COLUMN_NAME_CREATED_AT))),
+                    e.getDouble(e.getColumnIndexOrThrow(DbReferences.ENTRIES_COLUMN_NAME_LATITUDE)),
+                    e.getDouble(e.getColumnIndexOrThrow(DbReferences.ENTRIES_COLUMN_NAME_LONGITUDE)),
+                    e.getDouble(e.getColumnIndexOrThrow(DbReferences.ENTRIES_COLUMN_NAME_ADJUSTED_LATITUDE)),
+                    e.getDouble(e.getColumnIndexOrThrow(DbReferences.ENTRIES_COLUMN_NAME_ADJUSTED_LONGITUDE)),
+                    e.getFloat(e.getColumnIndexOrThrow(DbReferences.ENTRIES_COLUMN_NAME_ACCURACY)),
+                    e.getLong(e.getColumnIndexOrThrow(DbReferences._ID))
+                )
+            )
+        }
+
+        e.close()
+        database.close()
+        return entries
     }
 
     // Performs an UPDATE operation by comparing the old contact with the new contact. This method

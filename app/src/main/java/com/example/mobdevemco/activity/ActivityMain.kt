@@ -96,11 +96,7 @@ class ActivityMain : AppCompatActivity(), LocationListener {
                         searchView.setQuery("", true)
                         searchView.clearFocus()
                         filterList("")
-                        if(entries.size != 0){
-                            viewBinding.firstEntryText.visibility = View.GONE
-                        }else{
-                            viewBinding.firstEntryText.visibility = View.VISIBLE
-                        }
+                        changePlaceholderTextStatus()
                     }
                 }
             }
@@ -130,13 +126,9 @@ class ActivityMain : AppCompatActivity(), LocationListener {
             entryDbHelper = EntryDbHelper.getInstance(this@ActivityMain)
             entryDbHelper?.allEntriesDefault?.let { entries.addAll(it) }
 
-            if(entries.size != 0){
-                viewBinding.firstEntryText.visibility = View.GONE
-            }else{
-                viewBinding.firstEntryText.visibility = View.VISIBLE
-            }
+            changePlaceholderTextStatus()
             Log.d("TAG", "entries$entries")
-            entries.reverse()
+            //entries.reverse()
             runOnUiThread { // Pass in the contacts to the needed components and set the adapter
                 myAdapter = entries.let { EntryAdapter(it, entryResultLauncher) }
                 this.recyclerView.adapter = myAdapter
@@ -227,6 +219,7 @@ class ActivityMain : AppCompatActivity(), LocationListener {
                 return false
             }
             override fun onQueryTextChange(newText: String?): Boolean {
+                Log.d("TAG", "FILTER ENTRY")
                 filterList(newText)
                 return true
             }
@@ -250,18 +243,33 @@ class ActivityMain : AppCompatActivity(), LocationListener {
     }
 
     private fun filterList(query: String?){
-        if (query != null){
-            val filteredList = ArrayList<Entry>()
-            for (i in entries){
-                if (i.getTitle().lowercase(Locale.getDefault()).contains(query.lowercase(Locale.getDefault()))){
-                    filteredList.add(i)
-                }
+        var tempEntryArrayList: ArrayList<Entry>?
+        executorService.execute{
+            entryDbHelper = EntryDbHelper.getInstance(this@ActivityMain)
+            if (query != null){
+                tempEntryArrayList = entryDbHelper!!.getFilteredEntries(query)
+            }else{
+                tempEntryArrayList = entryDbHelper!!.allEntriesDefault
             }
-            if (filteredList.isNotEmpty()){
-                myAdapter.setFilteredList(filteredList)
+
+            runOnUiThread{
+                entries.clear()
+                tempEntryArrayList!!.reverse()
+                entries.addAll(tempEntryArrayList!!)
+                myAdapter.notifyDataSetChanged()
+                changePlaceholderTextStatus()
             }
         }
     }
+
+    private fun changePlaceholderTextStatus(){
+        if(entries.size != 0){
+            viewBinding.firstEntryText.visibility = View.GONE
+        }else{
+            viewBinding.firstEntryText.visibility = View.VISIBLE
+        }
+    }
+
     @SuppressLint("MissingPermission")
     private fun getLocation() {
         Log.d("TAG", "getting location")

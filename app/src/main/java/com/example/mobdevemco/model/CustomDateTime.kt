@@ -26,7 +26,8 @@ class CustomDateTime: Serializable {
 
     override fun equals(other: Any?): Boolean {
         try{
-            return this.toString() == other.toString()
+            val temp = other as CustomDateTime
+            return this.dateTime == temp.dateTime
         } catch(e: NoSuchMethodError){
             Log.d("TAG", e.toString())
         } finally{
@@ -80,6 +81,6 @@ class CustomDateTime: Serializable {
             "Nov",
             "Dec"
         )
-        private val sqliteFormat = "yyyy-MM-dd HH:mm"
+        private val sqliteFormat = "yyyy-MM-dd HH:mm:ss"
     }
 }
