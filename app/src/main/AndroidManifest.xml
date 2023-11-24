@@ -29,15 +29,19 @@
             android:value="AIzaSyBc3z0nG2fsL22TSctfwEp0k6HTw9IMpXI"/>
             <activity
                 android:name=".activity.EntryDetailsActivity"
+                android:screenOrientation="portrait"
                 android:exported="false" />
             <activity
                 android:name=".activity.EntryMapActivity"
+                android:screenOrientation="portrait"
                 android:exported="false" />
             <activity
                 android:name=".activity.NewEntryActivity"
+                android:screenOrientation="portrait"
                 android:exported="false" />
             <activity
                 android:name=".activity.ActivityMain"
+                android:screenOrientation="portrait"
                 android:exported="true">
                 <intent-filter>
                     <action android:name="android.intent.action.MAIN" />
