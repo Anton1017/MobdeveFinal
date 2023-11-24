@@ -114,7 +114,7 @@ class EntryMapActivity : AppCompatActivity(), OnMapReadyCallback, LocationListen
         }
         mapView.onCreate(mapViewBundle)
         mapView.getMapAsync(this)
-
+        //User wants to override their current location
         viewBinding.confirmBtn.setOnClickListener(View.OnClickListener {
             val intent= Intent()
             intent.putExtra(EntryMapActivity.CURRENTLOCATION, newaddresstext)
@@ -124,6 +124,7 @@ class EntryMapActivity : AppCompatActivity(), OnMapReadyCallback, LocationListen
             setResult(Activity.RESULT_OK, intent)
             finish()
         })
+        //User no longer wants to override current location
         viewBinding.backBtn.setOnClickListener(View.OnClickListener {
 
             finish()
@@ -140,6 +141,7 @@ class EntryMapActivity : AppCompatActivity(), OnMapReadyCallback, LocationListen
         mapView.onSaveInstanceState(mapViewBundle)
     }
 
+    //When the position of the map changed
     override fun onLocationChanged(location: Location) {
         val geocoder = Geocoder(this, Locale.getDefault())
         var addresses: List<Address>? = null
@@ -151,7 +153,7 @@ class EntryMapActivity : AppCompatActivity(), OnMapReadyCallback, LocationListen
         }
         setAddress(addresses!![0])
     }
-
+    //Change the address base on the map
     private fun setAddress(address: Address) {
         if (address != null){
             if (address.getAddressLine(0) != null){
@@ -169,7 +171,7 @@ class EntryMapActivity : AppCompatActivity(), OnMapReadyCallback, LocationListen
     }
 
 
-
+    //Camera stops when panning the map
     override fun onCameraIdle() {
         var addresses: List<Address>? = null
         val geocoder = Geocoder(this, Locale.getDefault())

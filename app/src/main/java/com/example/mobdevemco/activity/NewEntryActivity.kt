@@ -113,6 +113,7 @@ class NewEntryActivity : AppCompatActivity(), OnMapReadyCallback {
         }
     }
 
+    //Contains the lifecycle of maps onReady
     override fun onMapReady(googleMap: GoogleMap) {
         mapView.onResume()
         mMap = googleMap
@@ -182,7 +183,6 @@ class NewEntryActivity : AppCompatActivity(), OnMapReadyCallback {
             mapView.onCreate(mapViewBundle)
             mapView.getMapAsync(this)
 
-//            getLocation()
             Log.d("TAG", "add entry")
         }else if(activityType == EDIT_ENTRY){
             viewBinding.createBtn.text = getString(R.string.tournal_edit_action)
@@ -221,7 +221,7 @@ class NewEntryActivity : AppCompatActivity(), OnMapReadyCallback {
         }
 
         this.recyclerView.adapter = this.newImagesAdapter
-
+        //User wants to create a journal
         viewBinding.createBtn.setOnClickListener(View.OnClickListener {
             if(doAllFieldHaveEntries()){
                 executorService.execute {
@@ -283,11 +283,11 @@ class NewEntryActivity : AppCompatActivity(), OnMapReadyCallback {
                 ).show()
             }
         })
-
+        //User wants to cancel creating their journal
         viewBinding.cancelBtn.setOnClickListener(View.OnClickListener {
             finish()
         })
-
+        //User wants to add or edit their image selection
         viewBinding.addImageBtn.setOnClickListener(View.OnClickListener {
             val i = Intent()
             i.type = "image/*"
@@ -296,7 +296,7 @@ class NewEntryActivity : AppCompatActivity(), OnMapReadyCallback {
             i.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true)
             myActivityResultLauncher.launch(Intent.createChooser(i, "Select Pictures"))
         })
-
+        //User wants to edit the location
         viewBinding.editLocationBtn.setOnClickListener(View.OnClickListener {
             val i = Intent(this@NewEntryActivity, EntryMapActivity::class.java)
             i.putExtra(EntryMapActivity.LATITUDE, latitude)
@@ -312,6 +312,7 @@ class NewEntryActivity : AppCompatActivity(), OnMapReadyCallback {
         this.recyclerView.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
     }
 
+    //App checks if title, description and location is not null, if null then cant create entry
     private fun doAllFieldHaveEntries(): Boolean {
         return viewBinding.titleText.text.toString().isNotEmpty() &&
                 viewBinding.descriptionText.text.toString().isNotEmpty() &&

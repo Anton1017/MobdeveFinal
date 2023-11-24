@@ -200,7 +200,7 @@ class EntryDetailsActivity: AppCompatActivity(), OnMapReadyCallback {
                     entryCreatedAtTextView.text = entry.getCreatedAt().toStringFormatted()
                     entryLocationNameTextView.text = entry.getLocationName()
                     entryDescriptionTextView.text = entry.getDescription()
-
+                    //User wants to edit their entry
                     viewBinding.editBtn.setOnClickListener(View.OnClickListener {
                         val i = Intent(this@EntryDetailsActivity, NewEntryActivity::class.java)
                         i.putExtra(NewEntryActivity.ACTIVITY_TYPE, NewEntryActivity.EDIT_ENTRY)
@@ -221,6 +221,7 @@ class EntryDetailsActivity: AppCompatActivity(), OnMapReadyCallback {
                     val snapHelper: SnapHelper = PagerSnapHelper()
                     recyclerView.setOnFlingListener(null);
                     snapHelper.attachToRecyclerView(recyclerView)
+                    //current position of image is changed when scrolling
                     recyclerView.addOnScrollListener(SnapOnScrollListener(snapHelper, SnapOnScrollListener.NOTIFY_ON_SCROLL) { position ->
                         val curr_pos = position + 1
                         viewBinding.currentImg.text = curr_pos.toString().replace(" ", "")
@@ -236,9 +237,10 @@ class EntryDetailsActivity: AppCompatActivity(), OnMapReadyCallback {
 
 
         val builder = AlertDialog.Builder(this)
+        //User wants to delete their entry
         viewBinding.deletebtn.setOnClickListener(View.OnClickListener{
             builder.setTitle("Alert!")
-                .setMessage("Are you sure you want to delete the entry?")
+                .setMessage("Are you sure you want to delete this journal?")
                 .setCancelable(true)
                 .setPositiveButton("Yes"){dialogInterface,it ->
                     executorService.execute {
@@ -257,6 +259,7 @@ class EntryDetailsActivity: AppCompatActivity(), OnMapReadyCallback {
                 }
                 .show()
         })
+        //User wants to go back to home page
         viewBinding.backBtn.setOnClickListener(View.OnClickListener{
             onBackPressed()
         })
@@ -267,6 +270,7 @@ class EntryDetailsActivity: AppCompatActivity(), OnMapReadyCallback {
 
 
     }
+    //User wants to go back to home page from entry details
     override fun onBackPressed() {
         val i: Intent = Intent()
         i.putExtra(EDIT_CODE, editCode)
@@ -275,7 +279,7 @@ class EntryDetailsActivity: AppCompatActivity(), OnMapReadyCallback {
         setResult(RESULT_OK, i)
         finish()
     }
-
+    //Disables the recycler view for image if their is no image
     private fun disableRecyclerViewOnNoImage(){
         if(entry.getImages().size == 0){
             recyclerView.visibility = View.GONE

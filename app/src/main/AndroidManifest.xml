@@ -34,9 +34,6 @@
                 android:name=".activity.EntryMapActivity"
                 android:exported="false" />
             <activity
-                android:name=".activity.EntrySearchActivity"
-                android:exported="false" />
-            <activity
                 android:name=".activity.NewEntryActivity"
                 android:exported="false" />
             <activity

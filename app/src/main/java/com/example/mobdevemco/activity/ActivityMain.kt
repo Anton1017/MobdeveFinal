@@ -232,11 +232,7 @@ class ActivityMain : AppCompatActivity(), LocationListener {
             }
         })
 
-        viewBinding.entryRecyclerView.setOnClickListener(View.OnClickListener {
-            val intent = Intent(this@ActivityMain, EntrySearchActivity::class.java)
-            this.startActivity(intent)
-        })
-
+        //
         viewBinding.searchLogo.setOnClickListener(View.OnClickListener {
             if(searchToggle){
                 searchView.setQuery("", false);
