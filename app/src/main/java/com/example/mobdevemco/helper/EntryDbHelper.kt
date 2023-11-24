@@ -33,7 +33,7 @@ class EntryDbHelper(context: Context?) :
             null,
             null,
             null,
-            DbReferences.ENTRIES_COLUMN_NAME_CREATED_AT + " DESC " ,
+            null,
             null
         )
         while(e.moveToNext()){
@@ -69,7 +69,7 @@ class EntryDbHelper(context: Context?) :
                 null,
                 null,
                 null,
-                DbReferences.ENTRIES_COLUMN_NAME_CREATED_AT + " DESC " ,
+                null,
                 null
             )
             val entries: ArrayList<Entry> = ArrayList<Entry>()

@@ -136,7 +136,7 @@ class ActivityMain : AppCompatActivity(), LocationListener {
                 viewBinding.firstEntryText.visibility = View.VISIBLE
             }
             Log.d("TAG", "entries$entries")
-
+            entries.reverse()
             runOnUiThread { // Pass in the contacts to the needed components and set the adapter
                 myAdapter = entries.let { EntryAdapter(it, entryResultLauncher) }
                 this.recyclerView.adapter = myAdapter
