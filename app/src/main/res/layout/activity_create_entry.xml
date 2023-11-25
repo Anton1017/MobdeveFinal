@@ -108,14 +108,17 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="56dp"
+        android:layout_height="48dp"
         android:layout_marginTop="8dp">
 
         <Button
             android:id="@+id/createBtn"
             android:layout_width="wrap_content"
             android:layout_height="0dp"
+            android:autoText="false"
             android:text="@string/tournal_create_action"
+            android:textAlignment="center"
+            android:textSize="12sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -136,7 +139,7 @@
         <ImageView
             android:id="@+id/cancelBtn"
             android:layout_width="40dp"
-            android:layout_height="56dp"
+            android:layout_height="0dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"

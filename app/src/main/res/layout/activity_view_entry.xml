@@ -3,8 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:padding="1dp">
+    android:layout_height="match_parent">
 
     <ScrollView
         android:id="@+id/entryScrollView"
@@ -29,7 +28,7 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="40dp"
+                android:layout_height="32dp"
                 android:layout_marginBottom="8dp"
                 android:gravity="right"
                 android:orientation="horizontal">
@@ -41,7 +40,7 @@
 
                     <ImageView
                         android:id="@+id/backBtn"
-                        android:layout_width="48dp"
+                        android:layout_width="32dp"
                         android:layout_height="0dp"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
@@ -53,14 +52,14 @@
 
                 <ImageView
                     android:id="@+id/deletebtn"
-                    android:layout_width="40dp"
+                    android:layout_width="32dp"
                     android:layout_height="match_parent"
                     android:layout_gravity="right"
                     app:srcCompat="@drawable/baseline_delete_forever_24" />
 
                 <ImageView
                     android:id="@+id/editBtn"
-                    android:layout_width="40dp"
+                    android:layout_width="32dp"
                     android:layout_height="match_parent"
                     android:layout_marginLeft="8dp"
                     app:srcCompat="@drawable/baseline_mode_edit_outline_24" />
@@ -68,14 +67,15 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="20dp"
+                android:layout_height="16dp"
                 android:orientation="horizontal"
                 android:weightSum="1">
 
                 <ImageView
                     android:id="@+id/timeLogo"
-                    android:layout_width="32dp"
+                    android:layout_width="16dp"
                     android:layout_height="match_parent"
+                    android:layout_marginRight="8dp"
                     app:srcCompat="@drawable/baseline_access_time_filled_24" />
 
                 <TextView
@@ -85,7 +85,6 @@
                     android:layout_marginTop="1dp"
                     android:ellipsize="end"
                     android:maxLines="1"
-                    android:text="Oct 12, 2023"
                     android:textAllCaps="false"
                     android:textAppearance="@style/TextAppearance.AppCompat.Small"
                     android:textColor="?attr/colorOnSecondary" />
@@ -94,15 +93,17 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="20dp"
+                android:layout_height="16dp"
                 android:layout_marginTop="4dp"
+                android:minHeight="20dp"
                 android:orientation="horizontal"
                 android:weightSum="1">
 
                 <ImageView
                     android:id="@+id/locationLogo"
-                    android:layout_width="32dp"
+                    android:layout_width="16dp"
                     android:layout_height="match_parent"
+                    android:layout_marginEnd="8dp"
                     app:srcCompat="@drawable/map_marker" />
 
                 <TextView
@@ -111,8 +112,8 @@
                     android:layout_height="match_parent"
                     android:layout_marginTop="1dp"
                     android:ellipsize="end"
+                    android:maxHeight="40dp"
                     android:maxLines="1"
-                    android:text="Tokyo, Japan"
                     android:textAllCaps="false"
                     android:textAppearance="@style/TextAppearance.AppCompat.Small"
                     android:textColor="?attr/colorOnSecondary"
@@ -129,7 +130,6 @@
                 android:ellipsize="end"
                 android:fontFamily="sans-serif"
                 android:maxLines="2"
-                android:text="Mario Kart IRL "
                 android:textAllCaps="false"
                 android:textAppearance="@style/TextAppearance.AppCompat.Large"
                 android:textColor="?attr/colorOnSecondary"
@@ -196,7 +196,6 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
                 android:layout_marginBottom="32dp"
-                android:text="Being able to drive the karts like in Mario Kart reminds me of my Childhood Kart reminds me of my Childhood, excited to be like Mario while my friend is Luigi"
                 android:textAppearance="@style/TextAppearance.AppCompat.Small"
                 android:textColor="?attr/colorOnSecondary" />
         </LinearLayout>
