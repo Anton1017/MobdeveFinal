@@ -59,7 +59,7 @@ class EntryDbHelper(context: Context?) :
     }
 
     val allEntriesDefault: ArrayList<Entry>
-        // Method that returns an ArrayList of all stored contacts. This method was named with the term
+        // Method that returns an ArrayList of all stored entries. This method was named with the term
         get() {
             val database = this.readableDatabase
             val e = database.query(
@@ -95,8 +95,8 @@ class EntryDbHelper(context: Context?) :
             return entries
         }
 
-    // The insert operation, which takes a contact object as a parameter. It also returns the ID of
-    // the row so that the Contact can have that properly referenced within itself.
+    // The insert operation, which takes an entry object as a parameter. It also returns the ID of
+    // the row so that the Entry can have that properly referenced within itself.
     @Synchronized
     fun insertEntry(e: Entry, context: Context): Long {
         val database = this.writableDatabase
@@ -162,6 +162,8 @@ class EntryDbHelper(context: Context?) :
         return entry
     }
 
+    // Searches for specific entries based on the search query. It splits the words within the
+    // search query, then uses each of them to search for the title, date, and location
     @Synchronized
     fun getFilteredEntries(query: String): ArrayList<Entry> {
         val queryWords = query.split(" ")
@@ -225,7 +227,7 @@ class EntryDbHelper(context: Context?) :
         return entries
     }
 
-    // Performs an UPDATE operation by comparing the old contact with the new contact. This method
+    // Performs an UPDATE operation by comparing the old entry with the new entry. This method
     // tries to reduce the length of the update statement by only including attributes that have
     // been changed. If no changed are present, the update statement is simply not called.
     fun updateEntry(eOld: Entry, eNew: Entry, context: Context) {
@@ -276,7 +278,7 @@ class EntryDbHelper(context: Context?) :
         }
     }
 
-    // The delete contact method that takes in a contact object and uses its ID to find and delete
+    // The delete entry method that takes in a entry object and uses its ID to find and delete
     // the entry.
     fun deleteEntry(e: Entry) {
         this.deleteAllEntryImages(e)
@@ -289,6 +291,7 @@ class EntryDbHelper(context: Context?) :
         database.close()
     }
 
+    // It deletes all images stored in the internal storage directory of the application
     private fun deleteAllEntryImages(e: Entry) {
         val database = this.writableDatabase
 
@@ -312,6 +315,7 @@ class EntryDbHelper(context: Context?) :
         database.close()
     }
 
+    // it obtains the EntryImages object from the database based on the ID of the entry
     private fun getEntryImages(id: Long, database: SQLiteDatabase): ArrayList<EntryImages> {
         val imgQuery = database.query(
             DbReferences.TABLE_NAME_ENTRY_IMAGES,
@@ -345,6 +349,8 @@ class EntryDbHelper(context: Context?) :
         return imgArray
     }
 
+    // It inserts the EntryImages object attributes into the database, while also saving the image
+    // files themselves within the internal storage
     private fun insertEntryImages(id: Long, imgArray: ArrayList<EntryImages>, database: SQLiteDatabase, context: Context){
         for(image in imgArray){
             val imgValues = ContentValues()
@@ -364,6 +370,9 @@ class EntryDbHelper(context: Context?) :
             image.setTemporaryImage(false)
         }
     }
+
+    // Saves the images within the internal storage directory of the application, since the
+    // EntryImages object references to the uri of the image
     private fun saveImageToInternalStorage(uri: Uri, fileName: String, context: Context): String? {
         val inputStream: InputStream = context.contentResolver.openInputStream(uri)!!
         val bitmap: Bitmap = BitmapFactory.decodeStream(
