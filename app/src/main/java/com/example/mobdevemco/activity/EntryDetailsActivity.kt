@@ -265,11 +265,6 @@ class EntryDetailsActivity: AppCompatActivity(), OnMapReadyCallback {
         })
     }
 
-    override fun onStart(){
-        super.onStart()
-
-
-    }
     //User wants to go back to home page from entry details
     override fun onBackPressed() {
         val i: Intent = Intent()

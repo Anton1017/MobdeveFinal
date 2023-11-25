@@ -178,6 +178,7 @@ class ActivityMain : AppCompatActivity(), LocationListener {
 
         this.recyclerView = viewBinding.entryRecyclerView
 
+        //the animation when scrolling for recyclerView
         recyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                 super.onScrolled(recyclerView, dx, dy)
@@ -214,7 +215,7 @@ class ActivityMain : AppCompatActivity(), LocationListener {
 
             }
         })
-
+        //sets the query in searchView to check if there is query
         searchView.setOnQueryTextListener(object: SearchView.OnQueryTextListener{
             override fun onQueryTextSubmit(query: String?): Boolean {
                 return false
@@ -226,7 +227,7 @@ class ActivityMain : AppCompatActivity(), LocationListener {
             }
         })
 
-        //
+        //Toggles the visibility of searchView
         viewBinding.searchLogo.setOnClickListener(View.OnClickListener {
             if(searchToggle){
                 searchView.setQuery("", false);
@@ -243,6 +244,7 @@ class ActivityMain : AppCompatActivity(), LocationListener {
         this.recyclerView.layoutManager = LinearLayoutManager(this)
     }
 
+    //Filters the entries base on the query
     private fun filterList(query: String?){
         var tempEntryArrayList: ArrayList<Entry>?
         executorService.execute{
@@ -263,6 +265,7 @@ class ActivityMain : AppCompatActivity(), LocationListener {
         }
     }
 
+    //Checks if there is an entry in the recycler view of the main activity
     private fun changePlaceholderTextStatus(){
         if(entries.size != 0){
             viewBinding.firstEntryText.visibility = View.GONE
@@ -271,6 +274,7 @@ class ActivityMain : AppCompatActivity(), LocationListener {
         }
     }
 
+    //gets the current location of the user
     @SuppressLint("MissingPermission")
     private fun getLocation() {
         Log.d("TAG", "getting location")
@@ -299,23 +303,14 @@ class ActivityMain : AppCompatActivity(), LocationListener {
             startActivity(intent)
         }
     }
-
+    //Checks if phone has granted access to get location
     private fun isLocationEnabled(): Boolean {
         this.locationManager = getSystemService(Context.LOCATION_SERVICE) as LocationManager
         return locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)
                 || locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)
     }
 
-    private fun checkPermissions(): Boolean {
-        if(ActivityCompat.checkSelfPermission(this,
-                Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED
-            && ActivityCompat.checkSelfPermission(this,
-                Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED)
-            return true
-
-        return false
-    }
-
+    //requests permission on Location
     private fun requestPermission() {
         ActivityCompat.requestPermissions(this,
             arrayOf(
@@ -323,7 +318,7 @@ class ActivityMain : AppCompatActivity(), LocationListener {
                 Manifest.permission.ACCESS_FINE_LOCATION),
             locationPermissionCode)
     }
-
+    //Location has already changed
     override fun onLocationChanged(location: Location) {
         val geocoder = Geocoder(this, Locale.getDefault())
         val list: MutableList<Address>? =
@@ -345,6 +340,7 @@ class ActivityMain : AppCompatActivity(), LocationListener {
         Log.d("TAG", "Address\n${locationAddress}")
 
     }
+    //checks the result of requestpermission function
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         if (requestCode == locationPermissionCode) {
