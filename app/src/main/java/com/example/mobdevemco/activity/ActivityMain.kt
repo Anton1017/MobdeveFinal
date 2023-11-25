@@ -7,12 +7,13 @@ import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.content.res.Resources.Theme
-import android.content.res.TypedArray
 import android.location.Address
+import android.location.Criteria
 import android.location.Geocoder
 import android.location.Location
 import android.location.LocationListener
 import android.location.LocationManager
+import android.os.Build
 import android.os.Bundle
 import android.provider.Settings
 import android.util.Log
@@ -274,12 +275,21 @@ class ActivityMain : AppCompatActivity(), LocationListener {
     private fun getLocation() {
         Log.d("TAG", "getting location")
         if(isLocationEnabled()) {
-            this.locationManager.requestLocationUpdates(
-                LocationManager.NETWORK_PROVIDER,
-                5000,
-                5f,
-                this
-            )
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+                this.locationManager.requestLocationUpdates(
+                    LocationManager.FUSED_PROVIDER,
+                    5000,
+                    5f,
+                    this
+                )
+            }else{
+                this.locationManager.requestLocationUpdates(
+                    LocationManager.GPS_PROVIDER,
+                    5000,
+                    5f,
+                    this
+                )
+            }
         }
         else {
             Toast.makeText(this, "Permission Granted", Toast.LENGTH_SHORT).show()
@@ -319,15 +329,18 @@ class ActivityMain : AppCompatActivity(), LocationListener {
         longitude = location.longitude
         latitude = location.latitude
         accuracy = location.accuracy
-        var locationAddress = "${list?.get(0)?.getAddressLine(0)}"
+        var locationAddress = ""
+        if(list!!.size != 0){
+            locationAddress = "${list?.get(0)?.getAddressLine(0)}"
+        }
         viewBinding.currentLocationMain.text =
             if (locationAddress != "") locationAddress
             else getString(R.string.tournal_retrieving_addr)
 
-        currentLocation = "${list?.get(0)?.getAddressLine(0)}"
+        currentLocation = locationAddress
         Log.d("TAG", location.latitude.toString())
         Log.d("TAG", location.longitude.toString())
-        Log.d("TAG", "Address\n${list?.get(0)?.getAddressLine(0)}")
+        Log.d("TAG", "Address\n${locationAddress}")
 
     }
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
