@@ -379,7 +379,7 @@ class EntryDbHelper(context: Context?) :
         try {
             fos = FileOutputStream(myPath)
             // Use the compress method on the BitMap object to write image to the OutputStream
-            bitmap.compress(Bitmap.CompressFormat.PNG, 100, fos)
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 70, fos)
         } catch (e: Exception) {
             e.printStackTrace()
         } finally {
