@@ -275,14 +275,7 @@ class ActivityMain : AppCompatActivity(), LocationListener {
     private fun getLocation() {
         Log.d("TAG", "getting location")
         if(isLocationEnabled()) {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-                this.locationManager.requestLocationUpdates(
-                    LocationManager.FUSED_PROVIDER,
-                    5000,
-                    5f,
-                    this
-                )
-            }else{
+            try{
                 this.locationManager.requestLocationUpdates(
                     LocationManager.GPS_PROVIDER,
                     5000,
@@ -290,6 +283,15 @@ class ActivityMain : AppCompatActivity(), LocationListener {
                     this
                 )
             }
+            catch(e: IllegalArgumentException ){
+                this.locationManager.requestLocationUpdates(
+                    LocationManager.NETWORK_PROVIDER,
+                    5000,
+                    5f,
+                    this
+                )
+            }
+
         }
         else {
             Toast.makeText(this, "Permission Granted", Toast.LENGTH_SHORT).show()
