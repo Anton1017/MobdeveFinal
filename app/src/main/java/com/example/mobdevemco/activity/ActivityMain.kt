@@ -2,20 +2,15 @@ package com.example.mobdevemco.activity
 
 
 import android.Manifest
-import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.content.res.Resources.Theme
 import android.location.Address
-import android.location.Criteria
 import android.location.Geocoder
-import android.location.Location
-import android.location.LocationListener
 import android.location.LocationManager
-import android.os.Build
 import android.os.Bundle
-import android.provider.Settings
+import android.os.Looper
 import android.util.Log
 import android.util.TypedValue
 import android.view.View
@@ -36,11 +31,17 @@ import com.example.mobdevemco.adapter.EntryAdapter
 import com.example.mobdevemco.databinding.ActivityMainBinding
 import com.example.mobdevemco.helper.EntryDbHelper
 import com.example.mobdevemco.model.Entry
+import com.google.android.gms.location.FusedLocationProviderClient
+import com.google.android.gms.location.LocationCallback
+import com.google.android.gms.location.LocationRequest
+import com.google.android.gms.location.LocationResult
+import com.google.android.gms.location.LocationServices
+import com.google.android.gms.location.Priority
 import java.util.Locale
 import java.util.concurrent.Executors
 
 
-class ActivityMain : AppCompatActivity(), LocationListener {
+class ActivityMain : AppCompatActivity() {
 
     private lateinit var searchView: SearchView
     private val entries: ArrayList<Entry> = ArrayList<Entry>()
@@ -56,6 +57,9 @@ class ActivityMain : AppCompatActivity(), LocationListener {
     private var entryDbHelper: EntryDbHelper? = null
     private val executorService = Executors.newSingleThreadExecutor()
     private lateinit var currentLocation: String
+
+    private lateinit var fusedLocationClient: FusedLocationProviderClient
+    private lateinit var locationCallback: LocationCallback
 
     private var locationPermission: Boolean = false
 
@@ -117,6 +121,62 @@ class ActivityMain : AppCompatActivity(), LocationListener {
         animationFadeIn.fillAfter = true
 
         this.viewBinding = ActivityMainBinding.inflate(layoutInflater)
+        fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
+
+        if (ActivityCompat.checkSelfPermission(
+                this,
+                Manifest.permission.ACCESS_FINE_LOCATION
+            ) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
+                this,
+                Manifest.permission.ACCESS_COARSE_LOCATION
+            ) != PackageManager.PERMISSION_GRANTED
+        ) {
+            ActivityCompat.requestPermissions(this,
+                arrayOf(
+                    Manifest.permission.ACCESS_COARSE_LOCATION,
+                    Manifest.permission.ACCESS_FINE_LOCATION),
+                locationPermissionCode)
+        }
+
+        locationCallback = object : LocationCallback() {
+            override fun onLocationResult(p0: LocationResult) {
+                if(p0.locations.size != 0){
+                    val location = p0.locations[0]
+                    if (location == null)
+                        Toast.makeText(this@ActivityMain, "Cannot get location.", Toast.LENGTH_SHORT).show()
+                    else {
+                        val geocoder = Geocoder(this@ActivityMain, Locale.getDefault())
+                        val list: MutableList<Address>? =
+                            geocoder.getFromLocation(location.latitude, location.longitude, 1)
+                        longitude = location.longitude
+                        latitude = location.latitude
+                        accuracy = location.accuracy
+                        var locationAddress = ""
+                        if(list!!.size != 0){
+                            locationAddress = list[0].getAddressLine(0)
+                        }
+                        viewBinding.currentLocationMain.text =
+                            if (locationAddress != "") locationAddress
+                            else getString(R.string.tournal_retrieving_addr)
+
+                        currentLocation = locationAddress
+                        Log.d("TAG", location.latitude.toString())
+                        Log.d("TAG", location.longitude.toString())
+                        Log.d("TAG", "Address\n${locationAddress}")
+                    }
+                }
+            }
+        }
+
+        val locationRequest = LocationRequest.Builder(
+            Priority.PRIORITY_HIGH_ACCURACY,
+            5000
+        ).setMinUpdateIntervalMillis(3000).build()
+
+        fusedLocationClient.requestLocationUpdates(locationRequest,
+            locationCallback,
+            Looper.getMainLooper())
+
 
         val typedValue = TypedValue()
         val theme: Theme = this.theme
@@ -275,34 +335,7 @@ class ActivityMain : AppCompatActivity(), LocationListener {
     }
 
     //gets the current location of the user
-    @SuppressLint("MissingPermission")
-    private fun getLocation() {
-        Log.d("TAG", "getting location")
-        if(isLocationEnabled()) {
-            try{
-                this.locationManager.requestLocationUpdates(
-                    LocationManager.GPS_PROVIDER,
-                    5000,
-                    5f,
-                    this
-                )
-            }
-            catch(e: IllegalArgumentException ){
-                this.locationManager.requestLocationUpdates(
-                    LocationManager.NETWORK_PROVIDER,
-                    5000,
-                    5f,
-                    this
-                )
-            }
 
-        }
-        else {
-            Toast.makeText(this, "Permission Granted", Toast.LENGTH_SHORT).show()
-            val intent = Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS)
-            startActivity(intent)
-        }
-    }
     //Checks if phone has granted access to get location
     private fun isLocationEnabled(): Boolean {
         this.locationManager = getSystemService(Context.LOCATION_SERVICE) as LocationManager
@@ -319,27 +352,6 @@ class ActivityMain : AppCompatActivity(), LocationListener {
             locationPermissionCode)
     }
     //Location has already changed
-    override fun onLocationChanged(location: Location) {
-        val geocoder = Geocoder(this, Locale.getDefault())
-        val list: MutableList<Address>? =
-            geocoder.getFromLocation(location.latitude, location.longitude, 1)
-        longitude = location.longitude
-        latitude = location.latitude
-        accuracy = location.accuracy
-        var locationAddress = ""
-        if(list!!.size != 0){
-            locationAddress = "${list?.get(0)?.getAddressLine(0)}"
-        }
-        viewBinding.currentLocationMain.text =
-            if (locationAddress != "") locationAddress
-            else getString(R.string.tournal_retrieving_addr)
-
-        currentLocation = locationAddress
-        Log.d("TAG", location.latitude.toString())
-        Log.d("TAG", location.longitude.toString())
-        Log.d("TAG", "Address\n${locationAddress}")
-
-    }
     //checks the result of requestpermission function
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
@@ -349,8 +361,6 @@ class ActivityMain : AppCompatActivity(), LocationListener {
                 locationPermission = true
                 viewBinding.currentLocationMain.text = getString(R.string.tournal_retrieving_addr)
                 viewBinding.firstEntryText.text = getString(R.string.tournal_create_first_entry)
-
-                getLocation()
             }
             else {
                 //Toast.makeText(this, "Permission Denied", Toast.LENGTH_SHORT).show()
@@ -360,10 +370,5 @@ class ActivityMain : AppCompatActivity(), LocationListener {
             }
         }
     }
-   override fun onProviderEnabled(provider: String) {}
-   override fun onProviderDisabled(provider: String) {}
-    override fun onStatusChanged(provider: String?, status: Int, extras: Bundle?) {}
-
-
 
 }
