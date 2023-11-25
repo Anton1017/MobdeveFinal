@@ -58,8 +58,14 @@ class ActivityMain : AppCompatActivity() {
     private val executorService = Executors.newSingleThreadExecutor()
     private lateinit var currentLocation: String
 
+
     private lateinit var fusedLocationClient: FusedLocationProviderClient
     private lateinit var locationCallback: LocationCallback
+    //location updates parameter
+    private val locationRequest = LocationRequest.Builder(
+        Priority.PRIORITY_HIGH_ACCURACY,
+        5000
+    ).setMinUpdateIntervalMillis(3000).build()
 
     private var locationPermission: Boolean = false
 
@@ -123,22 +129,6 @@ class ActivityMain : AppCompatActivity() {
         this.viewBinding = ActivityMainBinding.inflate(layoutInflater)
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
 
-        //checking location permissions
-        if (ActivityCompat.checkSelfPermission(
-                this,
-                Manifest.permission.ACCESS_FINE_LOCATION
-            ) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
-                this,
-                Manifest.permission.ACCESS_COARSE_LOCATION
-            ) != PackageManager.PERMISSION_GRANTED
-        ) {
-            ActivityCompat.requestPermissions(this,
-                arrayOf(
-                    Manifest.permission.ACCESS_COARSE_LOCATION,
-                    Manifest.permission.ACCESS_FINE_LOCATION),
-                locationPermissionCode)
-        }
-
         //callback whenever location changes are detected
         locationCallback = object : LocationCallback() {
             override fun onLocationResult(p0: LocationResult) {
@@ -170,16 +160,9 @@ class ActivityMain : AppCompatActivity() {
             }
         }
 
-        //location updates parameter
-        val locationRequest = LocationRequest.Builder(
-            Priority.PRIORITY_HIGH_ACCURACY,
-            5000
-        ).setMinUpdateIntervalMillis(3000).build()
 
-        //for requesting constant location updates, parameters defined in locationRequest object
-        fusedLocationClient.requestLocationUpdates(locationRequest,
-            locationCallback,
-            Looper.getMainLooper())
+
+        requestLocationUpdates()
 
 
         val typedValue = TypedValue()
@@ -307,6 +290,29 @@ class ActivityMain : AppCompatActivity() {
         this.recyclerView.layoutManager = LinearLayoutManager(this)
     }
 
+    private fun requestLocationUpdates(){
+        //checking location permissions
+        if (ActivityCompat.checkSelfPermission(
+                this,
+                Manifest.permission.ACCESS_FINE_LOCATION
+            ) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
+                this,
+                Manifest.permission.ACCESS_COARSE_LOCATION
+            ) != PackageManager.PERMISSION_GRANTED
+        ) {
+            ActivityCompat.requestPermissions(this,
+                arrayOf(
+                    Manifest.permission.ACCESS_COARSE_LOCATION,
+                    Manifest.permission.ACCESS_FINE_LOCATION),
+                locationPermissionCode)
+        }
+
+        //for requesting constant location updates, parameters defined in locationRequest object
+        fusedLocationClient.requestLocationUpdates(locationRequest,
+            locationCallback,
+            Looper.getMainLooper())
+    }
+
     //Filters the entries base on the query
     private fun filterList(query: String?){
         var tempEntryArrayList: ArrayList<Entry>?
@@ -354,6 +360,7 @@ class ActivityMain : AppCompatActivity() {
                 locationPermission = true
                 viewBinding.currentLocationMain.text = getString(R.string.tournal_retrieving_addr)
                 viewBinding.firstEntryText.text = getString(R.string.tournal_create_first_entry)
+                requestLocationUpdates()
             }
             else {
                 locationPermission = false
