@@ -123,6 +123,7 @@ class ActivityMain : AppCompatActivity() {
         this.viewBinding = ActivityMainBinding.inflate(layoutInflater)
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
 
+        //checking location permissions
         if (ActivityCompat.checkSelfPermission(
                 this,
                 Manifest.permission.ACCESS_FINE_LOCATION
@@ -138,6 +139,7 @@ class ActivityMain : AppCompatActivity() {
                 locationPermissionCode)
         }
 
+        //callback whenever location changes are detected
         locationCallback = object : LocationCallback() {
             override fun onLocationResult(p0: LocationResult) {
                 if(p0.locations.size != 0){
@@ -168,11 +170,13 @@ class ActivityMain : AppCompatActivity() {
             }
         }
 
+        //location updates parameter
         val locationRequest = LocationRequest.Builder(
             Priority.PRIORITY_HIGH_ACCURACY,
             5000
         ).setMinUpdateIntervalMillis(3000).build()
 
+        //for requesting constant location updates, parameters defined in locationRequest object
         fusedLocationClient.requestLocationUpdates(locationRequest,
             locationCallback,
             Looper.getMainLooper())
@@ -183,14 +187,13 @@ class ActivityMain : AppCompatActivity() {
         theme.resolveAttribute(com.google.android.material.R.attr.colorOnPrimary, typedValue, true)
 
         executorService.execute {
-            // Get all contacts from the database
+            // Get all entries from the database
             entryDbHelper = EntryDbHelper.getInstance(this@ActivityMain)
             entryDbHelper?.allEntriesDefault?.let { entries.addAll(it) }
 
             changePlaceholderTextStatus()
             Log.d("TAG", "entries$entries")
-            //entries.reverse()
-            runOnUiThread { // Pass in the contacts to the needed components and set the adapter
+            runOnUiThread {
                 myAdapter = entries.let { EntryAdapter(it, entryResultLauncher) }
                 this.recyclerView.adapter = myAdapter
             }
@@ -334,16 +337,7 @@ class ActivityMain : AppCompatActivity() {
         }
     }
 
-    //gets the current location of the user
-
-    //Checks if phone has granted access to get location
-    private fun isLocationEnabled(): Boolean {
-        this.locationManager = getSystemService(Context.LOCATION_SERVICE) as LocationManager
-        return locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)
-                || locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)
-    }
-
-    //requests permission on Location
+    //requests permission on Location to user
     private fun requestPermission() {
         ActivityCompat.requestPermissions(this,
             arrayOf(
@@ -351,19 +345,17 @@ class ActivityMain : AppCompatActivity() {
                 Manifest.permission.ACCESS_FINE_LOCATION),
             locationPermissionCode)
     }
-    //Location has already changed
-    //checks the result of requestpermission function
+
+    //checks the result of location request from user
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         if (requestCode == locationPermissionCode) {
             if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                //Toast.makeText(this, "Permission Granted", Toast.LENGTH_SHORT).show()
                 locationPermission = true
                 viewBinding.currentLocationMain.text = getString(R.string.tournal_retrieving_addr)
                 viewBinding.firstEntryText.text = getString(R.string.tournal_create_first_entry)
             }
             else {
-                //Toast.makeText(this, "Permission Denied", Toast.LENGTH_SHORT).show()
                 locationPermission = false
                 viewBinding.currentLocationMain.text = getString(R.string.tournal_location_permission_denied)
                 viewBinding.firstEntryText.text = getString(R.string.tournal_request_location_permission)
