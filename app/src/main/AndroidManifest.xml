@@ -24,9 +24,6 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.MobdeveMCO"
         tools:targetApi="31">
-        <meta-data
-            android:name="com.google.android.geo.API_KEY"
-            android:value="AIzaSyBc3z0nG2fsL22TSctfwEp0k6HTw9IMpXI"/>
             <activity
                 android:name=".activity.EntryDetailsActivity"
                 android:screenOrientation="portrait"
